@@ -3326,7 +3326,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   'use strict';
 
   // App version — must match version.json (both are bumped on every release)
-  const APP_VERSION = '2026.09.28-1631';
+  const APP_VERSION = '2026.09.28-1642';
 
   // Check every few minutes (and when the tab comes back into view) whether a newer version was published
   function checkForUpdate() {
@@ -3945,7 +3945,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   // Format Numbers with Commas
   function formatNumber(num) {
     if (num === null || num === undefined || isNaN(num)) return '0';
-    return Number(num).toLocaleString('ar-EG');
+    return Number(num).toLocaleString('en-US');
   }
 
   // --- HEADER STATS ---
@@ -4520,13 +4520,13 @@ const CATALOG_SUGGESTED_PRESETS = [
       const end = parseISODate(r.to);
       while (d <= end) {
         const key = toISODate(d).slice(0, 7);
-        buckets.push({ key, label: d.toLocaleDateString('ar-EG', { month: 'short', year: '2-digit' }), sales: 0, exp: 0 });
+        buckets.push({ key, label: d.toLocaleDateString('ar-EG-u-nu-latn', { month: 'short', year: '2-digit' }), sales: 0, exp: 0 });
         d = new Date(d.getFullYear(), d.getMonth() + 1, 1);
       }
     } else {
       for (let i = 0; i < span; i++) {
         const key = addDaysISO(r.from, i);
-        buckets.push({ key, label: parseISODate(key).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' }), sales: 0, exp: 0 });
+        buckets.push({ key, label: parseISODate(key).toLocaleDateString('ar-EG-u-nu-latn', { day: 'numeric', month: 'short' }), sales: 0, exp: 0 });
       }
     }
     const idx = new Map(buckets.map((b, i) => [b.key, i]));
@@ -5082,7 +5082,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   }
   function formatDateAr(d) {
     if (!d) return '-';
-    return parseISODate(d).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short', year: 'numeric' });
+    return parseISODate(d).toLocaleDateString('ar-EG-u-nu-latn', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
   function getSettings() {
