@@ -3326,7 +3326,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   'use strict';
 
   // App version — must match version.json (both are bumped on every release)
-  const APP_VERSION = '2026.09.28-1642';
+  const APP_VERSION = '2026.09.28-1644';
 
   // Check every few minutes (and when the tab comes back into view) whether a newer version was published
   function checkForUpdate() {
@@ -4179,7 +4179,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     settlingVisitId = visitId;
     const net = visitNet(v), paid = visitPaid(v), over = visitOverpaid(v);
     $id('settleSummary').innerHTML = `
-      <div><span class="label">فاتورة:</span> <strong>#${escapeHtml(v.invoiceNumber || '')}</strong> — ${escapeHtml(v.date)}</div>
+      <div><span class="label">فاتورة:</span> <strong>#${escapeHtml(v.invoiceNumber || '')}</strong> — ${formatDateAr(v.date)}</div>
       <div><span class="label">قيمة الفاتورة دلوقتي:</span> <strong>${formatNumber(net)} ج.م</strong></div>
       <div><span class="label">المتسجل إنه اتدفع:</span> <strong>${formatNumber(paid)} ج.م</strong></div>
       <div><strong class="trend-bad">الفرق: ${formatNumber(over)} ج.م</strong></div>`;
@@ -4221,7 +4221,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     const veh = appState.vehicles.find(x => x.id === v.vehicleId);
     const cl = veh && appState.clients.find(c => c.id === veh.clientId);
     $id('paymentSummary').innerHTML = `
-      <div><span class="label">فاتورة:</span> <strong>#${escapeHtml(v.invoiceNumber || '')}</strong> — ${escapeHtml(v.date)}</div>
+      <div><span class="label">فاتورة:</span> <strong>#${escapeHtml(v.invoiceNumber || '')}</strong> — ${formatDateAr(v.date)}</div>
       <div><span class="label">العميل:</span> <strong>${escapeHtml(cl ? cl.name : '-')}</strong> — ${escapeHtml(veh ? `${carTitle(veh)}` : '')}</div>
       <div><span class="label">الصافي:</span> ${formatNumber(visitNet(v))} — <span class="label">المدفوع:</span> ${formatNumber(visitPaid(v))} — <strong class="trend-bad">الباقي: ${formatNumber(visitDue(v))} ج.م</strong></div>`;
     $id('payAmount').value = visitDue(v);
@@ -4520,13 +4520,13 @@ const CATALOG_SUGGESTED_PRESETS = [
       const end = parseISODate(r.to);
       while (d <= end) {
         const key = toISODate(d).slice(0, 7);
-        buckets.push({ key, label: d.toLocaleDateString('ar-EG-u-nu-latn', { month: 'short', year: '2-digit' }), sales: 0, exp: 0 });
+        buckets.push({ key, label: `${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`, sales: 0, exp: 0 });
         d = new Date(d.getFullYear(), d.getMonth() + 1, 1);
       }
     } else {
       for (let i = 0; i < span; i++) {
         const key = addDaysISO(r.from, i);
-        buckets.push({ key, label: parseISODate(key).toLocaleDateString('ar-EG-u-nu-latn', { day: 'numeric', month: 'short' }), sales: 0, exp: 0 });
+        buckets.push({ key, label: (() => { const x = parseISODate(key); return `${x.getDate()}/${x.getMonth() + 1}`; })(), sales: 0, exp: 0 });
       }
     }
     const idx = new Map(buckets.map((b, i) => [b.key, i]));
@@ -4655,7 +4655,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     $id('finInvoicesBody').innerHTML = list.length ? list.map(v => {
       const veh = vehMap.get(v.vehicleId); const cl = veh && cliMap.get(veh.clientId);
       return `<tr>
-        <td style="white-space:nowrap">${escapeHtml(v.date)}</td>
+        <td style="white-space:nowrap">${formatDateAr(v.date)}</td>
         <td>#${escapeHtml(v.invoiceNumber || '')}</td>
         <td>${escapeHtml(cl ? cl.name : '-')}</td>
         <td>${veh ? `${escapeHtml(carTitle(veh))} <span class="plate-mini">${escapeHtml(veh.plateFull || '')}</span>` : '-'}</td>
@@ -4678,7 +4678,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     // Expenses
     const exps = appState.expenses.filter(e => inRange(e.date, r)).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     $id('finExpensesBody').innerHTML = exps.length ? exps.map(e => `<tr>
-        <td style="white-space:nowrap">${escapeHtml(e.date)}</td>
+        <td style="white-space:nowrap">${formatDateAr(e.date)}</td>
         <td>${escapeHtml(EXPENSE_CATS[e.category] || e.category || '-')}</td>
         <td class="num">${formatNumber(e.amount)} ج.م</td>
         <td>${escapeHtml(e.note || '')}</td>
@@ -5082,7 +5082,8 @@ const CATALOG_SUGGESTED_PRESETS = [
   }
   function formatDateAr(d) {
     if (!d) return '-';
-    return parseISODate(d).toLocaleDateString('ar-EG-u-nu-latn', { day: 'numeric', month: 'short', year: 'numeric' });
+    const x = parseISODate(d), pad = n => String(n).padStart(2, '0');
+    return `${pad(x.getDate())}/${pad(x.getMonth() + 1)}/${x.getFullYear()}`;
   }
 
   function getSettings() {
@@ -5575,7 +5576,7 @@ const CATALOG_SUGGESTED_PRESETS = [
           <div class="visit-date-odo">
             <div class="visit-date-badge">
               <i class="fa-regular fa-calendar text-cyan"></i>
-              <span>${visit.date}</span>
+              <span>${formatDateAr(visit.date)}</span>
             </div>
             <div class="visit-odo-badge">
               <i class="fa-solid fa-gauge-high"></i> قراءة العداد: ${formatNumber(visit.odometer)} كم
@@ -5971,7 +5972,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     const paidNow = visitPaid(visit);
     const moneyWarn = paidNow > 0 ? `\n\n⚠️ الزيارة دي عليها ${formatNumber(paidNow)} ج.م متحصّلين — لو اتمسحت، المبلغ ده هيتشال من المحصّل وصافي الكاش.\nلو الزيارة اتعملت فعلاً والعميل دفع، الأفضل تعدّلها بدل ما تمسحها.` : '';
     const partsWarn = (visit.items || []).some(it => it.catalogId) ? `\n\nالقطع اللي اتصرفت فيها من المخزن هترجع للمخزن.` : '';
-    if (!confirm(`هل أنت متأكد من حذف زيارة ${visit.date} (فاتورة #${visit.invoiceNumber})؟${moneyWarn}${partsWarn}\n\nلا يمكن التراجع.`)) return;
+    if (!confirm(`هل أنت متأكد من حذف زيارة ${formatDateAr(visit.date)} (فاتورة #${visit.invoiceNumber})؟${moneyWarn}${partsWarn}\n\nلا يمكن التراجع.`)) return;
     appState.visits = appState.visits.filter(v => v.id !== visitId);
     const vehicle = appState.vehicles.find(v => v.id === visit.vehicleId);
     if (vehicle) recomputeCurrentOdometer(vehicle);
@@ -6173,7 +6174,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   // --- MODAL 3: PRINTABLE INVOICE MODAL ---
   function openInvoiceModal(visit, vehicle, client) {
     elements.invNumber.textContent = `#${visit.invoiceNumber || 'INV-1000'}`;
-    elements.invDate.textContent = visit.date;
+    elements.invDate.textContent = formatDateAr(visit.date);
     elements.invClientName.textContent = client ? client.name : '-';
     elements.invClientPhone.textContent = client ? client.phone : '-';
     elements.invCarDetails.textContent = `${carTitle(vehicle)}${vehicle.color ? ' — ' + vehicle.color : ''}`;
