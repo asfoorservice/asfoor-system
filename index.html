@@ -1082,7 +1082,7 @@ h1, h2, h3, h4, h5 {
   overflow-y: auto;
 }
 .modal-wide {
-  max-width: 850px;
+  max-width: 1000px;
 }
 
 @keyframes modalIn {
@@ -1524,6 +1524,88 @@ h1, h2, h3, h4, h5 {
 .sync-status.offline { color:#fca5a5; }
 .user-chip { font-size:.78rem; color:var(--text-muted); max-width:170px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
+/* ===== Phase 2: navigation, dashboard, finance, inventory ===== */
+:root { --series-sales: #3987e5; --series-exp: #d95926; }
+.main-tabs { display:flex; gap:6px; margin-bottom:20px; overflow-x:auto; padding-bottom:4px; border-bottom:1px solid var(--border-subtle); }
+.main-tab { background:none; border:none; border-bottom:3px solid transparent; color:var(--text-secondary); font-family:var(--font-main); font-size:.98rem; font-weight:700; padding:10px 16px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+.main-tab:hover { color:#fff; }
+.main-tab.active { color:#fff; border-bottom-color:var(--accent-red); }
+.app-view { display:none; }
+.app-view.active { display:block; }
+.view-head { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+.view-head h2 { font-size:1.35rem; }
+.period-select { padding:8px 12px; background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-md); color:#fff; font-family:var(--font-main); font-size:.9rem; }
+.kpi-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:14px; margin-bottom:20px; }
+@media (max-width: 520px) { .kpi-grid { grid-template-columns:1fr 1fr; gap:10px; } .kpi-tile { padding:12px; } .kpi-tile .kpi-sub { display:none; } }
+.kpi-tile { background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:16px 18px; }
+.kpi-tile .kpi-label { font-size:.82rem; color:var(--text-secondary); display:flex; align-items:center; gap:6px; }
+.kpi-tile .kpi-value { font-size:1.55rem; font-weight:800; color:#fff; margin-top:6px; line-height:1.2; }
+.kpi-tile .kpi-value small { font-size:.8rem; color:var(--text-muted); font-weight:600; }
+.kpi-tile .kpi-sub { font-size:.76rem; color:var(--text-muted); margin-top:4px; }
+.kpi-tile.clickable { cursor:pointer; }
+.kpi-tile.clickable:hover { border-color:rgba(255,255,255,.2); }
+.trend-good { color: var(--color-green) !important; }
+.trend-bad { color: #f87171 !important; }
+.dash-grid { display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+.dash-panel { padding:18px 20px; }
+.dash-wide { grid-column: 1 / -1; }
+.dash-panel-head { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.dash-panel h3 { font-size:1rem; }
+.link-btn { background:none; border:none; color:var(--accent-red-light); font-family:var(--font-main); font-size:.84rem; font-weight:700; cursor:pointer; }
+.mini-list { display:flex; flex-direction:column; }
+.mini-row { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid var(--border-subtle); font-size:.86rem; }
+.mini-row:last-child { border-bottom:none; }
+.mini-row .mr-main { min-width:0; }
+.mini-row .mr-title { color:#fff; font-weight:700; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.mini-row .mr-sub { color:var(--text-muted); font-size:.78rem; margin-top:2px; }
+.mini-row .mr-side { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+.mini-empty { color:var(--text-muted); font-size:.86rem; padding:18px 0; text-align:center; }
+.chip-btn { text-decoration:none; font-size:.76rem; padding:5px 9px; border-radius:6px; border:1px solid var(--border-subtle); background:var(--bg-surface-elevated); color:#fff; cursor:pointer; display:inline-flex; gap:5px; align-items:center; white-space:nowrap; font-family:var(--font-main); }
+.chip-btn.wa { background:#128c4a; border-color:#16a34a; }
+.chip-btn:hover { border-color: rgba(255,255,255,.3); }
+.chart-legend { display:flex; gap:16px; font-size:.82rem; color:var(--text-secondary); }
+.chart-legend span { display:inline-flex; align-items:center; gap:6px; }
+.chart-legend i.sw { width:12px; height:12px; border-radius:3px; display:inline-block; }
+.chart-box { position:relative; width:100%; }
+.chart-box svg { display:block; width:100%; height:auto; direction:ltr; }
+.chart-tip { position:absolute; pointer-events:none; background:var(--bg-surface-elevated); border:1px solid var(--border-subtle); border-radius:8px; padding:8px 12px; font-size:.8rem; color:#fff; box-shadow:var(--shadow-md); white-space:nowrap; display:none; z-index:5; }
+.chart-tip .tip-row { display:flex; align-items:center; gap:6px; color:var(--text-secondary); }
+.chart-tip .tip-row strong { color:#fff; }
+.data-table { width:100%; border-collapse:collapse; font-size:.86rem; text-align:right; }
+.data-table th { background:#10131c; color:var(--text-muted); font-weight:700; padding:10px 12px; border-bottom:1px solid var(--border-subtle); white-space:nowrap; position:sticky; top:0; }
+.data-table td { padding:10px 12px; border-bottom:1px solid var(--border-subtle); vertical-align:middle; }
+.data-table tr:hover td { background:rgba(255,255,255,.02); }
+.data-table .num { font-weight:700; color:#fff; white-space:nowrap; }
+.table-scroll { overflow:auto; max-height:560px; border:1px solid var(--border-subtle); border-radius:var(--radius-md); }
+.fin-panel { padding:16px 18px; }
+.fin-toolbar { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
+.fin-toolbar input[type=text] { flex:1; min-width:200px; padding:9px 12px; background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-md); color:#fff; font-family:var(--font-main); }
+.fin-toolbar label { display:flex; align-items:center; gap:6px; color:var(--text-secondary); font-size:.86rem; cursor:pointer; }
+.sub-tabs { display:flex; gap:6px; margin-bottom:14px; }
+.sub-tab { padding:8px 16px; border-radius:var(--radius-md); background:var(--bg-surface); border:1px solid var(--border-subtle); color:var(--text-secondary); font-family:var(--font-main); font-weight:700; cursor:pointer; }
+.sub-tab.active { background:var(--accent-red); color:#fff; border-color:var(--accent-red); }
+.pay-badge { display:inline-flex; align-items:center; gap:5px; font-size:.74rem; font-weight:800; padding:3px 9px; border-radius:999px; white-space:nowrap; }
+.pay-badge.paid { background:rgba(16,185,129,.14); color:#34d399; }
+.pay-badge.partial { background:rgba(245,158,11,.15); color:#fbbf24; }
+.pay-badge.unpaid { background:rgba(239,68,68,.15); color:#f87171; }
+.stock-badge { display:inline-flex; align-items:center; gap:5px; font-size:.74rem; font-weight:800; padding:3px 9px; border-radius:999px; white-space:nowrap; }
+.stock-badge.ok { background:rgba(16,185,129,.14); color:#34d399; }
+.stock-badge.low { background:rgba(245,158,11,.15); color:#fbbf24; }
+.stock-badge.out { background:rgba(239,68,68,.15); color:#f87171; }
+.stock-badge.untracked { background:var(--bg-surface-elevated); color:var(--text-muted); }
+.visit-pay-box { margin-top:14px; background:rgba(0,0,0,.18); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:14px 14px 4px; }
+.pay-readonly { padding:10px 14px; background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:var(--radius-sm); font-weight:800; color:#fff; }
+.pay-hint { font-size:.84rem; font-weight:700; padding:0 2px 10px; }
+.client-balance { background:rgba(239,68,68,.14); color:#fca5a5; border:1px solid rgba(239,68,68,.35); padding:3px 10px; border-radius:6px; font-weight:800; }
+.expense-form { display:grid; grid-template-columns: 150px 180px 140px 1fr auto; gap:10px; align-items:end; margin-bottom:16px; }
+.expense-form .form-group { margin-bottom:0; }
+.exp-cats { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+.exp-cat-chip { background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:8px; padding:6px 12px; font-size:.82rem; color:var(--text-secondary); }
+.exp-cat-chip strong { color:#fff; }
+.visit-items-table .line-total { font-weight:800; color:#fff; white-space:nowrap; }
+@media (max-width: 1024px) { .dash-grid { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .expense-form { grid-template-columns: 1fr 1fr; } .kpi-tile .kpi-value { font-size:1.3rem; } }
+
 /* Toast Notifications */
 .toast-container {
   position: fixed;
@@ -1871,7 +1953,122 @@ h1, h2, h3, h4, h5 {
 
   <!-- Main Application Container -->
   <main class="main-container">
-    
+
+    <!-- Main navigation -->
+    <nav class="main-tabs" id="mainTabs">
+      <button type="button" class="main-tab" data-view="dashboard"><i class="fa-solid fa-chart-column"></i> لوحة التحكم</button>
+      <button type="button" class="main-tab" data-view="cars"><i class="fa-solid fa-car"></i> العملاء والعربيات</button>
+      <button type="button" class="main-tab" data-view="inventory"><i class="fa-solid fa-boxes-stacked"></i> المخزن <span class="badge-count zero" id="lowStockCount">0</span></button>
+      <button type="button" class="main-tab" data-view="finance"><i class="fa-solid fa-coins"></i> الحسابات</button>
+    </nav>
+
+    <!-- ================= DASHBOARD ================= -->
+    <section class="app-view" id="viewDashboard">
+      <div class="view-head">
+        <h2>لوحة التحكم</h2>
+        <select class="period-select" id="dashPeriod"></select>
+      </div>
+      <div class="kpi-grid" id="dashKpis"></div>
+      <div class="dash-grid">
+        <div class="panel-card dash-panel dash-wide">
+          <div class="dash-panel-head">
+            <h3 id="dashChartTitle">المبيعات والمصروفات</h3>
+            <div class="chart-legend">
+              <span><i class="sw" style="background:var(--series-sales)"></i> المبيعات</span>
+              <span><i class="sw" style="background:var(--series-exp)"></i> المصروفات</span>
+            </div>
+          </div>
+          <div class="chart-box" id="dashChart"></div>
+        </div>
+        <div class="panel-card dash-panel">
+          <div class="dash-panel-head"><h3><i class="fa-solid fa-phone-volume text-amber"></i> عربيات ميعاد صيانتها قرّب أو عدّى</h3><button type="button" class="link-btn" id="dashOpenFollowUp">عرض الكل</button></div>
+          <div class="mini-list" id="dashDueList"></div>
+        </div>
+        <div class="panel-card dash-panel">
+          <div class="dash-panel-head"><h3><i class="fa-solid fa-hand-holding-dollar text-red"></i> عملاء عليهم فلوس</h3><button type="button" class="link-btn" id="dashOpenDebts">عرض الكل</button></div>
+          <div class="mini-list" id="dashDebtors"></div>
+        </div>
+        <div class="panel-card dash-panel">
+          <div class="dash-panel-head"><h3><i class="fa-solid fa-ranking-star text-cyan"></i> أكتر الخدمات والقطع (في الفترة)</h3></div>
+          <div class="mini-list" id="dashTopServices"></div>
+        </div>
+        <div class="panel-card dash-panel">
+          <div class="dash-panel-head"><h3><i class="fa-solid fa-box-open text-amber"></i> قطع قربت تخلص</h3><button type="button" class="link-btn" id="dashOpenInventory">المخزن</button></div>
+          <div class="mini-list" id="dashLowStock"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= INVENTORY ================= -->
+    <section class="app-view" id="viewInventory">
+      <div class="view-head">
+        <h2>المخزن</h2>
+        <button type="button" class="btn btn-primary" id="invAddPart"><i class="fa-solid fa-plus"></i> صنف جديد</button>
+      </div>
+      <div class="kpi-grid" id="invKpis"></div>
+      <div class="panel-card fin-panel">
+        <div class="fin-toolbar">
+          <input type="text" id="invSearch" placeholder="بحث باسم الصنف أو الكود...">
+          <div class="catalog-filter-tabs" id="invFilterTabs">
+            <button type="button" class="catalog-tab-btn active" data-f="all">الكل</button>
+            <button type="button" class="catalog-tab-btn" data-f="low">قربت تخلص</button>
+            <button type="button" class="catalog-tab-btn" data-f="out">خلصت</button>
+            <button type="button" class="catalog-tab-btn" data-f="untracked">مش متسجل كميتها</button>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead><tr><th>الصنف</th><th>المتاح</th><th>حد الطلب</th><th>سعر الشراء</th><th>سعر البيع</th><th>قيمة المخزون</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody id="invTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FINANCE ================= -->
+    <section class="app-view" id="viewFinance">
+      <div class="view-head">
+        <h2>الحسابات</h2>
+        <select class="period-select" id="finPeriod"></select>
+      </div>
+      <div class="kpi-grid" id="finKpis"></div>
+      <div class="sub-tabs">
+        <button type="button" class="sub-tab active" data-fin="invoices"><i class="fa-solid fa-file-invoice"></i> الفواتير والتحصيل</button>
+        <button type="button" class="sub-tab" data-fin="expenses"><i class="fa-solid fa-money-bill-wave"></i> المصروفات</button>
+      </div>
+      <div class="panel-card fin-panel" id="finInvoices">
+        <div class="fin-toolbar">
+          <input type="text" id="finSearch" placeholder="بحث باسم العميل أو اللوحة أو رقم الفاتورة...">
+          <label><input type="checkbox" id="finOnlyDue"> اللي عليها فلوس بس (من أي تاريخ)</label>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead><tr><th>التاريخ</th><th>الفاتورة</th><th>العميل</th><th>العربية</th><th>الصافي</th><th>المدفوع</th><th>الباقي</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody id="finInvoicesBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel-card fin-panel" id="finExpenses" style="display:none;">
+        <form class="expense-form" id="expenseForm">
+          <div class="form-group"><label for="expDate">التاريخ</label><input type="date" id="expDate" required></div>
+          <div class="form-group"><label for="expCategory">البند</label><select id="expCategory"></select></div>
+          <div class="form-group"><label for="expAmount">المبلغ (ج.م)</label><input type="number" id="expAmount" min="1" required></div>
+          <div class="form-group"><label for="expNote">ملاحظة</label><input type="text" id="expNote" placeholder="مثال: إيجار شهر أكتوبر"></div>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> إضافة مصروف</button>
+        </form>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead><tr><th>التاريخ</th><th>البند</th><th>المبلغ</th><th>ملاحظة</th><th>حذف</th></tr></thead>
+            <tbody id="finExpensesBody"></tbody>
+          </table>
+        </div>
+        <div class="exp-cats" id="finExpenseByCat"></div>
+      </div>
+    </section>
+
+    <!-- ================= CARS (existing workspace) ================= -->
+    <div class="app-view" id="viewCars">
+
     <!-- Top Search & Quick Selection Bar -->
     <section class="search-section">
       <div class="search-bar-wrapper">
@@ -1949,6 +2146,7 @@ h1, h2, h3, h4, h5 {
                   <span class="car-color-tag" id="bannerCarColor"></span>
                   <span><i class="fa-solid fa-user"></i> <strong id="bannerClientName">محمد أحمد علي</strong></span>
                   <span><i class="fa-solid fa-phone"></i> <span id="bannerClientPhone" dir="ltr">01012345678</span></span>
+                  <span class="client-balance" id="bannerBalance" style="display:none"></span>
                   <span class="last-recorded-odo"><i class="fa-solid fa-gauge-high"></i> آخر عداد مسجل: <strong id="bannerLastOdo">85,400 كم</strong></span>
                 </div>
               </div>
@@ -2044,6 +2242,8 @@ h1, h2, h3, h4, h5 {
       </section>
 
     </div>
+
+    </div><!-- /viewCars -->
 
   </main>
 
@@ -2233,12 +2433,14 @@ h1, h2, h3, h4, h5 {
             <table class="visit-items-table">
               <thead>
                 <tr>
-                  <th style="width: 24%;">بند الصيانة</th>
-                  <th style="width: 22%;">النوع / التفاصيل</th>
-                  <th style="width: 16%;" title="0 = بدون متابعة بالكيلو">المدى (كم)</th>
-                  <th style="width: 12%;" title="0 = بدون متابعة بالتاريخ">أو كل (شهور)</th>
-                  <th style="width: 16%;">التكلفة (ج.م)</th>
-                  <th style="width: 10%;">حذف</th>
+                  <th style="width: 20%;">بند الصيانة</th>
+                  <th style="width: 18%;">النوع / التفاصيل</th>
+                  <th style="width: 12%;" title="0 = بدون متابعة بالكيلو">المدى (كم)</th>
+                  <th style="width: 9%;" title="0 = بدون متابعة بالتاريخ">أو كل (شهور)</th>
+                  <th style="width: 8%;">الكمية</th>
+                  <th style="width: 12%;">سعر الوحدة</th>
+                  <th style="width: 13%;">الإجمالي</th>
+                  <th style="width: 8%;">حذف</th>
                 </tr>
               </thead>
               <tbody id="visitItemsTableBody">
@@ -2252,6 +2454,29 @@ h1, h2, h3, h4, h5 {
             <div class="total-label">إجمالي تكلفة الزيارة:</div>
             <div class="total-amount"><span id="visitTotalAmount">0</span> <small>ج.م</small></div>
           </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="visit-pay-box">
+          <div class="form-grid-4">
+            <div class="form-group">
+              <label for="visitDiscountInput">الخصم (ج.م)</label>
+              <input type="number" id="visitDiscountInput" min="0" value="0">
+            </div>
+            <div class="form-group">
+              <label>الصافي المطلوب</label>
+              <div class="pay-readonly"><span id="visitNetAmount">0</span> ج.م</div>
+            </div>
+            <div class="form-group">
+              <label for="visitPaidInput" id="visitPaidLabel">المدفوع دلوقتي</label>
+              <input type="number" id="visitPaidInput" min="0" value="0">
+            </div>
+            <div class="form-group">
+              <label for="visitPayMethod">طريقة الدفع</label>
+              <select id="visitPayMethod"></select>
+            </div>
+          </div>
+          <div class="pay-hint" id="visitPayHint"></div>
         </div>
 
         <div class="form-group" style="margin-top: 15px;">
@@ -2324,13 +2549,13 @@ h1, h2, h3, h4, h5 {
               <th>بند الصيانة</th>
               <th>النوع والمواصفات</th>
               <th>المدى الافتراضي</th>
-              <th>التكلفة</th>
+              <th>الإجمالي</th>
             </tr>
           </thead>
           <tbody id="invItemsBody">
             <!-- Items injected here -->
           </tbody>
-          <tfoot>
+          <tfoot id="invFoot">
             <tr>
               <th colspan="4" class="text-left">الإجمالي المطلوب:</th>
               <th id="invTotalAmount">0 ج.م</th>
@@ -2504,11 +2729,88 @@ h1, h2, h3, h4, h5 {
           </div>
         </div>
 
+        <div class="form-grid-3" id="partStockFields">
+          <div class="form-group">
+            <label for="partUnitInput">الوحدة</label>
+            <input list="unitsList" id="partUnitInput" value="قطعة">
+            <datalist id="unitsList"><option value="قطعة"><option value="لتر"><option value="طقم"><option value="علبة"><option value="كيلو"></datalist>
+          </div>
+          <div class="form-group">
+            <label for="partMinQtyInput">حد الطلب (نبّهني لما يوصل)</label>
+            <input type="number" id="partMinQtyInput" value="0" min="0">
+          </div>
+          <div class="form-group" id="partOpeningGroup">
+            <label for="partOpeningInput">الكمية الموجودة دلوقتي</label>
+            <input type="number" id="partOpeningInput" min="0" placeholder="اختياري">
+          </div>
+        </div>
+
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" id="btnCancelPartItemModal">إلغاء</button>
           <button type="submit" class="btn btn-primary">
             <i class="fa-solid fa-floppy-disk"></i> حفظ في الدليل
           </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 7: Collect payment for a visit -->
+  <div class="modal-overlay" id="paymentModal" style="display:none; z-index:1150;">
+    <div class="modal-window" style="max-width:480px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-hand-holding-dollar"></i><h3>تحصيل دفعة</h3></div>
+        <button class="modal-close-btn" id="btnClosePayment">&times;</button>
+      </div>
+      <form class="modal-form" id="paymentForm">
+        <div class="visit-target-summary" id="paymentSummary" style="flex-direction:column;align-items:flex-start;gap:4px;"></div>
+        <div class="form-grid-2" style="margin-top:14px;">
+          <div class="form-group"><label for="payAmount">المبلغ (ج.م)</label><input type="number" id="payAmount" min="1" required></div>
+          <div class="form-group"><label for="payMethod">طريقة الدفع</label><select id="payMethod"></select></div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group"><label for="payDate">التاريخ</label><input type="date" id="payDate" required></div>
+          <div class="form-group"><label for="payNote">ملاحظة</label><input type="text" id="payNote" placeholder="اختياري"></div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelPayment">إلغاء</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> تسجيل الدفعة</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 8: Receive stock / stock count -->
+  <div class="modal-overlay" id="stockModal" style="display:none; z-index:1150;">
+    <div class="modal-window" style="max-width:520px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-boxes-stacked"></i><h3 id="stockModalTitle">استلام كمية</h3></div>
+        <button class="modal-close-btn" id="btnCloseStock">&times;</button>
+      </div>
+      <form class="modal-form" id="stockForm">
+        <div class="visit-target-summary" id="stockSummary" style="flex-direction:column;align-items:flex-start;gap:4px;"></div>
+        <div id="stockReceiveFields">
+          <div class="form-grid-2" style="margin-top:14px;">
+            <div class="form-group"><label for="stockQty">الكمية المستلمة</label><input type="number" id="stockQty" min="0.01" step="any"></div>
+            <div class="form-group"><label for="stockUnitCost">سعر شراء الوحدة (ج.م)</label><input type="number" id="stockUnitCost" min="0" step="any"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group"><label for="stockDate">التاريخ</label><input type="date" id="stockDate"></div>
+            <div class="form-group"><label for="stockNote">ملاحظة / المورد</label><input type="text" id="stockNote" placeholder="اختياري"></div>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:.88rem;cursor:pointer;">
+            <input type="checkbox" id="stockAsExpense" checked> سجّل تمنها في المصروفات (شراء قطع)
+          </label>
+        </div>
+        <div id="stockCountFields" style="display:none;">
+          <div class="form-group" style="margin-top:14px;">
+            <label for="stockCountQty">العدد الفعلي الموجود على الرف</label>
+            <input type="number" id="stockCountQty" min="0" step="any">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelStock">إلغاء</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> حفظ</button>
         </div>
       </form>
     </div>
@@ -2852,7 +3154,8 @@ const CATALOG_SUGGESTED_PRESETS = [
     clients: 'clients',
     vehicles: 'vehicles',
     visits: 'visits',
-    partsCatalog: 'catalog'
+    partsCatalog: 'catalog',
+    expenses: 'expenses'
   };
   const MIGRATION_FLAG_KEY = 'ASFOUR_CLOUD_MIGRATION_DONE';
 
@@ -2878,6 +3181,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     vehicles: [],
     visits: [],
     partsCatalog: [],
+    expenses: [],
     invoiceCounter: 1000,
     settings: { defaultDailyKm: 40, alertDays: 14, alertKm: 1000, contactSnoozeDays: 7 },
     activeVehicleId: null,
@@ -3059,6 +3363,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     getSettings();
     bindEvents();
     bindFollowUpEvents();
+    bindPhase2Events();
     bindCloudUI();
     renderAllFromData();
 
@@ -3092,6 +3397,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       showEmptyState();
     }
     if (elements.followUpModal && elements.followUpModal.style.display === 'flex') renderFollowUpList();
+    renderCurrentView();
   }
 
   function scheduleRender() {
@@ -3155,6 +3461,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     appState.vehicles = [];
     appState.visits = [];
     appState.partsCatalog = [];
+    appState.expenses = [];
     appState.activeVehicleId = null;
     renderAllFromData();
     elements.userChip.textContent = '';
@@ -3433,6 +3740,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     if (elements.totalVehiclesCount) elements.totalVehiclesCount.textContent = appState.vehicles.length;
     if (elements.totalVisitsCount) elements.totalVisitsCount.textContent = appState.visits.length;
     updateFollowUpBadge();
+    updateLowStockBadge();
   }
 
   // --- CUSTOMER FOLLOW-UP (who to call) ---
@@ -3545,7 +3853,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       });
       card.querySelector('.open').addEventListener('click', () => {
         elements.followUpModal.style.display = 'none';
-        selectVehicle(vehicle.id);
+        openVehicle(vehicle.id);
       });
       elements.followUpList.appendChild(card);
     });
@@ -3568,6 +3876,621 @@ const CATALOG_SUGGESTED_PRESETS = [
     bindSetting(elements.setDefaultDailyKm, 'defaultDailyKm', 1, 500);
     bindSetting(elements.setAlertDays, 'alertDays', 0, 90);
     bindSetting(elements.setAlertKm, 'alertKm', 0, 10000);
+  }
+
+  // =====================================================================
+  // PHASE 2: MONEY, INVENTORY, DASHBOARD
+  // =====================================================================
+  const PAY_METHODS = { cash: 'كاش', vodafone: 'فودافون كاش', instapay: 'إنستاباي', card: 'فيزا / كارت', bank: 'تحويل بنكي' };
+  const EXPENSE_CATS = { rent: 'إيجار', salaries: 'مرتبات', utilities: 'كهرباء ومياه', purchase: 'شراء قطع / مخزون', tools: 'عدد وأدوات', marketing: 'دعاية', other: 'أخرى' };
+  const PERIODS = { today: 'النهارده', '7d': 'آخر 7 أيام', month: 'الشهر ده', lastMonth: 'الشهر اللي فات', year: 'السنة دي', all: 'كل الفترات' };
+  const $id = id => document.getElementById(id);
+  let currentView = 'dashboard';
+  let invFilter = 'all';
+
+  // ---------- Money helpers ----------
+  function visitNet(v) { return Math.max(0, (Number(v.totalCost) || 0) - (Number(v.discount) || 0)); }
+  // Visits recorded before payments existed are treated as fully paid on their date.
+  function paymentsOf(v) {
+    if (!Array.isArray(v.payments)) return [{ date: v.date, amount: visitNet(v), method: 'legacy' }];
+    return v.payments.map(p => ({ ...p, amount: Number(p.amount) || 0 }));
+  }
+  function visitPaid(v) { return paymentsOf(v).reduce((a, p) => a + p.amount, 0); }
+  function visitDue(v) { return Math.max(0, Math.round((visitNet(v) - visitPaid(v)) * 100) / 100); }
+  function payStatus(v) {
+    if (visitDue(v) <= 0) return 'paid';
+    return visitPaid(v) > 0 ? 'partial' : 'unpaid';
+  }
+  function payBadgeHtml(v) {
+    const st = payStatus(v);
+    if (st === 'paid') return `<span class="pay-badge paid"><i class="fa-solid fa-circle-check"></i> مدفوعة</span>`;
+    if (st === 'partial') return `<span class="pay-badge partial"><i class="fa-solid fa-circle-half-stroke"></i> باقي ${formatNumber(visitDue(v))}</span>`;
+    return `<span class="pay-badge unpaid"><i class="fa-solid fa-clock"></i> آجل ${formatNumber(visitDue(v))}</span>`;
+  }
+  function clientBalance(clientId) {
+    const vIds = new Set(appState.vehicles.filter(v => v.clientId === clientId).map(v => v.id));
+    return appState.visits.filter(v => vIds.has(v.vehicleId)).reduce((a, v) => a + visitDue(v), 0);
+  }
+  function fillSelect(sel, map, value) {
+    sel.innerHTML = Object.entries(map).map(([k, l]) => `<option value="${k}">${l}</option>`).join('');
+    if (value) sel.value = value;
+  }
+
+  // ---------- Visit modal payment section ----------
+  let paidTouched = false;
+  let editingPrevPaid = 0;
+  function preparePaymentFields(visit) {
+    paidTouched = false;
+    $id('visitDiscountInput').value = visit ? (Number(visit.discount) || 0) : 0;
+    $id('visitPayMethod').value = 'cash';
+    if (visit) {
+      editingPrevPaid = visitPaid(visit);
+      $id('visitPaidLabel').textContent = 'دفعة جديدة (اختياري)';
+      $id('visitPaidInput').value = 0;
+    } else {
+      editingPrevPaid = 0;
+      $id('visitPaidLabel').textContent = 'المدفوع دلوقتي';
+    }
+  }
+  function updateVisitPayment(total) {
+    if (total == null) total = [...elements.visitItemsTableBody.querySelectorAll('tr')].reduce((a, r) =>
+      a + (Number(r.querySelector('.item-qty-input')?.value) || 0) * (Number(r.querySelector('.item-cost-input')?.value) || 0), 0);
+    const disc = Math.min(Math.max(Number($id('visitDiscountInput').value) || 0, 0), total);
+    const net = Math.round((total - disc) * 100) / 100;
+    $id('visitNetAmount').textContent = formatNumber(net);
+    const paidInput = $id('visitPaidInput');
+    if (!editingVisitId && !paidTouched) paidInput.value = net;
+    const payNow = Number(paidInput.value) || 0;
+    const due = Math.max(0, Math.round((net - editingPrevPaid - payNow) * 100) / 100);
+    const hint = $id('visitPayHint');
+    const prev = editingPrevPaid > 0 ? `مدفوع قبل كده: ${formatNumber(editingPrevPaid)} ج.م — ` : '';
+    if (due <= 0) {
+      hint.innerHTML = `<span class="trend-good"><i class="fa-solid fa-circle-check"></i> ${prev}مدفوعة بالكامل</span>`;
+    } else {
+      hint.innerHTML = `<span class="trend-bad"><i class="fa-solid fa-clock"></i> ${prev}الباقي على العميل: ${formatNumber(due)} ج.م (هيتسجل آجل)</span>`;
+    }
+  }
+
+  // ---------- Payment modal ----------
+  let payingVisitId = null;
+  function openPaymentModal(visitId) {
+    const v = appState.visits.find(x => x.id === visitId);
+    if (!v) return;
+    payingVisitId = visitId;
+    const veh = appState.vehicles.find(x => x.id === v.vehicleId);
+    const cl = veh && appState.clients.find(c => c.id === veh.clientId);
+    $id('paymentSummary').innerHTML = `
+      <div><span class="label">فاتورة:</span> <strong>#${escapeHtml(v.invoiceNumber || '')}</strong> — ${escapeHtml(v.date)}</div>
+      <div><span class="label">العميل:</span> <strong>${escapeHtml(cl ? cl.name : '-')}</strong> — ${escapeHtml(veh ? `${veh.make} ${veh.model}` : '')}</div>
+      <div><span class="label">الصافي:</span> ${formatNumber(visitNet(v))} — <span class="label">المدفوع:</span> ${formatNumber(visitPaid(v))} — <strong class="trend-bad">الباقي: ${formatNumber(visitDue(v))} ج.م</strong></div>`;
+    $id('payAmount').value = visitDue(v);
+    $id('payAmount').max = visitDue(v);
+    $id('payDate').value = todayLocalISO();
+    $id('payNote').value = '';
+    $id('payMethod').value = 'cash';
+    $id('paymentModal').style.display = 'flex';
+  }
+  function handlePaymentSubmit(e) {
+    e.preventDefault();
+    const v = appState.visits.find(x => x.id === payingVisitId);
+    if (!v) return;
+    const amount = Math.min(Number($id('payAmount').value) || 0, visitDue(v));
+    if (amount <= 0) { showToast('اكتب مبلغ صحيح', 'error'); return; }
+    v.payments = paymentsOf(v).filter(p => p.method !== 'legacy');
+    v.payments.push({ id: generateId('pay'), date: $id('payDate').value || todayLocalISO(), amount, method: $id('payMethod').value, note: $id('payNote').value.trim() });
+    saveData();
+    $id('paymentModal').style.display = 'none';
+    renderAllFromData();
+    showToast(`تم تسجيل دفعة ${formatNumber(amount)} ج.م`, 'success');
+  }
+
+  // ---------- Inventory helpers ----------
+  function getStockUsageMap() {
+    const m = new Map();
+    appState.visits.forEach(v => (v.items || []).forEach(it => {
+      if (it.catalogId) m.set(it.catalogId, (m.get(it.catalogId) || 0) + (Number(it.qty) || 1));
+    }));
+    return m;
+  }
+  function getStockInfo(p, usage) {
+    const log = p.stockLog || [];
+    const tracked = log.length > 0;
+    const received = log.reduce((a, x) => a + (Number(x.qty) || 0), 0);
+    const used = (usage || getStockUsageMap()).get(p.id) || 0;
+    const qty = Math.round((received - used) * 100) / 100;
+    const min = Number(p.minQty) || 0;
+    const status = !tracked ? 'untracked' : qty <= 0 ? 'out' : qty <= min ? 'low' : 'ok';
+    return { tracked, qty, used, received, min, status, value: Math.max(qty, 0) * (Number(p.buyCost) || 0) };
+  }
+  function stockBadgeHtml(st) {
+    return {
+      ok: `<span class="stock-badge ok"><i class="fa-solid fa-circle-check"></i> متوفر</span>`,
+      low: `<span class="stock-badge low"><i class="fa-solid fa-circle-exclamation"></i> قرب يخلص</span>`,
+      out: `<span class="stock-badge out"><i class="fa-solid fa-triangle-exclamation"></i> خلص</span>`,
+      untracked: `<span class="stock-badge untracked"><i class="fa-regular fa-circle"></i> مش متسجل</span>`
+    }[st.status];
+  }
+  function inventoryParts() { return (appState.partsCatalog || []).filter(p => p.type === 'part'); }
+  function lowStockParts() {
+    const usage = getStockUsageMap();
+    return inventoryParts().map(p => ({ p, st: getStockInfo(p, usage) })).filter(x => x.st.status === 'low' || x.st.status === 'out');
+  }
+  function updateLowStockBadge() {
+    const el = $id('lowStockCount');
+    if (!el) return;
+    const n = lowStockParts().length;
+    el.textContent = n;
+    el.classList.toggle('zero', n === 0);
+  }
+
+  // ---------- Stock modal ----------
+  let stockPartId = null, stockMode = 'receive';
+  function openStockModal(partId, mode) {
+    const p = appState.partsCatalog.find(x => x.id === partId);
+    if (!p) return;
+    stockPartId = partId; stockMode = mode;
+    const st = getStockInfo(p);
+    $id('stockModalTitle').textContent = mode === 'receive' ? 'استلام كمية' : 'جرد (تعديل الكمية)';
+    $id('stockSummary').innerHTML = `
+      <div><strong>${escapeHtml(p.name)}</strong> ${p.code ? `<span class="part-code-tag">${escapeHtml(p.code)}</span>` : ''}</div>
+      <div><span class="label">المتاح حسب النظام:</span> <strong>${st.tracked ? formatNumber(st.qty) : '—'} ${escapeHtml(p.unit || 'قطعة')}</strong></div>`;
+    $id('stockReceiveFields').style.display = mode === 'receive' ? '' : 'none';
+    $id('stockCountFields').style.display = mode === 'count' ? '' : 'none';
+    $id('stockQty').value = '';
+    $id('stockUnitCost').value = p.buyCost || '';
+    $id('stockDate').value = todayLocalISO();
+    $id('stockNote').value = '';
+    $id('stockAsExpense').checked = true;
+    $id('stockCountQty').value = st.tracked ? Math.max(st.qty, 0) : '';
+    $id('stockModal').style.display = 'flex';
+  }
+  function handleStockSubmit(e) {
+    e.preventDefault();
+    const p = appState.partsCatalog.find(x => x.id === stockPartId);
+    if (!p) return;
+    p.stockLog = p.stockLog || [];
+    if (stockMode === 'receive') {
+      const qty = Number($id('stockQty').value) || 0;
+      const unitCost = Number($id('stockUnitCost').value) || 0;
+      if (qty <= 0) { showToast('اكتب الكمية المستلمة', 'error'); return; }
+      const date = $id('stockDate').value || todayLocalISO();
+      const note = $id('stockNote').value.trim();
+      const entryId = generateId('stk');
+      p.stockLog.push({ id: entryId, date, type: 'purchase', qty, unitCost, note });
+      if (unitCost > 0) p.buyCost = unitCost;
+      if ($id('stockAsExpense').checked && qty * unitCost > 0) {
+        appState.expenses.unshift({ id: generateId('exp'), date, category: 'purchase', amount: Math.round(qty * unitCost * 100) / 100,
+          note: `شراء ${formatNumber(qty)} ${p.unit || 'قطعة'} ${p.name}${note ? ' — ' + note : ''}`, stockEntryId: entryId });
+      }
+      showToast(`تم إضافة ${formatNumber(qty)} ${p.unit || 'قطعة'} للمخزن`, 'success');
+    } else {
+      const actual = Number($id('stockCountQty').value);
+      if (isNaN(actual) || actual < 0) { showToast('اكتب العدد الفعلي', 'error'); return; }
+      const st = getStockInfo(p);
+      const diff = Math.round((actual - (st.tracked ? st.qty : 0)) * 100) / 100;
+      p.stockLog.push({ id: generateId('stk'), date: todayLocalISO(), type: st.tracked ? 'adjust' : 'opening', qty: diff, note: 'جرد' });
+      showToast('تم تحديث الكمية حسب الجرد', 'success');
+    }
+    saveData();
+    $id('stockModal').style.display = 'none';
+    renderAllFromData();
+  }
+
+  // ---------- Periods & statistics ----------
+  function getPeriodRange(key) {
+    const t = todayLocalISO();
+    const d = parseISODate(t);
+    const first = (y, m) => toISODate(new Date(y, m, 1));
+    switch (key) {
+      case 'today': return { from: t, to: t };
+      case '7d': return { from: addDaysISO(t, -6), to: t };
+      case 'lastMonth': return { from: first(d.getFullYear(), d.getMonth() - 1), to: toISODate(new Date(d.getFullYear(), d.getMonth(), 0)) };
+      case 'year': return { from: first(d.getFullYear(), 0), to: t };
+      case 'all': {
+        const dates = appState.visits.map(v => v.date).concat(appState.expenses.map(e => e.date)).filter(Boolean).sort();
+        return { from: dates[0] || t, to: t };
+      }
+      default: return { from: first(d.getFullYear(), d.getMonth()), to: t };
+    }
+  }
+  const inRange = (d, r) => d && d >= r.from && d <= r.to;
+
+  function computeStats(r) {
+    const st = { sales: 0, discount: 0, visits: 0, collected: 0, expenses: 0, partsCost: 0, byCat: {}, services: new Map() };
+    appState.visits.forEach(v => {
+      if (inRange(v.date, r)) {
+        st.visits++;
+        st.sales += visitNet(v);
+        st.discount += Number(v.discount) || 0;
+        (v.items || []).forEach(it => {
+          const key = normalizeArabic(it.name);
+          const e = st.services.get(key) || { name: it.name, count: 0, revenue: 0 };
+          e.count += Number(it.qty) || 1;
+          e.revenue += Number(it.cost) || 0;
+          st.services.set(key, e);
+          if (Number(it.buyCost) > 0) st.partsCost += Number(it.buyCost) * (Number(it.qty) || 1);
+        });
+      }
+      paymentsOf(v).forEach(p => { if (inRange(p.date, r)) st.collected += p.amount; });
+    });
+    appState.expenses.forEach(e => {
+      if (inRange(e.date, r)) {
+        const a = Number(e.amount) || 0;
+        st.expenses += a;
+        st.byCat[e.category] = (st.byCat[e.category] || 0) + a;
+      }
+    });
+    st.outstanding = appState.visits.reduce((a, v) => a + visitDue(v), 0);
+    st.netCash = st.collected - st.expenses;
+    st.workProfit = st.sales - st.partsCost;
+    return st;
+  }
+
+  function getDebtors() {
+    const map = new Map();
+    appState.visits.forEach(v => {
+      const due = visitDue(v);
+      if (due <= 0) return;
+      const veh = appState.vehicles.find(x => x.id === v.vehicleId);
+      if (!veh) return;
+      const cl = appState.clients.find(c => c.id === veh.clientId);
+      const key = cl ? cl.id : veh.id;
+      const e = map.get(key) || { client: cl, vehicle: veh, due: 0, count: 0, oldest: v.date };
+      e.due += due; e.count++;
+      if (v.date < e.oldest) e.oldest = v.date;
+      map.set(key, e);
+    });
+    return [...map.values()].sort((a, b) => b.due - a.due);
+  }
+
+  function kpiTile(label, icon, value, sub, cls = '', attrs = '') {
+    return `<div class="kpi-tile ${attrs ? 'clickable' : ''}" ${attrs}>
+      <div class="kpi-label"><i class="fa-solid ${icon}"></i> ${label}</div>
+      <div class="kpi-value ${cls}">${value}</div>
+      ${sub ? `<div class="kpi-sub">${sub}</div>` : ''}
+    </div>`;
+  }
+  const money = n => `${formatNumber(Math.round(n))} <small>ج.م</small>`;
+
+  // ---------- Navigation ----------
+  function switchView(name) {
+    currentView = name;
+    try { localStorage.setItem('ASFOUR_VIEW', name); } catch (e) {}
+    document.querySelectorAll('.main-tab').forEach(t => t.classList.toggle('active', t.dataset.view === name));
+    const ids = { dashboard: 'viewDashboard', cars: 'viewCars', inventory: 'viewInventory', finance: 'viewFinance' };
+    Object.entries(ids).forEach(([k, id]) => $id(id).classList.toggle('active', k === name));
+    renderCurrentView();
+    window.scrollTo({ top: 0 });
+  }
+  function renderCurrentView() {
+    if (currentView === 'dashboard') renderDashboard();
+    else if (currentView === 'inventory') renderInventory();
+    else if (currentView === 'finance') renderFinance();
+  }
+  function openVehicle(id) {
+    switchView('cars');
+    selectVehicle(id);
+  }
+
+  // ---------- Dashboard ----------
+  function renderDashboard() {
+    const r = getPeriodRange($id('dashPeriod').value);
+    const st = computeStats(r);
+    const fu = getFollowUpList().filter(x => !x.snoozed);
+    const low = lowStockParts();
+    const debtors = getDebtors();
+
+    $id('dashKpis').innerHTML = [
+      kpiTile('المبيعات', 'fa-receipt', money(st.sales), `${formatNumber(st.visits)} زيارة${st.discount ? ` • خصومات ${formatNumber(st.discount)}` : ''}`),
+      kpiTile('المحصّل', 'fa-sack-dollar', money(st.collected), 'فلوس دخلت فعلاً'),
+      kpiTile('المصروفات', 'fa-money-bill-wave', money(st.expenses), 'إيجار ومرتبات وشراء قطع...'),
+      kpiTile('صافي الكاش', st.netCash >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down', money(st.netCash),
+        st.netCash >= 0 ? 'المحصّل ناقص المصروفات — مكسب' : 'المحصّل ناقص المصروفات — خسارة', st.netCash >= 0 ? 'trend-good' : 'trend-bad'),
+      kpiTile('مكسب الشغل', 'fa-screwdriver-wrench', money(st.workProfit), 'المبيعات ناقص تمن القطع المستخدمة'),
+      kpiTile('فلوس برّه', 'fa-hand-holding-dollar', money(st.outstanding), `${formatNumber(debtors.length)} عميل عليهم فلوس`, st.outstanding > 0 ? 'trend-bad' : '', 'data-go="debts"'),
+      kpiTile('محتاجين متابعة', 'fa-phone-volume', formatNumber(fu.length), 'عربيات ميعادها قرّب أو عدّى', fu.length ? 'trend-bad' : '', 'data-go="followup"'),
+      kpiTile('قطع قربت تخلص', 'fa-box-open', formatNumber(low.length), 'من المخزن', low.length ? 'trend-bad' : '', 'data-go="inventory"')
+    ].join('');
+    $id('dashKpis').querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => {
+      const g = el.dataset.go;
+      if (g === 'followup') openFollowUpModal();
+      else if (g === 'inventory') { invFilter = 'low'; switchView('inventory'); }
+      else if (g === 'debts') { $id('finOnlyDue').checked = true; switchView('finance'); }
+    }));
+
+    renderSalesChart(r);
+
+    // Due cars
+    $id('dashDueList').innerHTML = fu.length ? fu.slice(0, 6).map((x, i) => {
+      const plate = x.vehicle.plateFull || `${x.vehicle.plateLetters} ${x.vehicle.plateNumbers}`;
+      const names = x.due.map(d => d.item.name).join('، ');
+      return `<div class="mini-row">
+        <div class="mr-main">
+          <div class="mr-title">${colorDotHtml(x.vehicle.color)}${escapeHtml(x.vehicle.make)} ${escapeHtml(x.vehicle.model)} <span class="plate-mini">${escapeHtml(plate)}</span>
+            <span class="pay-badge ${x.status === 'overdue' ? 'unpaid' : 'partial'}">${x.status === 'overdue' ? 'متأخر' : 'قرّب'}</span></div>
+          <div class="mr-sub">${escapeHtml(x.client ? x.client.name : '')} — ${escapeHtml(names)}</div>
+        </div>
+        <div class="mr-side"><button type="button" class="chip-btn" data-open="${x.vehicle.id}"><i class="fa-solid fa-car"></i> فتح</button></div>
+      </div>`;
+    }).join('') : `<div class="mini-empty">مفيش عربيات محتاجة متابعة دلوقتي 👌</div>`;
+
+    // Debtors
+    $id('dashDebtors').innerHTML = debtors.length ? debtors.slice(0, 6).map(d => {
+      const msg = `أهلاً أستاذ/ة ${d.client ? d.client.name : ''} 👋\nمعاك مركز عصفور لصيانة السيارات.\nحابين نفكّر حضرتك بمبلغ ${formatNumber(d.due)} ج.م متبقي من صيانة عربيتك.\nشكراً لحضرتك.`;
+      const wa = d.client && d.client.phone ? `https://wa.me/${toWhatsAppNumber(d.client.phone)}?text=${encodeURIComponent(msg)}` : null;
+      return `<div class="mini-row">
+        <div class="mr-main">
+          <div class="mr-title">${escapeHtml(d.client ? d.client.name : '-')} <span class="pay-badge unpaid">${formatNumber(d.due)} ج.م</span></div>
+          <div class="mr-sub">${formatNumber(d.count)} فاتورة — أقدم واحدة ${formatDateAr(d.oldest)}</div>
+        </div>
+        <div class="mr-side">
+          ${wa ? `<a class="chip-btn wa" href="${wa}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> تذكير</a>` : ''}
+          <button type="button" class="chip-btn" data-open="${d.vehicle.id}"><i class="fa-solid fa-car"></i> فتح</button>
+        </div>
+      </div>`;
+    }).join('') : `<div class="mini-empty">مفيش فلوس برّه — كل الفواتير متحصّلة 👌</div>`;
+
+    // Top services
+    const top = [...st.services.values()].sort((a, b) => b.revenue - a.revenue).slice(0, 6);
+    $id('dashTopServices').innerHTML = top.length ? top.map(s => `<div class="mini-row">
+        <div class="mr-main"><div class="mr-title">${escapeHtml(s.name)}</div><div class="mr-sub">${formatNumber(s.count)} مرة</div></div>
+        <div class="mr-side"><strong style="color:#fff">${formatNumber(Math.round(s.revenue))} ج.م</strong></div>
+      </div>`).join('') : `<div class="mini-empty">مفيش زيارات في الفترة دي</div>`;
+
+    // Low stock
+    $id('dashLowStock').innerHTML = low.length ? low.slice(0, 6).map(({ p, st: s }) => `<div class="mini-row">
+        <div class="mr-main"><div class="mr-title">${escapeHtml(p.name)}</div><div class="mr-sub">المتاح ${formatNumber(s.qty)} ${escapeHtml(p.unit || 'قطعة')} — حد الطلب ${formatNumber(s.min)}</div></div>
+        <div class="mr-side">${stockBadgeHtml(s)}<button type="button" class="chip-btn" data-receive="${p.id}"><i class="fa-solid fa-plus"></i> استلام</button></div>
+      </div>`).join('') : `<div class="mini-empty">كل القطع المتسجلة متوفرة 👌</div>`;
+
+    $id('viewDashboard').querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => openVehicle(b.dataset.open)));
+    $id('viewDashboard').querySelectorAll('[data-receive]').forEach(b => b.addEventListener('click', () => openStockModal(b.dataset.receive, 'receive')));
+  }
+
+  // Grouped bar chart: sales vs expenses (one axis, same unit)
+  function renderSalesChart(r) {
+    const box = $id('dashChart');
+    const span = daysBetween(r.from, r.to) + 1;
+    const monthly = span > 62;
+    const buckets = [];
+    if (monthly) {
+      let d = parseISODate(r.from); d = new Date(d.getFullYear(), d.getMonth(), 1);
+      const end = parseISODate(r.to);
+      while (d <= end) {
+        const key = toISODate(d).slice(0, 7);
+        buckets.push({ key, label: d.toLocaleDateString('ar-EG', { month: 'short', year: '2-digit' }), sales: 0, exp: 0 });
+        d = new Date(d.getFullYear(), d.getMonth() + 1, 1);
+      }
+    } else {
+      for (let i = 0; i < span; i++) {
+        const key = addDaysISO(r.from, i);
+        buckets.push({ key, label: parseISODate(key).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short' }), sales: 0, exp: 0 });
+      }
+    }
+    const idx = new Map(buckets.map((b, i) => [b.key, i]));
+    const keyOf = date => monthly ? date.slice(0, 7) : date;
+    appState.visits.forEach(v => { if (inRange(v.date, r) && idx.has(keyOf(v.date))) buckets[idx.get(keyOf(v.date))].sales += visitNet(v); });
+    appState.expenses.forEach(e => { if (inRange(e.date, r) && idx.has(keyOf(e.date))) buckets[idx.get(keyOf(e.date))].exp += Number(e.amount) || 0; });
+    $id('dashChartTitle').textContent = `المبيعات والمصروفات — ${monthly ? 'بالشهر' : 'باليوم'}`;
+
+    const max = Math.max(0, ...buckets.map(b => Math.max(b.sales, b.exp)));
+    if (max === 0) { box.innerHTML = `<div class="mini-empty">مفيش مبيعات ولا مصروفات في الفترة دي</div>`; return; }
+
+    const W = Math.max(box.clientWidth || 800, 320), H = 240, padL = 56, padR = 10, padT = 12, padB = 30;
+    const plotW = W - padL - padR, plotH = H - padT - padB;
+    const nice = (() => { const p = Math.pow(10, Math.floor(Math.log10(max))); const m = max / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; })();
+    const y = v => padT + plotH - (v / nice) * plotH;
+    const step = plotW / buckets.length;
+    const barW = Math.max(2, Math.min(18, (step - 6) / 2));
+    const short = v => v >= 1000 ? `${formatNumber(Math.round(v / 100) / 10)} ألف` : formatNumber(v);
+    const rounded = (x, top, w, h) => {
+      if (h <= 0) return '';
+      const rr = Math.min(4, w / 2, h);
+      const b = top + h;
+      return `M${x},${b} V${top + rr} Q${x},${top} ${x + rr},${top} H${x + w - rr} Q${x + w},${top} ${x + w},${top + rr} V${b} Z`;
+    };
+    let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="المبيعات والمصروفات">`;
+    for (let i = 0; i <= 4; i++) {
+      const v = nice * i / 4, yy = y(v);
+      svg += `<line x1="${padL}" x2="${W - padR}" y1="${yy}" y2="${yy}" stroke="rgba(255,255,255,${i === 0 ? .25 : .07})" stroke-width="1"/>`;
+      svg += `<text x="${padL - 8}" y="${yy + 4}" text-anchor="end" font-size="11" fill="#94a3b8" font-family="Cairo">${short(v)}</text>`;
+    }
+    const labelEvery = Math.ceil(buckets.length / Math.max(1, Math.floor(plotW / 60)));
+    buckets.forEach((b, i) => {
+      const cx = padL + step * i + step / 2;
+      const hs = plotH * b.sales / nice, he = plotH * b.exp / nice;
+      svg += `<path d="${rounded(cx - barW - 1, y(b.sales), barW, hs)}" fill="var(--series-sales)"/>`;
+      svg += `<path d="${rounded(cx + 1, y(b.exp), barW, he)}" fill="var(--series-exp)"/>`;
+      if (i % labelEvery === 0) svg += `<text x="${cx}" y="${H - 10}" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="Cairo">${b.label}</text>`;
+      svg += `<rect class="hit" data-i="${i}" x="${padL + step * i}" y="${padT}" width="${step}" height="${plotH}" fill="transparent"/>`;
+    });
+    svg += `</svg><div class="chart-tip" id="dashChartTip"></div>`;
+    box.innerHTML = svg;
+    const tip = $id('dashChartTip');
+    box.querySelectorAll('rect.hit').forEach(rc => {
+      rc.addEventListener('mousemove', ev => {
+        const b = buckets[Number(rc.dataset.i)];
+        tip.innerHTML = `<div style="font-weight:800;margin-bottom:4px">${b.label}</div>
+          <div class="tip-row"><i class="sw" style="width:10px;height:10px;border-radius:2px;background:var(--series-sales);display:inline-block"></i> المبيعات: <strong>${formatNumber(Math.round(b.sales))} ج.م</strong></div>
+          <div class="tip-row"><i class="sw" style="width:10px;height:10px;border-radius:2px;background:var(--series-exp);display:inline-block"></i> المصروفات: <strong>${formatNumber(Math.round(b.exp))} ج.م</strong></div>`;
+        const rect = box.getBoundingClientRect();
+        tip.style.display = 'block';
+        let left = ev.clientX - rect.left + 12;
+        if (left + tip.offsetWidth > rect.width) left = ev.clientX - rect.left - tip.offsetWidth - 12;
+        tip.style.left = left + 'px';
+        tip.style.top = Math.max(0, ev.clientY - rect.top - 30) + 'px';
+      });
+      rc.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+    });
+  }
+
+  // ---------- Inventory view ----------
+  function renderInventory() {
+    const usage = getStockUsageMap();
+    const parts = inventoryParts().map(p => ({ p, st: getStockInfo(p, usage) }));
+    const value = parts.reduce((a, x) => a + x.st.value, 0);
+    const low = parts.filter(x => x.st.status === 'low').length;
+    const out = parts.filter(x => x.st.status === 'out').length;
+    const untracked = parts.filter(x => x.st.status === 'untracked').length;
+    $id('invKpis').innerHTML = [
+      kpiTile('عدد الأصناف', 'fa-boxes-stacked', formatNumber(parts.length), untracked ? `${formatNumber(untracked)} منهم لسه مش متسجل كميتهم` : 'كلهم متسجلين'),
+      kpiTile('قيمة المخزون', 'fa-coins', money(value), 'الكمية × سعر الشراء'),
+      kpiTile('قربت تخلص', 'fa-circle-exclamation', formatNumber(low), 'وصلت لحد الطلب', low ? 'trend-bad' : ''),
+      kpiTile('خلصت', 'fa-triangle-exclamation', formatNumber(out), 'الكمية صفر', out ? 'trend-bad' : '')
+    ].join('');
+    document.querySelectorAll('#invFilterTabs .catalog-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.f === invFilter));
+    const q = normalizeArabic($id('invSearch').value);
+    const rows = parts.filter(x => {
+      if (invFilter === 'low' && !(x.st.status === 'low' || x.st.status === 'out')) return false;
+      if (invFilter === 'out' && x.st.status !== 'out') return false;
+      if (invFilter === 'untracked' && x.st.status !== 'untracked') return false;
+      if (q && !(normalizeArabic(x.p.name).includes(q) || normalizeArabic(x.p.code || '').includes(q))) return false;
+      return true;
+    });
+    $id('invTableBody').innerHTML = rows.length ? rows.map(({ p, st }) => `<tr>
+        <td><strong style="color:#fff">${escapeHtml(p.name)}</strong>${p.code ? `<div class="part-code-tag">${escapeHtml(p.code)}</div>` : ''}</td>
+        <td class="num">${st.tracked ? `${formatNumber(st.qty)} ${escapeHtml(p.unit || 'قطعة')}` : '—'}</td>
+        <td>${formatNumber(st.min)}</td>
+        <td>${p.buyCost ? formatNumber(p.buyCost) + ' ج.م' : '—'}</td>
+        <td>${formatNumber(p.cost)} ج.م</td>
+        <td class="num">${st.tracked ? formatNumber(Math.round(st.value)) + ' ج.م' : '—'}</td>
+        <td>${stockBadgeHtml(st)}</td>
+        <td style="white-space:nowrap">
+          <button type="button" class="chip-btn" data-receive="${p.id}"><i class="fa-solid fa-plus"></i> استلام</button>
+          <button type="button" class="chip-btn" data-count="${p.id}"><i class="fa-solid fa-clipboard-check"></i> جرد</button>
+          <button type="button" class="chip-btn" data-edit="${p.id}"><i class="fa-solid fa-pen"></i></button>
+        </td>
+      </tr>`).join('') : `<tr><td colspan="8"><div class="mini-empty">${parts.length ? 'مفيش أصناف بالشروط دي' : 'مفيش قطع غيار في الدليل لسه — دوس "صنف جديد" أو حمّل البنود المقترحة من دليل القطع'}</div></td></tr>`;
+    const tb = $id('invTableBody');
+    tb.querySelectorAll('[data-receive]').forEach(b => b.addEventListener('click', () => openStockModal(b.dataset.receive, 'receive')));
+    tb.querySelectorAll('[data-count]').forEach(b => b.addEventListener('click', () => openStockModal(b.dataset.count, 'count')));
+    tb.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openPartItemModal(b.dataset.edit)));
+  }
+
+  // ---------- Finance view ----------
+  function renderFinance() {
+    const r = getPeriodRange($id('finPeriod').value);
+    const st = computeStats(r);
+    $id('finKpis').innerHTML = [
+      kpiTile('المبيعات', 'fa-receipt', money(st.sales), `${formatNumber(st.visits)} فاتورة`),
+      kpiTile('المحصّل', 'fa-sack-dollar', money(st.collected), 'فلوس دخلت فعلاً'),
+      kpiTile('المصروفات', 'fa-money-bill-wave', money(st.expenses), ''),
+      kpiTile('صافي الكاش', st.netCash >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down', money(st.netCash), st.netCash >= 0 ? 'مكسب' : 'خسارة', st.netCash >= 0 ? 'trend-good' : 'trend-bad'),
+      kpiTile('فلوس برّه (كل الفترات)', 'fa-hand-holding-dollar', money(st.outstanding), 'فواتير لسه ماتحصّلتش', st.outstanding > 0 ? 'trend-bad' : '')
+    ].join('');
+
+    // Invoices
+    const onlyDue = $id('finOnlyDue').checked;
+    const q = normalizeArabic($id('finSearch').value);
+    const vehMap = new Map(appState.vehicles.map(v => [v.id, v]));
+    const cliMap = new Map(appState.clients.map(c => [c.id, c]));
+    const list = appState.visits.filter(v => onlyDue ? visitDue(v) > 0 : inRange(v.date, r)).filter(v => {
+      if (!q) return true;
+      const veh = vehMap.get(v.vehicleId); const cl = veh && cliMap.get(veh.clientId);
+      return [v.invoiceNumber, veh && (veh.plateFull || `${veh.plateLetters}${veh.plateNumbers}`), cl && cl.name, cl && cl.phone]
+        .some(x => x && normalizeArabic(x).includes(q));
+    }).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    $id('finInvoicesBody').innerHTML = list.length ? list.map(v => {
+      const veh = vehMap.get(v.vehicleId); const cl = veh && cliMap.get(veh.clientId);
+      return `<tr>
+        <td style="white-space:nowrap">${escapeHtml(v.date)}</td>
+        <td>#${escapeHtml(v.invoiceNumber || '')}</td>
+        <td>${escapeHtml(cl ? cl.name : '-')}</td>
+        <td>${veh ? `${escapeHtml(veh.make)} ${escapeHtml(veh.model)} <span class="plate-mini">${escapeHtml(veh.plateFull || '')}</span>` : '-'}</td>
+        <td class="num">${formatNumber(visitNet(v))}</td>
+        <td>${formatNumber(visitPaid(v))}</td>
+        <td class="num">${visitDue(v) > 0 ? formatNumber(visitDue(v)) : '—'}</td>
+        <td>${payBadgeHtml(v)}</td>
+        <td style="white-space:nowrap">
+          ${visitDue(v) > 0 ? `<button type="button" class="chip-btn" data-pay="${v.id}"><i class="fa-solid fa-hand-holding-dollar"></i> تحصيل</button>` : ''}
+          ${veh ? `<button type="button" class="chip-btn" data-open="${veh.id}"><i class="fa-solid fa-car"></i></button>` : ''}
+        </td>
+      </tr>`;
+    }).join('') : `<tr><td colspan="9"><div class="mini-empty">${onlyDue ? 'مفيش فواتير عليها فلوس 👌' : 'مفيش فواتير في الفترة دي'}</div></td></tr>`;
+    const tb = $id('finInvoicesBody');
+    tb.querySelectorAll('[data-pay]').forEach(b => b.addEventListener('click', () => openPaymentModal(b.dataset.pay)));
+    tb.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => openVehicle(b.dataset.open)));
+
+    // Expenses
+    const exps = appState.expenses.filter(e => inRange(e.date, r)).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    $id('finExpensesBody').innerHTML = exps.length ? exps.map(e => `<tr>
+        <td style="white-space:nowrap">${escapeHtml(e.date)}</td>
+        <td>${escapeHtml(EXPENSE_CATS[e.category] || e.category || '-')}</td>
+        <td class="num">${formatNumber(e.amount)} ج.م</td>
+        <td>${escapeHtml(e.note || '')}</td>
+        <td><button type="button" class="btn-table-action" data-del-exp="${e.id}" title="حذف"><i class="fa-solid fa-trash-can text-red"></i></button></td>
+      </tr>`).join('') : `<tr><td colspan="5"><div class="mini-empty">مفيش مصروفات في الفترة دي</div></td></tr>`;
+    $id('finExpensesBody').querySelectorAll('[data-del-exp]').forEach(b => b.addEventListener('click', () => {
+      const e = appState.expenses.find(x => x.id === b.dataset.delExp);
+      if (!e || !confirm(`حذف مصروف "${EXPENSE_CATS[e.category] || ''}" بمبلغ ${formatNumber(e.amount)} ج.م؟`)) return;
+      appState.expenses = appState.expenses.filter(x => x.id !== e.id);
+      saveData();
+      renderFinance();
+      showToast('تم حذف المصروف', 'info');
+    }));
+    $id('finExpenseByCat').innerHTML = Object.entries(st.byCat).sort((a, b) => b[1] - a[1])
+      .map(([k, v]) => `<span class="exp-cat-chip">${escapeHtml(EXPENSE_CATS[k] || k)}: <strong>${formatNumber(Math.round(v))} ج.م</strong></span>`).join('');
+  }
+
+  function bindPhase2Events() {
+    // selects
+    [$id('dashPeriod'), $id('finPeriod')].forEach(sel => fillSelect(sel, PERIODS, 'month'));
+    fillSelect($id('visitPayMethod'), PAY_METHODS, 'cash');
+    fillSelect($id('payMethod'), PAY_METHODS, 'cash');
+    fillSelect($id('expCategory'), EXPENSE_CATS, 'rent');
+    $id('expDate').value = todayLocalISO();
+
+    // navigation
+    document.querySelectorAll('.main-tab').forEach(t => t.addEventListener('click', () => switchView(t.dataset.view)));
+    let saved = 'dashboard';
+    try { saved = localStorage.getItem('ASFOUR_VIEW') || 'dashboard'; } catch (e) {}
+    switchView(['dashboard', 'cars', 'inventory', 'finance'].includes(saved) ? saved : 'dashboard');
+
+    // dashboard
+    $id('dashPeriod').addEventListener('change', renderDashboard);
+    $id('dashOpenFollowUp').addEventListener('click', openFollowUpModal);
+    $id('dashOpenInventory').addEventListener('click', () => { invFilter = 'low'; switchView('inventory'); });
+    $id('dashOpenDebts').addEventListener('click', () => { $id('finOnlyDue').checked = true; switchView('finance'); });
+    let resizeT;
+    window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (currentView === 'dashboard') renderDashboard(); }, 200); });
+
+    // finance
+    $id('finPeriod').addEventListener('change', renderFinance);
+    $id('finOnlyDue').addEventListener('change', renderFinance);
+    $id('finSearch').addEventListener('input', renderFinance);
+    document.querySelectorAll('.sub-tab').forEach(t => t.addEventListener('click', () => {
+      document.querySelectorAll('.sub-tab').forEach(x => x.classList.toggle('active', x === t));
+      $id('finInvoices').style.display = t.dataset.fin === 'invoices' ? '' : 'none';
+      $id('finExpenses').style.display = t.dataset.fin === 'expenses' ? '' : 'none';
+    }));
+    $id('expenseForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const amount = Number($id('expAmount').value) || 0;
+      if (amount <= 0) { showToast('اكتب المبلغ', 'error'); return; }
+      appState.expenses.unshift({ id: generateId('exp'), date: $id('expDate').value || todayLocalISO(), category: $id('expCategory').value, amount, note: $id('expNote').value.trim() });
+      saveData();
+      $id('expAmount').value = '';
+      $id('expNote').value = '';
+      renderFinance();
+      showToast('تم تسجيل المصروف', 'success');
+    });
+
+    // inventory
+    $id('invSearch').addEventListener('input', renderInventory);
+    document.querySelectorAll('#invFilterTabs .catalog-tab-btn').forEach(b => b.addEventListener('click', () => { invFilter = b.dataset.f; renderInventory(); }));
+    $id('invAddPart').addEventListener('click', () => { openPartItemModal(); elements.partTypeSelect.value = 'part'; togglePartStockFields(); });
+    elements.partTypeSelect.addEventListener('change', togglePartStockFields);
+
+    // visit payment fields
+    $id('visitDiscountInput').addEventListener('input', () => updateVisitPayment());
+    $id('visitPaidInput').addEventListener('input', () => { paidTouched = true; updateVisitPayment(); });
+
+    // payment & stock modals
+    $id('paymentForm').addEventListener('submit', handlePaymentSubmit);
+    ['btnClosePayment', 'btnCancelPayment'].forEach(id => $id(id).addEventListener('click', () => { $id('paymentModal').style.display = 'none'; }));
+    $id('stockForm').addEventListener('submit', handleStockSubmit);
+    ['btnCloseStock', 'btnCancelStock'].forEach(id => $id(id).addEventListener('click', () => { $id('stockModal').style.display = 'none'; }));
+    ['paymentModal', 'stockModal'].forEach(id => $id(id).addEventListener('click', e => { if (e.target.id === id) $id(id).style.display = 'none'; }));
   }
 
   // --- VEHICLE SELECTION & WORKSPACE ---
@@ -3595,6 +4518,10 @@ const CATALOG_SUGGESTED_PRESETS = [
     elements.bannerClientPhone.textContent = client ? client.phone : '-';
     elements.bannerCarColor.innerHTML = vehicle.color ? `${colorDotHtml(vehicle.color)} ${escapeHtml(vehicle.color)}` : '';
     elements.bannerCarColor.style.display = vehicle.color ? '' : 'none';
+    const bal = client ? clientBalance(client.id) : 0;
+    const balEl = document.getElementById('bannerBalance');
+    balEl.style.display = bal > 0 ? '' : 'none';
+    balEl.innerHTML = bal > 0 ? `<i class="fa-solid fa-hand-holding-dollar"></i> عليه ${formatNumber(bal)} ج.م` : '';
 
     // Last real odometer reading
     const visits = getVehicleVisits(vehicleId);
@@ -3978,7 +4905,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     elements.visitsTimeline.innerHTML = '';
     elements.visitCountBadge.textContent = `${visits.length} زيارة مسجلة`;
 
-    const totalSpent = visits.reduce((acc, v) => acc + (Number(v.totalCost) || 0), 0);
+    const totalSpent = visits.reduce((acc, v) => acc + visitNet(v), 0);
     elements.totalSpentBadge.textContent = `إجمالي المصروفات: ${formatNumber(totalSpent)} ج.م`;
 
     if (visits.length === 0) {
@@ -3999,7 +4926,7 @@ const CATALOG_SUGGESTED_PRESETS = [
         <span class="visit-item-tag">
           <strong>${escapeHtml(item.name)}:</strong> 
           ${escapeHtml(item.detail || '')} 
-          <span class="item-price">(${formatNumber(item.cost)} ج.م)</span>
+          <span class="item-price">(${Number(item.qty) > 1 ? formatNumber(item.qty) + ' × ' : ''}${formatNumber(item.cost)} ج.م)</span>
         </span>
       `).join('');
 
@@ -4015,8 +4942,10 @@ const CATALOG_SUGGESTED_PRESETS = [
             </div>
           </div>
           <div class="visit-cost-print">
-            <span class="visit-cost">${formatNumber(visit.totalCost)} ج.م</span>
+            <span class="visit-cost">${formatNumber(visitNet(visit))} ج.م</span>
+            ${payBadgeHtml(visit)}
             <div class="visit-actions-row">
+              ${visitDue(visit) > 0 ? `<button class="btn-print-sm btn-collect-visit" title="تحصيل دفعة"><i class="fa-solid fa-hand-holding-dollar"></i> تحصيل</button>` : ''}
               <button class="btn-print-sm btn-edit-visit" title="تعديل الزيارة">
                 <i class="fa-solid fa-pen"></i> تعديل
               </button>
@@ -4044,6 +4973,8 @@ const CATALOG_SUGGESTED_PRESETS = [
       // Print button listener
       card.querySelector('.btn-invoice-visit').addEventListener('click', () => openInvoiceModal(visit, vehicle, client));
       card.querySelector('.btn-edit-visit').addEventListener('click', () => openVisitModal(visit.id));
+      const collectBtn = card.querySelector('.btn-collect-visit');
+      if (collectBtn) collectBtn.addEventListener('click', () => openPaymentModal(visit.id));
       card.querySelector('.btn-del-visit').addEventListener('click', () => deleteVisit(visit.id));
 
       elements.visitsTimeline.appendChild(card);
@@ -4330,6 +5261,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       saveData();
       renderClientsList();
       selectVehicle(newVehicleId);
+      switchView('cars');
       showToast(existingClient ? `تمت إضافة السيارة للعميل ${existingClient.name}` : 'تم تسجيل العميل والسيارة الجديدة بنجاح', 'success');
     }
 
@@ -4361,8 +5293,10 @@ const CATALOG_SUGGESTED_PRESETS = [
       elements.visitOdoInput.value = visit.odometer;
       elements.visitNotesInput.value = visit.notes || '';
       (visit.items || []).forEach(it => {
-        addVisitItemRow(it.category || 'custom', it.name, it.detail || '', Number(it.intervalKm) || 0, Number(it.cost) || 0, Number(it.intervalMonths) || 0, it.id);
+        addVisitItemRow(it.category || 'custom', it.name, it.detail || '', Number(it.intervalKm) || 0, Number(it.cost) || 0, Number(it.intervalMonths) || 0, it.id,
+          { qty: it.qty, unitPrice: it.unitPrice, catalogId: it.catalogId, buyCost: it.buyCost });
       });
+      preparePaymentFields(visit);
     } else {
       elements.visitModalTitle.textContent = 'تسجيل إجراءات زيارة صيانة جديدة';
       elements.visitDateInput.value = todayLocalISO();
@@ -4370,6 +5304,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       elements.visitNotesInput.value = '';
       addVisitItemRow('oil', 'تغيير زيت المحرك', 'تخليقي 10,000 كم (شل / موبيل)', 10000, 1600, 6);
       addVisitItemRow('oil_filter', 'تغيير فلتر زيت', 'أصلي وكالة', 10000, 350, 6);
+      preparePaymentFields(null);
     }
 
     calculateVisitTotal();
@@ -4394,10 +5329,14 @@ const CATALOG_SUGGESTED_PRESETS = [
   }
 
   // Add Item Row to the Visit Modal Table
-  function addVisitItemRow(category = 'custom', name = '', detail = '', intervalKm = 10000, cost = 0, intervalMonths = 0, itemId = null) {
+  function addVisitItemRow(category = 'custom', name = '', detail = '', intervalKm = 10000, cost = 0, intervalMonths = 0, itemId = null, extra = {}) {
     const row = document.createElement('tr');
     row.dataset.category = category;
     if (itemId) row.dataset.itemId = itemId;
+    if (extra.catalogId) row.dataset.catalogId = extra.catalogId;
+    if (extra.buyCost) row.dataset.buyCost = extra.buyCost;
+    const qty = Number(extra.qty) || 1;
+    const unitPrice = extra.unitPrice != null ? Number(extra.unitPrice) : (Number(cost) || 0) / qty;
 
     row.innerHTML = `
       <td>
@@ -4413,8 +5352,12 @@ const CATALOG_SUGGESTED_PRESETS = [
         <input type="number" class="item-months-input" value="${intervalMonths}" placeholder="0" title="0 = بدون متابعة بالتاريخ" min="0" step="1">
       </td>
       <td>
-        <input type="number" class="item-cost-input" value="${cost}" placeholder="التكلفة" min="0" step="10" required>
+        <input type="number" class="item-qty-input" value="${qty}" min="0.01" step="any" required>
       </td>
+      <td>
+        <input type="number" class="item-cost-input" value="${Math.round(unitPrice * 100) / 100}" placeholder="السعر" min="0" step="any" required>
+      </td>
+      <td class="line-total">0</td>
       <td style="text-align: center;">
         <button type="button" class="btn-table-del" title="حذف البند">
           <i class="fa-solid fa-trash-can"></i>
@@ -4423,8 +5366,8 @@ const CATALOG_SUGGESTED_PRESETS = [
     `;
 
     // Row Event Listeners
-    const costInput = row.querySelector('.item-cost-input');
-    costInput.addEventListener('input', calculateVisitTotal);
+    row.querySelector('.item-cost-input').addEventListener('input', calculateVisitTotal);
+    row.querySelector('.item-qty-input').addEventListener('input', calculateVisitTotal);
 
     const delBtn = row.querySelector('.btn-table-del');
     delBtn.addEventListener('click', () => {
@@ -4440,10 +5383,15 @@ const CATALOG_SUGGESTED_PRESETS = [
     let total = 0;
     const rows = elements.visitItemsTableBody.querySelectorAll('tr');
     rows.forEach(r => {
-      const cost = Number(r.querySelector('.item-cost-input')?.value) || 0;
-      total += cost;
+      const qty = Number(r.querySelector('.item-qty-input')?.value) || 0;
+      const unit = Number(r.querySelector('.item-cost-input')?.value) || 0;
+      const line = Math.round(qty * unit * 100) / 100;
+      const cell = r.querySelector('.line-total');
+      if (cell) cell.textContent = formatNumber(line);
+      total += line;
     });
     elements.visitTotalAmount.textContent = formatNumber(total);
+    updateVisitPayment(total);
   }
 
   function handleVisitFormSubmit(e) {
@@ -4475,34 +5423,55 @@ const CATALOG_SUGGESTED_PRESETS = [
       const detail = r.querySelector('.item-detail-input').value.trim();
       const intervalKm = Number(r.querySelector('.item-interval-input').value) || 0;
       const intervalMonths = Number(r.querySelector('.item-months-input').value) || 0;
-      const cost = Number(r.querySelector('.item-cost-input').value) || 0;
+      const qty = Number(r.querySelector('.item-qty-input').value) || 1;
+      const unitPrice = Number(r.querySelector('.item-cost-input').value) || 0;
+      const cost = Math.round(qty * unitPrice * 100) / 100;
       const category = r.dataset.category || 'custom';
 
       if (name) {
-        items.push({
+        const it = {
           id: r.dataset.itemId || generateId('item'),
           category,
           name,
           detail,
           intervalKm,
           intervalMonths,
+          qty,
+          unitPrice,
           cost
-        });
+        };
+        if (r.dataset.catalogId) it.catalogId = r.dataset.catalogId;
+        if (Number(r.dataset.buyCost) > 0) it.buyCost = Number(r.dataset.buyCost);
+        items.push(it);
         totalCost += cost;
       }
     });
 
+    const discount = Math.min(Math.max(Number(document.getElementById('visitDiscountInput').value) || 0, 0), totalCost);
+    const net = totalCost - discount;
+    const payNow = Math.max(Number(document.getElementById('visitPaidInput').value) || 0, 0);
+    const method = document.getElementById('visitPayMethod').value || 'cash';
+
     if (editingVisitId) {
       const visit = appState.visits.find(v => v.id === editingVisitId);
       if (visit) {
+        const oldPayments = paymentsOf(visit).filter(p => p.amount > 0).map(p => ({
+          id: p.id || generateId('pay'), date: p.date, amount: p.amount, method: p.method === 'legacy' ? 'cash' : (p.method || 'cash'), note: p.note || ''
+        }));
+        const already = oldPayments.reduce((a, p) => a + p.amount, 0);
+        const add = Math.min(payNow, Math.max(net - already, 0));
+        if (add > 0) oldPayments.push({ id: generateId('pay'), date: todayLocalISO(), amount: add, method, note: '' });
         visit.date = date;
         visit.odometer = odo;
         visit.notes = notes;
         visit.totalCost = totalCost;
+        visit.discount = discount;
+        visit.payments = oldPayments;
         visit.items = items;
         visit.updatedAt = new Date().toISOString();
       }
     } else {
+      const paid = Math.min(payNow, net);
       appState.visits.unshift({
         id: generateId('vis'),
         vehicleId: vehicle.id,
@@ -4511,6 +5480,8 @@ const CATALOG_SUGGESTED_PRESETS = [
         odometer: odo,
         notes,
         totalCost,
+        discount,
+        payments: paid > 0 ? [{ id: generateId('pay'), date, amount: paid, method, note: '' }] : [],
         items,
         createdAt: new Date().toISOString()
       });
@@ -4546,12 +5517,18 @@ const CATALOG_SUGGESTED_PRESETS = [
         <td><strong>${escapeHtml(item.name)}</strong></td>
         <td>${escapeHtml(item.detail || '-')}</td>
         <td>${formatInterval(item)}</td>
-        <td><strong>${formatNumber(item.cost)} ج.م</strong></td>
+        <td><strong>${Number(item.qty) > 1 ? `${formatNumber(item.qty)} × ${formatNumber(item.unitPrice)} = ` : ''}${formatNumber(item.cost)} ج.م</strong></td>
       `;
       elements.invItemsBody.appendChild(tr);
     });
 
-    elements.invTotalAmount.textContent = `${formatNumber(visit.totalCost)} ج.م`;
+    const disc = Number(visit.discount) || 0;
+    const footRows = [['الإجمالي:', visit.totalCost]];
+    if (disc > 0) footRows.push(['الخصم:', -disc], ['الصافي المطلوب:', visitNet(visit)]);
+    footRows.push(['المدفوع:', visitPaid(visit)]);
+    if (visitDue(visit) > 0) footRows.push(['الباقي على العميل:', visitDue(visit)]);
+    document.getElementById('invFoot').innerHTML = footRows.map(([label, val], i) =>
+      `<tr><th colspan="4" class="text-left">${label}</th><th ${i === 0 && disc === 0 ? 'id="invTotalAmount"' : ''}>${formatNumber(val)} ج.م</th></tr>`).join('');
 
     // Notes
     if (visit.notes) {
@@ -4748,14 +5725,25 @@ const CATALOG_SUGGESTED_PRESETS = [
         elements.partCostInput.value = item.cost || 0;
         elements.partCodeInput.value = item.code || '';
         elements.partBuyCostInput.value = item.buyCost || '';
+        document.getElementById('partUnitInput').value = item.unit || 'قطعة';
+        document.getElementById('partMinQtyInput').value = item.minQty || 0;
       }
     } else {
       elements.partModalTitle.textContent = 'إضافة بند جديد للدليل';
       elements.partIntervalInput.value = 10000;
       elements.partMonthsInput.value = 0;
+      document.getElementById('partUnitInput').value = 'قطعة';
+      document.getElementById('partMinQtyInput').value = 0;
+      document.getElementById('partOpeningInput').value = '';
     }
 
+    document.getElementById('partOpeningGroup').style.display = partId ? 'none' : '';
+    togglePartStockFields();
     elements.partItemModal.style.display = 'flex';
+  }
+
+  function togglePartStockFields() {
+    document.getElementById('partStockFields').style.display = elements.partTypeSelect.value === 'part' ? '' : 'none';
   }
 
   function closePartItemModal() {
@@ -4774,6 +5762,9 @@ const CATALOG_SUGGESTED_PRESETS = [
     const cost = Number(elements.partCostInput.value) || 0;
     const code = elements.partCodeInput.value.trim();
     const buyCost = Number(elements.partBuyCostInput.value) || 0;
+    const unit = document.getElementById('partUnitInput').value.trim() || 'قطعة';
+    const minQty = Number(document.getElementById('partMinQtyInput').value) || 0;
+    const opening = Number(document.getElementById('partOpeningInput').value) || 0;
 
     if (!appState.partsCatalog) appState.partsCatalog = [];
 
@@ -4790,7 +5781,9 @@ const CATALOG_SUGGESTED_PRESETS = [
           intervalMonths,
           cost,
           code,
-          buyCost
+          buyCost,
+          unit,
+          minQty
         };
         showToast('تم تعديل البند في الدليل بنجاح', 'success');
       }
@@ -4805,8 +5798,13 @@ const CATALOG_SUGGESTED_PRESETS = [
         intervalMonths,
         cost,
         code,
-        buyCost
+        buyCost,
+        unit,
+        minQty
       };
+      if (type === 'part' && opening > 0) {
+        newItem.stockLog = [{ id: generateId('stk'), date: todayLocalISO(), type: 'opening', qty: opening, unitCost: buyCost, note: 'رصيد أول المدة' }];
+      }
       appState.partsCatalog.unshift(newItem);
       showToast('تمت إضافة البند إلى الدليل بنجاح', 'success');
     }
@@ -4840,8 +5838,13 @@ const CATALOG_SUGGESTED_PRESETS = [
     const item = (appState.partsCatalog || []).find(p => p.id === selectedId);
     if (!item) return;
 
-    addVisitItemRow(item.category, item.name, item.specs, item.intervalKm, item.cost, item.intervalMonths || 0);
+    addVisitItemRow(item.category, item.name, item.specs, item.intervalKm, item.cost, item.intervalMonths || 0, null,
+      { catalogId: item.id, buyCost: item.buyCost, qty: 1, unitPrice: item.cost });
     calculateVisitTotal();
+    if (item.type === 'part') {
+      const st = getStockInfo(item);
+      if (st.tracked && st.qty <= 0) showToast(`تنبيه: "${item.name}" خلص من المخزن حسب السجل`, 'error');
+    }
     showToast(`تم إدراج "${item.name}" في بنود الصيانة`, 'success');
   }
 
@@ -5053,6 +6056,7 @@ const CATALOG_SUGGESTED_PRESETS = [
         appState.vehicles = [];
         appState.visits = [];
         appState.partsCatalog = [];
+        appState.expenses = [];
         appState.invoiceCounter = 1000;
         saveData();
         renderClientsList();
@@ -5085,6 +6089,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       vehicles: appState.vehicles,
       visits: appState.visits,
       partsCatalog: appState.partsCatalog,
+      expenses: appState.expenses,
       invoiceCounter: appState.invoiceCounter,
       settings: appState.settings
     }, null, 2);
@@ -5111,6 +6116,7 @@ const CATALOG_SUGGESTED_PRESETS = [
           appState.clients = importedData.clients;
           appState.vehicles = importedData.vehicles;
           appState.visits = importedData.visits;
+          appState.expenses = Array.isArray(importedData.expenses) ? importedData.expenses : [];
           if (importedData.partsCatalog) {
             appState.partsCatalog = importedData.partsCatalog;
           }
