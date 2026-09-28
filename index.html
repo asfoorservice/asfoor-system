@@ -1658,6 +1658,37 @@ h1, h2, h3, h4, h5 {
   .app-header .main-tab { padding: 9px 10px 10px; font-size: .86rem; }
 }
 
+/* ===== Invoice modal scroll ===== */
+.printable-modal .invoice-paper { overflow-y: auto; min-height: 0; flex: 1 1 auto; border-radius: 0; }
+.printable-modal .modal-actions { flex-shrink: 0; margin: 0; padding: 14px 20px; background: var(--bg-secondary); }
+@media print {
+  .modal-overlay, .modal-window, .printable-modal { position: static !important; max-height: none !important; overflow: visible !important; background: none !important; backdrop-filter: none !important; }
+  .printable-modal .invoice-paper { overflow: visible !important; max-height: none !important; }
+}
+
+/* ===== Combobox (searchable pick list) ===== */
+.combo { position: relative; }
+.combo input { padding-left: 34px !important; }
+.combo-caret { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: .75rem; pointer-events: none; }
+.combo-list { display: none; position: absolute; top: calc(100% + 4px); right: 0; left: 0; max-height: 260px; overflow-y: auto; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); box-shadow: var(--shadow-lg); z-index: 30; padding: 4px; }
+.combo.open .combo-list { display: block; }
+.combo.up .combo-list { top: auto; bottom: calc(100% + 4px); }
+.combo-opt { padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: .9rem; display: flex; align-items: center; gap: 8px; }
+.combo-opt .opt-sub { color: var(--text-muted); font-size: .78rem; margin-inline-start: auto; direction: ltr; }
+.combo-opt:hover, .combo-opt.active { background: rgba(230,30,43,.15); color: #fff; }
+.combo-opt.combo-custom { color: var(--accent-red-light); border-top: 1px dashed var(--border-subtle); margin-top: 4px; }
+.combo-empty { padding: 10px; color: var(--text-muted); font-size: .85rem; text-align: center; }
+.form-group select:invalid { color: var(--text-muted); }
+
+/* ===== Team ===== */
+.tech-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.tech-chip { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border-subtle); background: var(--bg-surface); color: var(--text-secondary); font-family: var(--font-main); font-size: .86rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.tech-chip.on { background: rgba(230,30,43,.16); border-color: var(--accent-red); color: #fff; }
+.tech-chip .tc-role { font-weight: 500; font-size: .74rem; color: var(--text-muted); }
+.tech-empty { color: var(--text-muted); font-size: .84rem; }
+.team-inactive td { opacity: .5; }
+.visit-techs { font-size: .82rem; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+
 /* Toast Notifications */
 .toast-container {
   position: fixed;
@@ -1994,6 +2025,7 @@ h1, h2, h3, h4, h5 {
       <button type="button" class="main-tab" data-view="cars"><i class="fa-solid fa-car"></i> العملاء والعربيات</button>
       <button type="button" class="main-tab" data-view="inventory"><i class="fa-solid fa-boxes-stacked"></i> المخزن <span class="badge-count zero" id="lowStockCount">0</span></button>
       <button type="button" class="main-tab" data-view="finance"><i class="fa-solid fa-coins"></i> الحسابات</button>
+      <button type="button" class="main-tab" data-view="team"><i class="fa-solid fa-users-gear"></i> التيم</button>
     </nav>
   </header>
 
@@ -2103,6 +2135,29 @@ h1, h2, h3, h4, h5 {
           </table>
         </div>
         <div class="exp-cats" id="finExpenseByCat"></div>
+      </div>
+    </section>
+
+    <!-- ================= TEAM ================= -->
+    <section class="app-view" id="viewTeam">
+      <div class="view-head">
+        <h2>التيم</h2>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <select class="period-select" id="teamPeriod"></select>
+          <button type="button" class="btn btn-primary" id="btnAddMember"><i class="fa-solid fa-user-plus"></i> إضافة عضو</button>
+        </div>
+      </div>
+      <div class="kpi-grid" id="teamKpis"></div>
+      <div class="panel-card fin-panel">
+        <div class="fin-toolbar">
+          <label><input type="checkbox" id="teamShowInactive"> اعرض اللي سابوا الشغل كمان</label>
+        </div>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead><tr><th>الاسم</th><th>الوظيفة</th><th>التليفون</th><th>نظام القبض</th><th>زيارات (الفترة)</th><th>مبيعات زياراته</th><th>عمولة مستحقة</th><th>اتصرف له (الفترة)</th><th>إجراءات</th></tr></thead>
+            <tbody id="teamTableBody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -2338,46 +2393,36 @@ h1, h2, h3, h4, h5 {
 
         <div class="form-grid-2">
           <div class="form-group">
-            <label for="carMakeInput">النوع / الماركة <span class="req">*</span></label>
-            <input list="carMakesList" id="carMakeInput" placeholder="اختر أو اكتب (مثل: تويوتا، كيا، هيونداي...)" required>
-            <datalist id="carMakesList">
-              <option value="تويوتا">
-              <option value="هيونداي">
-              <option value="كيا">
-              <option value="نيسان">
-              <option value="ميتسوبيشي">
-              <option value="شيفروليه">
-              <option value="مرسيدس بنز">
-              <option value="بي إم دبليو">
-              <option value="أودي">
-              <option value="فولكس فاجن">
-              <option value="شيري">
-              <option value="إم جي MG">
-              <option value="بيجو">
-              <option value="رينو">
-              <option value="هوندا">
-              <option value="سوزوكي">
-              <option value="سكودا">
-              <option value="فيات">
-              <option value="فورد">
-              <option value="جيب">
-            </datalist>
+            <label for="carMakeInput">الماركة <span class="req">*</span></label>
+            <div class="combo" id="comboMake">
+              <input type="text" id="carMakeInput" autocomplete="off" placeholder="ابحث واختار الماركة (عربي أو إنجليزي)...">
+              <i class="fa-solid fa-chevron-down combo-caret"></i>
+              <div class="combo-list"></div>
+            </div>
           </div>
           <div class="form-group">
-            <label for="carModelInput">الموديل / سنة الصنع <span class="req">*</span></label>
-            <input type="text" id="carModelInput" placeholder="مثال: كورولا 2022 أو سيراتو 2020" required>
+            <label for="carModelInput">الموديل <span class="req">*</span></label>
+            <div class="combo" id="comboModel">
+              <input type="text" id="carModelInput" autocomplete="off" placeholder="اختار الماركة الأول...">
+              <i class="fa-solid fa-chevron-down combo-caret"></i>
+              <div class="combo-list"></div>
+            </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="carColorInput">لون السيارة</label>
-          <input list="carColorsList" id="carColorInput" placeholder="اختر أو اكتب اللون (مثل: أبيض، فضي، أسود...)">
-          <datalist id="carColorsList">
-            <option value="أبيض"><option value="أسود"><option value="فضي"><option value="رمادي">
-            <option value="أحمر"><option value="نبيتي"><option value="أزرق"><option value="كحلي">
-            <option value="لبني"><option value="أخضر"><option value="بيج"><option value="بني">
-            <option value="ذهبي"><option value="برتقالي"><option value="أصفر">
-          </datalist>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="carYearInput">سنة الصنع <span class="req">*</span></label>
+            <select id="carYearInput" required></select>
+          </div>
+          <div class="form-group">
+            <label for="carColorInput">اللون</label>
+            <div class="combo" id="comboColor">
+              <input type="text" id="carColorInput" autocomplete="off" placeholder="اختار اللون...">
+              <i class="fa-solid fa-chevron-down combo-caret"></i>
+              <div class="combo-list"></div>
+            </div>
+          </div>
         </div>
 
         <div class="form-group">
@@ -2430,6 +2475,11 @@ h1, h2, h3, h4, h5 {
             <label for="visitOdoInput">قراءة العداد عند الزيارة (كم) <span class="req">*</span></label>
             <input type="number" id="visitOdoInput" placeholder="مثال: 85000" min="0" required>
           </div>
+        </div>
+
+        <div class="form-group">
+          <label>الفنيين اللي اشتغلوا على العربية</label>
+          <div class="tech-chips" id="visitTechChips"></div>
         </div>
 
         <!-- Maintenance Services & Items Table/List -->
@@ -2578,6 +2628,7 @@ h1, h2, h3, h4, h5 {
             <p><strong>السيارة:</strong> <span id="invCarDetails">تويوتا كورولا 2021</span></p>
             <p><strong>رقم اللوحة:</strong> <span id="invCarPlate">أ ب ج 1234</span></p>
             <p><strong>قراءة العداد عند الزيارة:</strong> <span id="invCarOdo">85,000 كم</span></p>
+            <p id="invTechsRow"><strong>الفني:</strong> <span id="invTechs"></span></p>
           </div>
         </div>
 
@@ -2851,6 +2902,64 @@ h1, h2, h3, h4, h5 {
         <div class="modal-actions">
           <button type="button" class="btn btn-secondary" id="btnCancelStock">إلغاء</button>
           <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> حفظ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 9: Team member -->
+  <div class="modal-overlay" id="memberModal" style="display:none; z-index:1150;">
+    <div class="modal-window" style="max-width:620px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-user-gear"></i><h3 id="memberModalTitle">إضافة عضو للتيم</h3></div>
+        <button class="modal-close-btn" id="btnCloseMember">&times;</button>
+      </div>
+      <form class="modal-form" id="memberForm">
+        <input type="hidden" id="memberId">
+        <div class="form-grid-2">
+          <div class="form-group"><label for="memberName">الاسم <span class="req">*</span></label><input type="text" id="memberName" required></div>
+          <div class="form-group"><label for="memberPhone">التليفون</label><input type="tel" id="memberPhone" dir="ltr"></div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group"><label for="memberRole">الوظيفة <span class="req">*</span></label><select id="memberRole" required></select></div>
+          <div class="form-group"><label for="memberStart">تاريخ بداية الشغل</label><input type="date" id="memberStart"></div>
+        </div>
+        <div class="form-grid-3">
+          <div class="form-group"><label for="memberPayType">نظام القبض</label><select id="memberPayType"></select></div>
+          <div class="form-group"><label for="memberSalary" id="memberSalaryLabel">المرتب (ج.م)</label><input type="number" id="memberSalary" min="0"></div>
+          <div class="form-group"><label for="memberCommission" title="نسبة من صافي الزيارات اللي اشتغل فيها (بتتقسم لو أكتر من فني)">عمولة % من الزيارات</label><input type="number" id="memberCommission" min="0" max="100" step="0.5" value="0"></div>
+        </div>
+        <div class="form-group"><label for="memberNotes">ملاحظات</label><textarea id="memberNotes" rows="2"></textarea></div>
+        <label style="display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:.9rem;cursor:pointer;"><input type="checkbox" id="memberActive" checked> شغال حالياً في المركز</label>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-danger-soft" id="btnDeleteMember" style="margin-inline-end:auto;display:none;"><i class="fa-solid fa-trash"></i> حذف</button>
+          <button type="button" class="btn btn-secondary" id="btnCancelMember">إلغاء</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 10: Pay a team member (recorded as an expense) -->
+  <div class="modal-overlay" id="payMemberModal" style="display:none; z-index:1150;">
+    <div class="modal-window" style="max-width:480px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-money-bill-wave"></i><h3 id="payMemberTitle">صرف</h3></div>
+        <button class="modal-close-btn" id="btnClosePayMember">&times;</button>
+      </div>
+      <form class="modal-form" id="payMemberForm">
+        <div class="form-grid-2">
+          <div class="form-group"><label for="pmKind">النوع</label><select id="pmKind"></select></div>
+          <div class="form-group"><label for="pmAmount">المبلغ (ج.م)</label><input type="number" id="pmAmount" min="1" required></div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group"><label for="pmDate">التاريخ</label><input type="date" id="pmDate" required></div>
+          <div class="form-group"><label for="pmNote">ملاحظة</label><input type="text" id="pmNote" placeholder="مثال: مرتب شهر أكتوبر"></div>
+        </div>
+        <p style="font-size:.82rem;color:var(--text-muted);">المبلغ هيتسجل تلقائي في المصروفات تحت "مرتبات".</p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelPayMember">إلغاء</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> تسجيل</button>
         </div>
       </form>
     </div>
@@ -3195,7 +3304,8 @@ const CATALOG_SUGGESTED_PRESETS = [
     vehicles: 'vehicles',
     visits: 'visits',
     partsCatalog: 'catalog',
-    expenses: 'expenses'
+    expenses: 'expenses',
+    team: 'team'
   };
   const MIGRATION_FLAG_KEY = 'ASFOUR_CLOUD_MIGRATION_DONE';
 
@@ -3222,6 +3332,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     visits: [],
     partsCatalog: [],
     expenses: [],
+    team: [],
     invoiceCounter: 1000,
     settings: { defaultDailyKm: 40, alertDays: 14, alertKm: 1000, contactSnoozeDays: 7 },
     activeVehicleId: null,
@@ -3402,6 +3513,8 @@ const CATALOG_SUGGESTED_PRESETS = [
     getSettings();
     bindEvents();
     bindFollowUpEvents();
+    setupCarPickers();
+    bindTeamEvents();
     bindPhase2Events();
     bindCloudUI();
     renderAllFromData();
@@ -3501,6 +3614,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     appState.visits = [];
     appState.partsCatalog = [];
     appState.expenses = [];
+    appState.team = [];
     appState.activeVehicleId = null;
     renderAllFromData();
     elements.userChip.textContent = '';
@@ -3856,7 +3970,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       const names = due.map(d => d.item.name);
       const msg = `أهلاً أستاذ/ة ${client ? client.name : ''} 👋\n` +
         `معاك مركز عصفور لصيانة السيارات.\n` +
-        `حسب سجل صيانة عربيتك ${vehicle.make} ${vehicle.model} (${plate})، ` +
+        `حسب سجل صيانة عربيتك ${carTitle(vehicle)} (${plate})، ` +
         `${status === 'overdue' ? 'ميعاد' : 'قرّب ميعاد'}: ${names.join('، ')}.\n` +
         `تحب نحجزلك ميعاد؟`;
       const wa = client && client.phone ? `https://wa.me/${toWhatsAppNumber(client.phone)}?text=${encodeURIComponent(msg)}` : null;
@@ -3869,7 +3983,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       card.className = `fu-card ${status === 'overdue' ? 'overdue' : ''} ${snoozed ? 'snoozed' : ''}`;
       card.innerHTML = `
         <div>
-          <div class="fu-car">${colorDotHtml(vehicle.color)}${escapeHtml(vehicle.make)} ${escapeHtml(vehicle.model)} <span class="plate-mini">${escapeHtml(plate)}</span></div>
+          <div class="fu-car">${colorDotHtml(vehicle.color)}${escapeHtml(carTitle(vehicle))} <span class="plate-mini">${escapeHtml(plate)}</span></div>
           <div class="fu-sub"><i class="fa-regular fa-user"></i> ${escapeHtml(client ? client.name : '-')} — <span dir="ltr">${escapeHtml(client ? client.phone : '')}</span></div>
           <div class="fu-sub"><i class="fa-solid fa-gauge"></i> آخر قراءة ${formatNumber(info.lastOdo)} — المتوقع ~${formatNumber(info.estimated)} كم</div>
           <div class="fu-sub"><i class="fa-solid fa-clock-rotate-left"></i> ${contactText}</div>
@@ -4000,7 +4114,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     const cl = veh && appState.clients.find(c => c.id === veh.clientId);
     $id('paymentSummary').innerHTML = `
       <div><span class="label">فاتورة:</span> <strong>#${escapeHtml(v.invoiceNumber || '')}</strong> — ${escapeHtml(v.date)}</div>
-      <div><span class="label">العميل:</span> <strong>${escapeHtml(cl ? cl.name : '-')}</strong> — ${escapeHtml(veh ? `${veh.make} ${veh.model}` : '')}</div>
+      <div><span class="label">العميل:</span> <strong>${escapeHtml(cl ? cl.name : '-')}</strong> — ${escapeHtml(veh ? `${carTitle(veh)}` : '')}</div>
       <div><span class="label">الصافي:</span> ${formatNumber(visitNet(v))} — <span class="label">المدفوع:</span> ${formatNumber(visitPaid(v))} — <strong class="trend-bad">الباقي: ${formatNumber(visitDue(v))} ج.م</strong></div>`;
     $id('payAmount').value = visitDue(v);
     $id('payAmount').max = visitDue(v);
@@ -4196,7 +4310,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     currentView = name;
     try { localStorage.setItem('ASFOUR_VIEW', name); } catch (e) {}
     document.querySelectorAll('.main-tab').forEach(t => t.classList.toggle('active', t.dataset.view === name));
-    const ids = { dashboard: 'viewDashboard', cars: 'viewCars', inventory: 'viewInventory', finance: 'viewFinance' };
+    const ids = { dashboard: 'viewDashboard', cars: 'viewCars', inventory: 'viewInventory', finance: 'viewFinance', team: 'viewTeam' };
     Object.entries(ids).forEach(([k, id]) => $id(id).classList.toggle('active', k === name));
     renderCurrentView();
     window.scrollTo({ top: 0 });
@@ -4205,6 +4319,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     if (currentView === 'dashboard') renderDashboard();
     else if (currentView === 'inventory') renderInventory();
     else if (currentView === 'finance') renderFinance();
+    else if (currentView === 'team') renderTeam();
   }
   function openVehicle(id) {
     switchView('cars');
@@ -4245,7 +4360,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       const names = x.due.map(d => d.item.name).join('، ');
       return `<div class="mini-row">
         <div class="mr-main">
-          <div class="mr-title">${colorDotHtml(x.vehicle.color)}${escapeHtml(x.vehicle.make)} ${escapeHtml(x.vehicle.model)} <span class="plate-mini">${escapeHtml(plate)}</span>
+          <div class="mr-title">${colorDotHtml(x.vehicle.color)}${escapeHtml(carTitle(x.vehicle))} <span class="plate-mini">${escapeHtml(plate)}</span>
             <span class="pay-badge ${x.status === 'overdue' ? 'unpaid' : 'partial'}">${x.status === 'overdue' ? 'متأخر' : 'قرّب'}</span></div>
           <div class="mr-sub">${escapeHtml(x.client ? x.client.name : '')} — ${escapeHtml(names)}</div>
         </div>
@@ -4435,7 +4550,7 @@ const CATALOG_SUGGESTED_PRESETS = [
         <td style="white-space:nowrap">${escapeHtml(v.date)}</td>
         <td>#${escapeHtml(v.invoiceNumber || '')}</td>
         <td>${escapeHtml(cl ? cl.name : '-')}</td>
-        <td>${veh ? `${escapeHtml(veh.make)} ${escapeHtml(veh.model)} <span class="plate-mini">${escapeHtml(veh.plateFull || '')}</span>` : '-'}</td>
+        <td>${veh ? `${escapeHtml(carTitle(veh))} <span class="plate-mini">${escapeHtml(veh.plateFull || '')}</span>` : '-'}</td>
         <td class="num">${formatNumber(visitNet(v))}</td>
         <td>${formatNumber(visitPaid(v))}</td>
         <td class="num">${visitDue(v) > 0 ? formatNumber(visitDue(v)) : '—'}</td>
@@ -4492,7 +4607,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
     let saved = 'dashboard';
     try { saved = localStorage.getItem('ASFOUR_VIEW') || 'dashboard'; } catch (e) {}
-    switchView(['dashboard', 'cars', 'inventory', 'finance'].includes(saved) ? saved : 'dashboard');
+    switchView(['dashboard', 'cars', 'inventory', 'finance', 'team'].includes(saved) ? saved : 'dashboard');
 
     // dashboard
     $id('dashPeriod').addEventListener('change', renderDashboard);
@@ -4541,6 +4656,204 @@ const CATALOG_SUGGESTED_PRESETS = [
     ['paymentModal', 'stockModal'].forEach(id => $id(id).addEventListener('click', e => { if (e.target.id === id) $id(id).style.display = 'none'; }));
   }
 
+  // =====================================================================
+  // TEAM
+  // =====================================================================
+  const TEAM_ROLES = { mechanic: 'فني ميكانيكا', electric: 'فني كهربا', suspension: 'فني عفشة', ac: 'فني تكييف', body: 'سمكري', paint: 'دهان', helper: 'مساعد فني', reception: 'استقبال / خدمة عملاء', accountant: 'محاسب', manager: 'مدير', other: 'أخرى' };
+  const PAY_TYPES = { monthly: 'مرتب شهري', daily: 'يومية', commission: 'عمولة بس' };
+  const PAY_KINDS = { salary: 'مرتب', daily: 'يومية', advance: 'سلفة', commission: 'عمولة', bonus: 'مكافأة' };
+  const TECH_ROLES = ['mechanic', 'electric', 'suspension', 'ac', 'body', 'paint', 'helper', 'other'];
+
+  function techNamesOf(v) {
+    if (!Array.isArray(v.technicianIds) || !v.technicianIds.length) return [];
+    return v.technicianIds.map((id, i) => {
+      const m = appState.team.find(x => x.id === id);
+      return m ? m.name : ((v.technicianNames || [])[i] || 'عضو محذوف');
+    });
+  }
+
+  function renderTechChips(selected) {
+    const box = $id('visitTechChips');
+    const sel = new Set(selected);
+    const members = appState.team.filter(m => (m.active !== false && TECH_ROLES.includes(m.role)) || sel.has(m.id));
+    if (!members.length) {
+      box.innerHTML = `<span class="tech-empty">لسه مفيش فنيين — ضيفهم من قسم "التيم" فوق.</span>`;
+      return;
+    }
+    box.innerHTML = members.map(m => `<button type="button" class="tech-chip ${sel.has(m.id) ? 'on' : ''}" data-id="${m.id}">
+      <i class="fa-solid ${sel.has(m.id) ? 'fa-circle-check' : 'fa-circle'}"></i> ${escapeHtml(m.name)} <span class="tc-role">${escapeHtml(TEAM_ROLES[m.role] || '')}</span></button>`).join('');
+    box.querySelectorAll('.tech-chip').forEach(b => b.addEventListener('click', () => {
+      b.classList.toggle('on');
+      b.querySelector('i').className = `fa-solid ${b.classList.contains('on') ? 'fa-circle-check' : 'fa-circle'}`;
+    }));
+  }
+  function getSelectedTechs() {
+    const ids = [...$id('visitTechChips').querySelectorAll('.tech-chip.on')].map(b => b.dataset.id);
+    return { ids, names: ids.map(id => (appState.team.find(m => m.id === id) || {}).name || '') };
+  }
+
+  function memberStats(m, r) {
+    let visits = 0, sales = 0;
+    appState.visits.forEach(v => {
+      if (!inRange(v.date, r) || !Array.isArray(v.technicianIds) || !v.technicianIds.includes(m.id)) return;
+      visits++;
+      sales += visitNet(v) / v.technicianIds.length;
+    });
+    const commission = (Number(m.commissionPct) || 0) / 100 * sales;
+    const paid = appState.expenses.filter(e => e.teamMemberId === m.id && inRange(e.date, r)).reduce((a, e) => a + (Number(e.amount) || 0), 0);
+    return { visits, sales, commission, paid };
+  }
+
+  function renderTeam() {
+    const r = getPeriodRange($id('teamPeriod').value);
+    const showInactive = $id('teamShowInactive').checked;
+    const members = appState.team.filter(m => showInactive || m.active !== false)
+      .sort((a, b) => (a.active === false) - (b.active === false) || a.name.localeCompare(b.name, 'ar'));
+    const stats = new Map(appState.team.map(m => [m.id, memberStats(m, r)]));
+    const active = appState.team.filter(m => m.active !== false);
+    const totalPaid = [...stats.values()].reduce((a, x) => a + x.paid, 0);
+    const totalComm = [...stats.values()].reduce((a, x) => a + x.commission, 0);
+    const monthlyBill = active.reduce((a, m) => a + (m.payType === 'monthly' ? Number(m.salary) || 0 : 0), 0);
+    $id('teamKpis').innerHTML = [
+      kpiTile('التيم الشغال', 'fa-users', formatNumber(active.length), `${formatNumber(active.filter(m => TECH_ROLES.includes(m.role)).length)} فني`),
+      kpiTile('المرتبات الشهرية', 'fa-calendar', money(monthlyBill), 'مجموع المرتبات الثابتة'),
+      kpiTile('اتصرف للتيم', 'fa-money-bill-wave', money(totalPaid), 'في الفترة (مرتبات وسلف وعمولات)'),
+      kpiTile('عمولات مستحقة', 'fa-percent', money(totalComm), 'محسوبة من زيارات الفترة')
+    ].join('');
+    $id('teamTableBody').innerHTML = members.length ? members.map(m => {
+      const st = stats.get(m.id);
+      const pay = PAY_TYPES[m.payType] || '-';
+      const payAmt = m.payType === 'commission' ? '' : (Number(m.salary) ? ` — ${formatNumber(m.salary)} ج.م` : '');
+      return `<tr class="${m.active === false ? 'team-inactive' : ''}">
+        <td><strong style="color:#fff">${escapeHtml(m.name)}</strong>${m.active === false ? ' <span class="stock-badge untracked">ساب الشغل</span>' : ''}</td>
+        <td>${escapeHtml(TEAM_ROLES[m.role] || '-')}</td>
+        <td dir="ltr" style="text-align:right">${escapeHtml(m.phone || '-')}</td>
+        <td>${pay}${payAmt}${Number(m.commissionPct) ? ` + ${formatNumber(m.commissionPct)}%` : ''}</td>
+        <td class="num">${formatNumber(st.visits)}</td>
+        <td>${formatNumber(Math.round(st.sales))} ج.م</td>
+        <td class="num">${Number(m.commissionPct) ? formatNumber(Math.round(st.commission)) + ' ج.م' : '—'}</td>
+        <td>${formatNumber(Math.round(st.paid))} ج.م</td>
+        <td style="white-space:nowrap">
+          <button type="button" class="chip-btn" data-pay="${m.id}"><i class="fa-solid fa-money-bill-wave"></i> صرف</button>
+          <button type="button" class="chip-btn" data-edit="${m.id}"><i class="fa-solid fa-pen"></i></button>
+        </td>
+      </tr>`;
+    }).join('') : `<tr><td colspan="9"><div class="mini-empty">لسه مفيش حد في التيم — دوس "إضافة عضو"</div></td></tr>`;
+    $id('teamTableBody').querySelectorAll('[data-pay]').forEach(b => b.addEventListener('click', () => openPayMember(b.dataset.pay)));
+    $id('teamTableBody').querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openMemberModal(b.dataset.edit)));
+  }
+
+  function openMemberModal(id = null) {
+    const m = id ? appState.team.find(x => x.id === id) : null;
+    $id('memberForm').reset();
+    $id('memberModalTitle').textContent = m ? `تعديل بيانات ${m.name}` : 'إضافة عضو للتيم';
+    $id('memberId').value = m ? m.id : '';
+    $id('memberName').value = m ? m.name : '';
+    $id('memberPhone').value = m ? (m.phone || '') : '';
+    $id('memberRole').value = m ? m.role : 'mechanic';
+    $id('memberStart').value = m ? (m.startDate || '') : todayLocalISO();
+    $id('memberPayType').value = m ? (m.payType || 'monthly') : 'monthly';
+    $id('memberSalary').value = m ? (m.salary || '') : '';
+    $id('memberCommission').value = m ? (m.commissionPct || 0) : 0;
+    $id('memberNotes').value = m ? (m.notes || '') : '';
+    $id('memberActive').checked = m ? m.active !== false : true;
+    $id('btnDeleteMember').style.display = m ? '' : 'none';
+    syncSalaryLabel();
+    $id('memberModal').style.display = 'flex';
+  }
+  function syncSalaryLabel() {
+    const t = $id('memberPayType').value;
+    $id('memberSalaryLabel').textContent = t === 'daily' ? 'اليومية (ج.م)' : t === 'commission' ? 'مفيش مرتب ثابت' : 'المرتب الشهري (ج.م)';
+    $id('memberSalary').disabled = t === 'commission';
+  }
+  function handleMemberSubmit(e) {
+    e.preventDefault();
+    const id = $id('memberId').value;
+    const data = {
+      name: $id('memberName').value.trim(),
+      phone: $id('memberPhone').value.trim(),
+      role: $id('memberRole').value,
+      startDate: $id('memberStart').value,
+      payType: $id('memberPayType').value,
+      salary: $id('memberPayType').value === 'commission' ? 0 : (Number($id('memberSalary').value) || 0),
+      commissionPct: Math.min(Math.max(Number($id('memberCommission').value) || 0, 0), 100),
+      notes: $id('memberNotes').value.trim(),
+      active: $id('memberActive').checked
+    };
+    if (!data.name) { showToast('اكتب الاسم', 'error'); return; }
+    if (id) {
+      const m = appState.team.find(x => x.id === id);
+      if (m) Object.assign(m, data);
+    } else {
+      appState.team.push({ id: generateId('tm'), ...data, createdAt: new Date().toISOString() });
+    }
+    saveData();
+    $id('memberModal').style.display = 'none';
+    renderTeam();
+    showToast(id ? 'تم تعديل البيانات' : `تم إضافة ${data.name} للتيم`, 'success');
+  }
+  function deleteMember() {
+    const id = $id('memberId').value;
+    const m = appState.team.find(x => x.id === id);
+    if (!m) return;
+    const used = appState.visits.some(v => (v.technicianIds || []).includes(id));
+    const msg = used
+      ? `${m.name} متسجل في زيارات قديمة. الأفضل تشيل علامة "شغال حالياً" بدل الحذف.\nتحذفه برضه؟ (اسمه هيفضل ظاهر في الزيارات القديمة)`
+      : `حذف ${m.name} من التيم؟`;
+    if (!confirm(msg)) return;
+    appState.team = appState.team.filter(x => x.id !== id);
+    saveData();
+    $id('memberModal').style.display = 'none';
+    renderTeam();
+    showToast('تم الحذف', 'info');
+  }
+
+  let payMemberId = null;
+  function openPayMember(id) {
+    const m = appState.team.find(x => x.id === id);
+    if (!m) return;
+    payMemberId = id;
+    $id('payMemberTitle').textContent = `صرف لـ ${m.name}`;
+    $id('pmKind').value = m.payType === 'daily' ? 'daily' : m.payType === 'commission' ? 'commission' : 'salary';
+    const r = getPeriodRange('month');
+    const st = memberStats(m, r);
+    $id('pmAmount').value = m.payType === 'commission' ? Math.round(st.commission) || '' : (m.salary || '');
+    $id('pmDate').value = todayLocalISO();
+    $id('pmNote').value = '';
+    $id('payMemberModal').style.display = 'flex';
+  }
+  function handlePayMemberSubmit(e) {
+    e.preventDefault();
+    const m = appState.team.find(x => x.id === payMemberId);
+    const amount = Number($id('pmAmount').value) || 0;
+    if (!m || amount <= 0) { showToast('اكتب المبلغ', 'error'); return; }
+    const kind = $id('pmKind').value;
+    const note = $id('pmNote').value.trim();
+    appState.expenses.unshift({ id: generateId('exp'), date: $id('pmDate').value || todayLocalISO(), category: 'salaries', amount,
+      note: `${PAY_KINDS[kind]} — ${m.name}${note ? ' — ' + note : ''}`, teamMemberId: m.id, payKind: kind });
+    saveData();
+    $id('payMemberModal').style.display = 'none';
+    renderTeam();
+    showToast(`تم تسجيل ${PAY_KINDS[kind]} ${formatNumber(amount)} ج.م لـ ${m.name}`, 'success');
+  }
+
+  function bindTeamEvents() {
+    fillSelect($id('teamPeriod'), PERIODS, 'month');
+    fillSelect($id('memberRole'), TEAM_ROLES, 'mechanic');
+    fillSelect($id('memberPayType'), PAY_TYPES, 'monthly');
+    fillSelect($id('pmKind'), PAY_KINDS, 'salary');
+    $id('teamPeriod').addEventListener('change', renderTeam);
+    $id('teamShowInactive').addEventListener('change', renderTeam);
+    $id('btnAddMember').addEventListener('click', () => openMemberModal());
+    $id('memberPayType').addEventListener('change', syncSalaryLabel);
+    $id('memberForm').addEventListener('submit', handleMemberSubmit);
+    $id('btnDeleteMember').addEventListener('click', deleteMember);
+    $id('payMemberForm').addEventListener('submit', handlePayMemberSubmit);
+    [['btnCloseMember', 'memberModal'], ['btnCancelMember', 'memberModal'], ['btnClosePayMember', 'payMemberModal'], ['btnCancelPayMember', 'payMemberModal']]
+      .forEach(([b, m]) => $id(b).addEventListener('click', () => { $id(m).style.display = 'none'; }));
+    ['memberModal', 'payMemberModal'].forEach(id => $id(id).addEventListener('click', e => { if (e.target.id === id) $id(id).style.display = 'none'; }));
+  }
+
   // --- VEHICLE SELECTION & WORKSPACE ---
   function selectVehicle(vehicleId) {
     const vehicle = appState.vehicles.find(v => v.id === vehicleId);
@@ -4561,7 +4874,7 @@ const CATALOG_SUGGESTED_PRESETS = [
 
     // Populate Banner Info
     elements.bannerPlateText.textContent = vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`;
-    elements.bannerCarTitle.textContent = `${vehicle.make} ${vehicle.model}`;
+    elements.bannerCarTitle.textContent = `${carTitle(vehicle)}`;
     elements.bannerClientName.textContent = client ? client.name : 'عميل غير محدد';
     elements.bannerClientPhone.textContent = client ? client.phone : '-';
     elements.bannerCarColor.innerHTML = vehicle.color ? `${colorDotHtml(vehicle.color)} ${escapeHtml(vehicle.color)}` : '';
@@ -4664,11 +4977,169 @@ const CATALOG_SUGGESTED_PRESETS = [
   }
 
   // ---------- CAR COLORS ----------
-  const COLOR_MAP = {
-    'ابيض': '#f5f5f5', 'اسود': '#111111', 'فضي': '#c0c4c8', 'رمادي': '#7d8288', 'احمر': '#d32f2f',
-    'نبيتي': '#6d1b2b', 'ازرق': '#1e63d6', 'كحلي': '#1b2a4a', 'لبني': '#90caf9', 'اخضر': '#2e7d32',
-    'بيج': '#d8c8a8', 'بني': '#6d4c41', 'ذهبي': '#c9a227', 'برتقالي': '#ef6c00', 'اصفر': '#fbc02d'
-  };
+  // Car colors (label -> swatch). Order = order shown in the picker.
+  const CAR_COLORS = [
+    ['أبيض', '#f5f5f5'], ['أبيض لؤلؤي', '#f3efe6'], ['أسود', '#111111'], ['فضي', '#c0c4c8'], ['رمادي', '#7d8288'],
+    ['رمادي غامق', '#4a4f55'], ['أحمر', '#d32f2f'], ['نبيتي', '#6d1b2b'], ['أزرق', '#1e63d6'], ['كحلي', '#1b2a4a'],
+    ['لبني', '#90caf9'], ['تركواز', '#1ba39c'], ['أخضر', '#2e7d32'], ['زيتي', '#556b2f'], ['بيج', '#d8c8a8'],
+    ['شمبانيا', '#e6d3a3'], ['بني', '#6d4c41'], ['برونزي', '#8c6239'], ['ذهبي', '#c9a227'], ['برتقالي', '#ef6c00'],
+    ['أصفر', '#fbc02d'], ['بنفسجي', '#6a1b9a'], ['وردي', '#e991b0'], ['موف', '#9c7fa8']
+  ];
+  const COLOR_MAP = {};
+  CAR_COLORS.forEach(([n, h]) => { COLOR_MAP[normalizeArabic(n)] = h; });
+
+  // Makes & models common in Egypt: [Arabic make, English make, "Model|اسم عربي, ..."]
+  const CAR_DATA = [
+    ['تويوتا', 'Toyota', 'Corolla|كورولا, Yaris|ياريس, Belta|بيلتا, Camry|كامري, C-HR|سي اتش ار, Corolla Cross|كورولا كروس, RAV4|راف فور, Rush|راش, Raize|رايز, Fortuner|فورتشنر, Land Cruiser|لاند كروزر, Prado|برادو, Hilux|هايلكس, Avanza|افانزا, Hiace|هايس'],
+    ['هيونداي', 'Hyundai', 'Elantra|النترا, Accent|اكسنت, Accent RB|اكسنت ار بي, Verna|فيرنا, i10|اي 10, Grand i10|جراند اي 10, i20|اي 20, i30|اي 30, Tucson|توسان, Creta|كريتا, Santa Fe|سانتافي, Sonata|سوناتا, Bayon|بايون, Kona|كونا, Matrix|ماتريكس, Getz|جيتز, Staria|ستاريا, H1|اتش 1'],
+    ['كيا', 'Kia', 'Cerato|سيراتو, Rio|ريو, Picanto|بيكانتو, Sportage|سبورتاج, Sorento|سورينتو, Seltos|سيلتوس, Soul|سول, Pegas|بيجاس, Carens|كارينز, Carnival|كرنفال, Sonet|سونيت, K5|كيه 5, Optima|اوبتيما, Xceed|اكسيد'],
+    ['نيسان', 'Nissan', 'Sunny|صني, Sentra|سنترا, Qashqai|قشقاي, Juke|جوك, X-Trail|اكس تريل, Patrol|باترول, Kicks|كيكس, Tiida|تيدا, Navara|نافارا, Altima|التيما, Micra|ميكرا'],
+    ['ميتسوبيشي', 'Mitsubishi', 'Lancer|لانسر, Lancer EX|لانسر اي اكس, Attrage|اتراج, Mirage|ميراج, Pajero|باجيرو, Outlander|اوتلاندر, Eclipse Cross|اكليبس كروس, ASX|اي اس اكس, Xpander|اكسباندر, L200|ال 200'],
+    ['شيفروليه', 'Chevrolet', 'Aveo|افيو, Optra|اوبترا, Lanos|لانوس, Cruze|كروز, Captiva|كابتيفا, Spark|سبارك, Sonic|سونيك, Malibu|ماليبو, Tahoe|تاهو, Trailblazer|تريل بليزر, N300|ان 300, T-Series|تي سيريز'],
+    ['مرسيدس بنز', 'Mercedes-Benz', 'A-Class|ايه كلاس, C-Class|سي كلاس, E-Class|اي كلاس, S-Class|اس كلاس, CLA|سي ال ايه, GLA|جي ال ايه, GLB|جي ال بي, GLC|جي ال سي, GLE|جي ال اي, GLS|جي ال اس, G-Class|جي كلاس'],
+    ['بي إم دبليو', 'BMW', '1 Series|الفئة الأولى, 2 Series|الفئة التانية, 3 Series|الفئة التالتة, 4 Series|الفئة الرابعة, 5 Series|الفئة الخامسة, 7 Series|الفئة السابعة, X1|اكس 1, X2|اكس 2, X3|اكس 3, X4|اكس 4, X5|اكس 5, X6|اكس 6, X7|اكس 7'],
+    ['أودي', 'Audi', 'A3|ايه 3, A4|ايه 4, A5|ايه 5, A6|ايه 6, A8|ايه 8, Q2|كيو 2, Q3|كيو 3, Q5|كيو 5, Q7|كيو 7, Q8|كيو 8'],
+    ['فولكس فاجن', 'Volkswagen', 'Golf|جولف, Polo|بولو, Passat|باسات, Jetta|جيتا, Bora|بورا, Tiguan|تيجوان, Touareg|طوارق, T-Roc|تي روك, Teramont|تيرامونت'],
+    ['شيري', 'Chery', 'Tiggo 2|تيجو 2, Tiggo 3|تيجو 3, Tiggo 4|تيجو 4, Tiggo 7|تيجو 7, Tiggo 8|تيجو 8, Arrizo 5|اريزو 5, Arrizo 6|اريزو 6, Envy|انفي'],
+    ['إم جي MG', 'MG', 'MG 3|ام جي 3, MG 4|ام جي 4, MG 5|ام جي 5, MG 6|ام جي 6, MG ZS|ام جي زد اس, MG HS|ام جي اتش اس, MG RX5|ام جي ار اكس 5, MG RX8|ام جي ار اكس 8, MG One|ام جي وان, MG GT|ام جي جي تي'],
+    ['بيجو', 'Peugeot', '208, 301, 308, 408, 508, 2008, 3008, 5008, Partner|بارتنر'],
+    ['رينو', 'Renault', 'Logan|لوجان, Sandero|سانديرو, Sandero Stepway|ستيب واي, Duster|داستر, Megane|ميجان, Fluence|فلوانس, Kadjar|كادجار, Captur|كابتشر, Austral|اوسترال, Symbol|سيمبول, Clio|كليو'],
+    ['هوندا', 'Honda', 'Civic|سيفيك, City|سيتي, Accord|اكورد, CR-V|سي ار في, HR-V|اتش ار في, Jazz|جاز, Pilot|بايلوت'],
+    ['سوزوكي', 'Suzuki', 'Swift|سويفت, Dzire|ديزاير, Ciaz|سياز, Alto|التو, Celerio|سيليريو, Ertiga|ارتيجا, Vitara|فيتارا, S-Presso|اس بريسو, Jimny|جيمني, Baleno|بالينو'],
+    ['سكودا', 'Skoda', 'Octavia|اوكتافيا, Superb|سوبيرب, Fabia|فابيا, Kodiaq|كودياك, Karoq|كاروك, Kamiq|كاميك, Rapid|رابيد, Scala|سكالا'],
+    ['فيات', 'Fiat', 'Tipo|تيبو, 500, 500X, Punto|بونتو, Linea|لينيا, Siena|سيينا, Doblo|دوبلو, 128, 131, شاهين'],
+    ['فورد', 'Ford', 'Focus|فوكس, Fiesta|فييستا, Mondeo|مونديو, Kuga|كوجا, EcoSport|ايكو سبورت, Explorer|اكسبلورر, Ranger|رينجر, Territory|تيريتوري'],
+    ['جيب', 'Jeep', 'Wrangler|رانجلر, Grand Cherokee|جراند شيروكي, Cherokee|شيروكي, Compass|كومباس, Renegade|رينيجيد'],
+    ['سيات', 'Seat', 'Ibiza|ابيزا, Leon|ليون, Arona|ارونا, Ateca|اتيكا, Tarraco|تاراكو, Toledo|توليدو'],
+    ['أوبل', 'Opel', 'Astra|استرا, Corsa|كورسا, Insignia|انسيجنيا, Mokka|موكا, Crossland|كروس لاند, Grandland|جراند لاند, Vectra|فيكترا'],
+    ['سيتروين', 'Citroen', 'C3|سي 3, C4|سي 4, C5|سي 5, C-Elysee|سي اليزيه, C3 Aircross|سي 3 اير كروس, C5 Aircross|سي 5 اير كروس, Berlingo|برلينجو'],
+    ['مازدا', 'Mazda', 'Mazda 2|مازدا 2, Mazda 3|مازدا 3, Mazda 6|مازدا 6, CX-3|سي اكس 3, CX-30|سي اكس 30, CX-5|سي اكس 5, CX-9|سي اكس 9'],
+    ['سوبارو', 'Subaru', 'Impreza|امبريزا, XV|اكس في, Forester|فورستر, Outback|اوت باك'],
+    ['جيلي', 'Geely', 'Emgrand|امجراند, Coolray|كولراي, Okavango|اوكافانجو, Tugella|توجيلا, Monjaro|مونجارو, Geometry C|جيومتري سي'],
+    ['بي واي دي', 'BYD', 'F3|اف 3, L3|ال 3, S5|اس 5, Qin|تشين, Song Plus|سونج بلس, Atto 3|اتو 3, Seal|سيل, Dolphin|دولفين'],
+    ['هافال', 'Haval', 'H6|اتش 6, Jolion|جوليون, H9|اتش 9, Dargo|دارجو'],
+    ['شانجان', 'Changan', 'Alsvin|السفين, Eado|ايدو, CS35|سي اس 35, CS55|سي اس 55, CS75|سي اس 75, CS85|سي اس 85, Uni-K|يوني كيه, Uni-T|يوني تي'],
+    ['جيتور', 'Jetour', 'X70|اكس 70, X70 Plus|اكس 70 بلس, Dashing|داشينج, T2|تي 2'],
+    ['بايك', 'BAIC', 'X3|اكس 3, X35|اكس 35, X55|اكس 55, X7|اكس 7, BJ40|بي جيه 40'],
+    ['سبيرانزا', 'Speranza', 'A113|ايه 113, A516|ايه 516, M11|ام 11, Tiggo|تيجو'],
+    ['بروتون', 'Proton', 'Saga|ساجا, Persona|برسونا, X50|اكس 50, X70|اكس 70'],
+    ['لادا', 'Lada', 'Granta|جرانتا, Vesta|فيستا, Niva|نيفا, 2107'],
+    ['دايهاتسو', 'Daihatsu', 'Terios|تيريوس, Gran Max|جران ماكس, Sirion|سيريون'],
+    ['لكزس', 'Lexus', 'ES|اي اس, IS|اي اس, LS|ال اس, NX|ان اكس, RX|ار اكس, LX|ال اكس, UX|يو اكس'],
+    ['جريت وول', 'Great Wall', 'Wingle|وينجل, Poer|بوير'],
+    ['لاند روفر', 'Land Rover', 'Range Rover|رينج روفر, Range Rover Sport|رينج روفر سبورت, Evoque|ايفوك, Velar|فيلار, Discovery|ديسكفري, Discovery Sport|ديسكفري سبورت, Defender|ديفندر'],
+    ['بورشه', 'Porsche', 'Cayenne|كايين, Macan|ماكان, Panamera|باناميرا, 911']
+  ];
+  const CAR_MAKES = CAR_DATA.map(([ar, en, models]) => ({
+    value: ar, label: ar, search: en, en,
+    models: models.split(',').map(x => x.trim()).filter(Boolean).map(x => {
+      const [enName, arName] = x.split('|').map(y => y && y.trim());
+      return arName ? { value: arName, label: arName, sub: enName, search: enName } : { value: enName, label: enName, search: '' };
+    })
+  }));
+  function carTitle(v) { return [v.make, v.model, v.year].filter(Boolean).join(' '); }
+
+  // Searchable pick list. getOptions() -> [{value,label,sub?,search?,swatch?}]
+  function createCombo(input, { getOptions, onChange, customLabel }) {
+    const wrap = input.closest('.combo');
+    const list = wrap.querySelector('.combo-list');
+    let shown = [], active = -1;
+    const optHtml = o => `${o.swatch ? `<span class="color-dot" style="background:${o.swatch}"></span>` : ''}<span>${escapeHtml(o.label)}</span>${o.sub ? `<span class="opt-sub">${escapeHtml(o.sub)}</span>` : ''}`;
+    function render(text) {
+      const q = normalizeArabic(text || '').toLowerCase();
+      const all = getOptions();
+      shown = q ? all.filter(o => normalizeArabic(`${o.label} ${o.sub || ''} ${o.search || ''}`).toLowerCase().includes(q)) : all;
+      let html = shown.map((o, i) => `<div class="combo-opt" data-i="${i}">${optHtml(o)}</div>`).join('');
+      if (!shown.length) html = `<div class="combo-empty">${all.length ? 'مفيش نتايج' : 'مفيش اختيارات'}</div>`;
+      if (customLabel && (text || '').trim()) html += `<div class="combo-opt combo-custom" data-custom="1"><i class="fa-solid fa-pen"></i> ${customLabel}: "${escapeHtml(text.trim())}"</div>`;
+      list.innerHTML = html;
+      active = -1;
+    }
+    const open = () => {
+      // open upwards when there isn't enough room below (e.g. near the bottom of a modal)
+      const box = (input.closest('.modal-form') || document.documentElement).getBoundingClientRect();
+      const ri = input.getBoundingClientRect();
+      const below = Math.min(box.bottom, window.innerHeight) - ri.bottom, above = ri.top - Math.max(box.top, 0);
+      wrap.classList.toggle('up', below < 220 && above > below);
+      wrap.classList.add('open');
+      render(input.dataset.value ? '' : input.value);
+    };
+    const close = () => wrap.classList.remove('open');
+    function choose(o) {
+      input.value = o.label; input.dataset.value = o.value; delete input.dataset.custom;
+      close(); if (onChange) onChange(o.value);
+    }
+    function chooseCustom() {
+      const t = input.value.trim(); if (!t) return;
+      input.dataset.value = t; input.dataset.custom = '1';
+      close(); if (onChange) onChange(t);
+    }
+    function highlight(i) {
+      const els = list.querySelectorAll('.combo-opt');
+      if (!els.length) return;
+      active = (i + els.length) % els.length;
+      els.forEach((el, k) => el.classList.toggle('active', k === active));
+      els[active].scrollIntoView({ block: 'nearest' });
+    }
+    input.addEventListener('focus', open);
+    input.addEventListener('click', () => { if (!wrap.classList.contains('open')) open(); });
+    input.addEventListener('input', () => { input.dataset.value = ''; wrap.classList.add('open'); render(input.value); });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); if (!wrap.classList.contains('open')) open(); highlight(active + 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); highlight(active - 1); }
+      else if (e.key === 'Enter' && wrap.classList.contains('open')) {
+        e.preventDefault();
+        const els = list.querySelectorAll('.combo-opt');
+        const el = els[active >= 0 ? active : 0];
+        if (!el) return;
+        if (el.dataset.custom) chooseCustom(); else choose(shown[Number(el.dataset.i)]);
+      } else if (e.key === 'Escape') close();
+    });
+    list.addEventListener('mousedown', e => {
+      const el = e.target.closest('.combo-opt');
+      if (!el) return;
+      e.preventDefault();
+      if (el.dataset.custom) chooseCustom(); else choose(shown[Number(el.dataset.i)]);
+    });
+    input.addEventListener('blur', () => setTimeout(() => {
+      close();
+      if (input.dataset.value) { if (!input.dataset.custom) { const o = getOptions().find(x => x.value === input.dataset.value); if (o) input.value = o.label; } return; }
+      const typed = normalizeArabic(input.value);
+      const exact = typed && getOptions().find(o => normalizeArabic(o.label) === typed || normalizeArabic(o.sub || '') === typed);
+      if (exact) choose(exact);
+      else if (input.value) { input.value = ''; if (onChange) onChange(''); }
+    }, 150));
+    return {
+      set(value) {
+        if (!value) { input.value = ''; input.dataset.value = ''; delete input.dataset.custom; return; }
+        const o = getOptions().find(x => x.value === value || normalizeArabic(x.label) === normalizeArabic(value));
+        input.value = o ? o.label : value; input.dataset.value = o ? o.value : value;
+        if (o) delete input.dataset.custom; else input.dataset.custom = '1';
+      },
+      get value() { return input.dataset.value || ''; }
+    };
+  }
+  let makeCombo, modelCombo, colorCombo;
+  function setupCarPickers() {
+    makeCombo = createCombo(elements.carMakeInput, {
+      getOptions: () => CAR_MAKES,
+      customLabel: 'ماركة مش موجودة؟ استخدم',
+      onChange: () => { modelCombo.set(''); elements.carModelInput.placeholder = makeCombo.value ? 'ابحث واختار الموديل...' : 'اختار الماركة الأول...'; }
+    });
+    modelCombo = createCombo(elements.carModelInput, {
+      getOptions: () => { const m = CAR_MAKES.find(x => x.value === makeCombo.value); return m ? m.models : []; },
+      customLabel: 'موديل مش موجود؟ استخدم'
+    });
+    colorCombo = createCombo(elements.carColorInput, {
+      getOptions: () => CAR_COLORS.map(([n, h]) => ({ value: n, label: n, swatch: h })),
+      customLabel: 'لون تاني؟ استخدم'
+    });
+    const yearSel = document.getElementById('carYearInput');
+    const maxYear = new Date().getFullYear() + 1;
+    let html = '<option value="" disabled selected>اختار السنة</option>';
+    for (let y = maxYear; y >= 1980; y--) html += `<option value="${y}">${y}</option>`;
+    yearSel.innerHTML = html;
+  }
   function colorDotHtml(colorName) {
     if (!colorName) return '';
     const key = normalizeArabic(colorName).replace(/ه$/, '');
@@ -5007,6 +5478,7 @@ const CATALOG_SUGGESTED_PRESETS = [
           </div>
         </div>
 
+        ${techNamesOf(visit).length ? `<div class="visit-techs"><i class="fa-solid fa-user-gear"></i> الفني: <strong>${escapeHtml(techNamesOf(visit).join('، '))}</strong></div>` : ''}
         <div class="visit-items-chips">
           ${itemsHtml}
         </div>
@@ -5044,7 +5516,7 @@ const CATALOG_SUGGESTED_PRESETS = [
         const lettersNorm = normalizeArabic(vehicle.plateLetters);
         const numbersNorm = normalizeArabic(vehicle.plateNumbers);
         const makeNorm = normalizeArabic(vehicle.make);
-        const modelNorm = normalizeArabic(vehicle.model);
+        const modelNorm = normalizeArabic(`${vehicle.model} ${vehicle.year || ''}`);
         const clientNameNorm = client ? normalizeArabic(client.name) : '';
         const clientPhoneNorm = client ? normalizeArabic(client.phone) : '';
         const colorNorm = normalizeArabic(vehicle.color || '');
@@ -5103,7 +5575,7 @@ const CATALOG_SUGGESTED_PRESETS = [
 
       card.innerHTML = `
         <div class="client-card-top">
-          <div class="card-car-title">${colorDotHtml(vehicle.color)}${escapeHtml(vehicle.make)} ${escapeHtml(vehicle.model)}</div>
+          <div class="card-car-title">${colorDotHtml(vehicle.color)}${escapeHtml(carTitle(vehicle))}</div>
           <span class="plate-mini">${escapeHtml(vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`)}</span>
         </div>
 
@@ -5166,6 +5638,9 @@ const CATALOG_SUGGESTED_PRESETS = [
   // --- MODAL 1: CLIENT & VEHICLE REGISTRATION / EDIT ---
   function openClientModal(editClientId = null, addToClientId = null) {
     elements.clientForm.reset();
+    makeCombo.set(''); modelCombo.set(''); colorCombo.set('');
+    elements.carModelInput.placeholder = 'اختار الماركة الأول...';
+    document.getElementById('carYearInput').value = '';
     elements.editClientId.value = '';
     elements.addToClientId.value = '';
     elements.clientNameInput.readOnly = false;
@@ -5198,9 +5673,10 @@ const CATALOG_SUGGESTED_PRESETS = [
       elements.carPlateLettersInput.value = vehicle.plateLetters;
       elements.carPlateNumbersInput.value = vehicle.plateNumbers;
       elements.carInitialOdoInput.value = vehicle.initialOdometer;
-      elements.carMakeInput.value = vehicle.make;
-      elements.carModelInput.value = vehicle.model;
-      elements.carColorInput.value = vehicle.color || '';
+      makeCombo.set(vehicle.make);
+      modelCombo.set(vehicle.model);
+      colorCombo.set(vehicle.color || '');
+      document.getElementById('carYearInput').value = vehicle.year || '';
       elements.clientNotesInput.value = client ? client.notes : '';
     } else {
       elements.clientModalTitle.textContent = 'تسجيل عميل وسيارة جديدة';
@@ -5222,13 +5698,14 @@ const CATALOG_SUGGESTED_PRESETS = [
     const plateLetters = elements.carPlateLettersInput.value.trim();
     const plateNumbers = elements.carPlateNumbersInput.value.trim();
     const initialOdo = Number(elements.carInitialOdoInput.value) || 0;
-    const make = elements.carMakeInput.value.trim();
-    const model = elements.carModelInput.value.trim();
-    const color = elements.carColorInput.value.trim();
+    const make = makeCombo.value;
+    const model = modelCombo.value;
+    const color = colorCombo.value;
+    const year = Number(document.getElementById('carYearInput').value) || null;
     const notes = elements.clientNotesInput.value.trim();
 
-    if (!name || !phone || !plateLetters || !plateNumbers || !make || !model) {
-      showToast('يرجى ملء جميع الحقول المطلوبة', 'error');
+    if (!name || !phone || !plateLetters || !plateNumbers || !make || !model || !year) {
+      showToast(!make ? 'اختار الماركة من القايمة' : !model ? 'اختار الموديل من القايمة' : !year ? 'اختار سنة الصنع' : 'يرجى ملء جميع الحقول المطلوبة', 'error');
       return;
     }
 
@@ -5241,6 +5718,7 @@ const CATALOG_SUGGESTED_PRESETS = [
         vehicle.plateFull = `${plateLetters} ${plateNumbers}`;
         vehicle.make = make;
         vehicle.model = model;
+        vehicle.year = year;
         vehicle.color = color;
         vehicle.initialOdometer = initialOdo;
         // Keep current odometer consistent if no visits recorded yet
@@ -5297,6 +5775,7 @@ const CATALOG_SUGGESTED_PRESETS = [
         plateFull: `${plateLetters} ${plateNumbers}`,
         make,
         model,
+        year,
         color,
         initialOdometer: initialOdo,
         currentOdometer: initialOdo,
@@ -5330,7 +5809,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     const visit = visitId ? appState.visits.find(v => v.id === visitId) : null;
     editingVisitId = visit ? visit.id : null;
 
-    elements.visitModalCarTitle.textContent = `${vehicle.make} ${vehicle.model}`;
+    elements.visitModalCarTitle.textContent = `${carTitle(vehicle)}`;
     elements.visitModalPlateBadge.textContent = vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`;
     elements.visitModalClientName.textContent = client ? client.name : '-';
     elements.visitItemsTableBody.innerHTML = '';
@@ -5345,6 +5824,7 @@ const CATALOG_SUGGESTED_PRESETS = [
           { qty: it.qty, unitPrice: it.unitPrice, catalogId: it.catalogId, buyCost: it.buyCost });
       });
       preparePaymentFields(visit);
+      renderTechChips(visit.technicianIds || []);
     } else {
       elements.visitModalTitle.textContent = 'تسجيل إجراءات زيارة صيانة جديدة';
       elements.visitDateInput.value = todayLocalISO();
@@ -5353,6 +5833,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       addVisitItemRow('oil', 'تغيير زيت المحرك', 'تخليقي 10,000 كم (شل / موبيل)', 10000, 1600, 6);
       addVisitItemRow('oil_filter', 'تغيير فلتر زيت', 'أصلي وكالة', 10000, 350, 6);
       preparePaymentFields(null);
+      renderTechChips([]);
     }
 
     calculateVisitTotal();
@@ -5499,6 +5980,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     const net = totalCost - discount;
     const payNow = Math.max(Number(document.getElementById('visitPaidInput').value) || 0, 0);
     const method = document.getElementById('visitPayMethod').value || 'cash';
+    const techs = getSelectedTechs();
 
     if (editingVisitId) {
       const visit = appState.visits.find(v => v.id === editingVisitId);
@@ -5516,6 +5998,8 @@ const CATALOG_SUGGESTED_PRESETS = [
         visit.discount = discount;
         visit.payments = oldPayments;
         visit.items = items;
+        visit.technicianIds = techs.ids;
+        visit.technicianNames = techs.names;
         visit.updatedAt = new Date().toISOString();
       }
     } else {
@@ -5531,6 +6015,8 @@ const CATALOG_SUGGESTED_PRESETS = [
         discount,
         payments: paid > 0 ? [{ id: generateId('pay'), date, amount: paid, method, note: '' }] : [],
         items,
+        technicianIds: techs.ids,
+        technicianNames: techs.names,
         createdAt: new Date().toISOString()
       });
     }
@@ -5552,9 +6038,12 @@ const CATALOG_SUGGESTED_PRESETS = [
     elements.invDate.textContent = visit.date;
     elements.invClientName.textContent = client ? client.name : '-';
     elements.invClientPhone.textContent = client ? client.phone : '-';
-    elements.invCarDetails.textContent = `${vehicle.make} ${vehicle.model}${vehicle.color ? ' — ' + vehicle.color : ''}`;
+    elements.invCarDetails.textContent = `${carTitle(vehicle)}${vehicle.color ? ' — ' + vehicle.color : ''}`;
     elements.invCarPlate.textContent = vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`;
     elements.invCarOdo.textContent = `${formatNumber(visit.odometer)} كم`;
+    const tn = techNamesOf(visit);
+    document.getElementById('invTechsRow').style.display = tn.length ? '' : 'none';
+    document.getElementById('invTechs').textContent = tn.join('، ');
 
     // Items table
     elements.invItemsBody.innerHTML = '';
@@ -6113,6 +6602,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       visits: appState.visits,
       partsCatalog: appState.partsCatalog,
       expenses: appState.expenses,
+      team: appState.team,
       invoiceCounter: appState.invoiceCounter,
       settings: appState.settings
     }, null, 2);
@@ -6141,6 +6631,7 @@ const CATALOG_SUGGESTED_PRESETS = [
           appState.vehicles = importedData.vehicles;
           appState.visits = importedData.visits;
           appState.expenses = Array.isArray(importedData.expenses) ? importedData.expenses : [];
+          appState.team = Array.isArray(importedData.team) ? importedData.team : [];
           if (importedData.partsCatalog) {
             appState.partsCatalog = importedData.partsCatalog;
           }
