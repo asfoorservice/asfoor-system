@@ -1631,6 +1631,11 @@ h1, h2, h3, h4, h5 {
 .account-head { display: flex; align-items: center; gap: 10px; padding: 10px 10px 12px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 6px; }
 .account-head > i { font-size: 1.6rem; color: var(--text-muted); }
 .account-label { font-size: .72rem; color: var(--text-muted); }
+.sync-info { font-size: .74rem; color: var(--text-secondary); padding: 6px 12px; line-height: 1.8; }
+.sync-info b { color: var(--text-primary); font-weight: 700; }
+.sync-info .warn { color: #fca5a5; }
+.clock-banner { display: none; background: #7f1d1d; color: #fff; text-align: center; padding: 10px 16px; font-weight: 700; font-size: .88rem; }
+.clock-banner.show { display: block; }
 .account-head .user-chip { color: #fff; font-size: .85rem; max-width: 170px; }
 .menu-item { width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 10px; background: none; border: none; border-radius: 8px; color: var(--text-primary); font-family: var(--font-main); font-size: .88rem; cursor: pointer; text-align: right; }
 .menu-item i { width: 18px; text-align: center; color: var(--text-muted); }
@@ -2026,6 +2031,10 @@ h1, h2, h3, h4, h5 {
             <button class="menu-item" id="btnExportData"><i class="fa-solid fa-file-export"></i> تنزيل نسخة احتياطية</button>
             <button class="menu-item" id="btnImportData"><i class="fa-solid fa-file-import"></i> استيراد نسخة احتياطية</button>
             <div class="menu-sep"></div>
+            <div class="sync-info" id="syncInfo"></div>
+            <button class="menu-item" id="btnResync"><i class="fa-solid fa-arrows-rotate"></i> تحديث البيانات من السيرفر</button>
+            <button class="menu-item" id="btnClearDeviceCache"><i class="fa-solid fa-broom"></i> مسح نسخة الجهاز وإعادة التحميل</button>
+            <div class="menu-sep"></div>
             <div class="menu-version" id="appVersionLabel"></div>
             <button class="menu-item" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
           </div>
@@ -2043,6 +2052,7 @@ h1, h2, h3, h4, h5 {
       <button type="button" class="main-tab" data-view="team"><i class="fa-solid fa-users-gear"></i> التيم</button>
     </nav>
   </header>
+  <div class="clock-banner" id="clockBanner"></div>
 
   <!-- Main Application Container -->
   <main class="main-container">
@@ -3343,7 +3353,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   'use strict';
 
   // App version — must match version.json (both are bumped on every release)
-  const APP_VERSION = '2026.09.28-1656';
+  const APP_VERSION = '2026.09.28-1737';
 
   // Check every few minutes (and when the tab comes back into view) whether a newer version was published
   function checkForUpdate() {
@@ -3363,6 +3373,11 @@ const CATALOG_SUGGESTED_PRESETS = [
     setInterval(checkForUpdate, 3 * 60 * 1000);
     document.addEventListener('visibilitychange', () => { if (!document.hidden) checkForUpdate(); });
     setTimeout(checkForUpdate, 5000);
+    setTimeout(checkDeviceClock, 2000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) checkDeviceClock(); });
+    document.getElementById('btnResync').addEventListener('click', resyncFromServer);
+    document.getElementById('btnClearDeviceCache').addEventListener('click', clearDeviceCacheAndReload);
+    document.getElementById('btnAccount').addEventListener('click', () => setTimeout(renderSyncInfo, 0));
   }
 
   // ================= FIREBASE / CLOUD DATABASE =================
@@ -3661,7 +3676,9 @@ const CATALOG_SUGGESTED_PRESETS = [
       cloud.auth = F.getAuth(cloud.app);
       cloud.db = F.initializeFirestore(cloud.app, {
         // keeps a full copy on this device: works offline and syncs when the internet is back
-        localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() })
+        localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() }),
+        // some antivirus / networks block the live stream; this falls back to a mode that works through them
+        experimentalAutoDetectLongPolling: true
       });
     } catch (e) {
       console.error(e);
@@ -3720,9 +3737,11 @@ const CATALOG_SUGGESTED_PRESETS = [
     const keys = Object.keys(CLOUD_COLLECTIONS);
     const got = new Set();
 
+    cloud.cacheOnly = {};
     const markLoaded = (key, fromCache) => {
       got.add(key);
-      if (!fromCache) cloud.firstServerLoad[key] = true;
+      cloud.cacheOnly[key] = !!fromCache;
+      if (!fromCache) { cloud.firstServerLoad[key] = true; cloud.lastServerAt = Date.now(); }
       if (!cloud.ready && got.size === keys.length + 1) {
         cloud.ready = true;
       }
@@ -3761,6 +3780,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       }
       markLoaded('meta', snap.metadata.fromCache);
       if (!snap.metadata.fromCache) cloud.firstServerLoad.meta = true;
+      updateSyncStatus();
       scheduleRender();
     }, err => handleCloudError(err));
     cloud.unsubs.push(unsubMeta);
@@ -3850,12 +3870,82 @@ const CATALOG_SUGGESTED_PRESETS = [
     } else if (cloud.pendingWrites > 0) {
       el.classList.add('pending');
       elements.syncStatusText.textContent = 'جاري رفع التغييرات...';
+    } else if (cloud.ready && Object.values(cloud.cacheOnly || {}).some(Boolean)) {
+      // We only have the copy saved on this device — the live link to the server isn't working
+      el.classList.add('offline');
+      elements.syncStatusText.textContent = 'مش متصل بالسيرفر';
+      el.title = 'بيعرض آخر نسخة محفوظة على الجهاز ده — افتح قايمة الحساب ودوس "تحديث البيانات من السيرفر"';
     } else if (cloud.ready) {
       el.classList.add('ok');
       elements.syncStatusText.textContent = 'متزامن';
+      el.title = '';
     } else {
       elements.syncStatusText.textContent = 'جاري التحميل...';
     }
+  }
+
+  // ---------- Sync diagnostics (account menu) ----------
+  function renderSyncInfo() {
+    const el = document.getElementById('syncInfo');
+    if (!el) return;
+    const t = cloud.lastServerAt ? new Date(cloud.lastServerAt) : null;
+    const hhmm = t ? `${String(t.getHours()).padStart(2, '0')}:${String(t.getMinutes()).padStart(2, '0')}` : null;
+    const cacheOnly = Object.values(cloud.cacheOnly || {}).some(Boolean);
+    el.innerHTML = `
+      <div>العملاء: <b>${formatNumber(appState.clients.length)}</b> — الزيارات: <b>${formatNumber(appState.visits.length)}</b> — المصروفات: <b>${formatNumber(appState.expenses.length)}</b></div>
+      <div>آخر استلام من السيرفر: ${hhmm ? `<b>${hhmm}</b>` : '<span class="warn">لسه مفيش</span>'}${cacheOnly ? ' <span class="warn">(بيعرض نسخة الجهاز)</span>' : ''}</div>
+      <div>تاريخ الجهاز: <b>${formatDateAr(todayLocalISO())}</b></div>`;
+  }
+
+  async function resyncFromServer() {
+    if (!cloud.db) return;
+    const F = cloud.F;
+    showToast('بيعيد الاتصال بالسيرفر...', 'info');
+    try {
+      await F.disableNetwork(cloud.db);
+      await F.enableNetwork(cloud.db);
+      startListeners();
+      setTimeout(() => {
+        const cacheOnly = Object.values(cloud.cacheOnly || {}).some(Boolean);
+        showToast(cacheOnly ? 'لسه مش قادر يوصل للسيرفر — جرب "مسح نسخة الجهاز" أو شبكة تانية' : 'تمام — البيانات اتحدثت من السيرفر', cacheOnly ? 'error' : 'success');
+        renderSyncInfo();
+      }, 6000);
+    } catch (e) {
+      console.error(e);
+      showToast('حصلت مشكلة في إعادة الاتصال: ' + (e.message || ''), 'error');
+    }
+  }
+
+  async function clearDeviceCacheAndReload() {
+    if (cloud.pendingWrites > 0) {
+      showToast('فيه تغييرات لسه بتترفع — استنى لحد ما تبقى "متزامن" وجرب تاني', 'error');
+      return;
+    }
+    if (!confirm('ده هيمسح النسخة المحفوظة على الجهاز ده بس، ويحمّل كل البيانات من جديد من السيرفر.\nالبيانات اللي على السيرفر مش هتتأثر.\n\nتكمل؟')) return;
+    try {
+      stopListeners();
+      await cloud.F.terminate(cloud.db);
+      await cloud.F.clearIndexedDbPersistence(cloud.db);
+    } catch (e) {
+      console.error(e);
+    }
+    location.reload();
+  }
+
+  function checkDeviceClock() {
+    if (location.protocol !== 'https:') return;
+    fetch(`version.json?_=${Date.now()}`, { cache: 'no-store' }).then(r => {
+      const d = r.headers.get('date');
+      if (!d) return;
+      const diffH = Math.abs(Date.now() - new Date(d).getTime()) / 36e5;
+      const b = document.getElementById('clockBanner');
+      if (diffH > 12) {
+        b.textContent = `⚠ تاريخ أو ساعة الجهاز ده غلط (الجهاز فاكر النهارده ${formatDateAr(todayLocalISO())}) — ظبط التاريخ من إعدادات الجهاز، وإلا الحسابات ولوحة التحكم هتطلع أرقام غلط`;
+        b.classList.add('show');
+      } else {
+        b.classList.remove('show');
+      }
+    }).catch(() => {});
   }
 
   // ---------- One-time migration of old browser-only data ----------
