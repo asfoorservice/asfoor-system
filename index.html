@@ -2965,6 +2965,33 @@ h1, h2, h3, h4, h5 {
     </div>
   </div>
 
+  <!-- MODAL 11: Settle overpayment -->
+  <div class="modal-overlay" id="settleModal" style="display:none; z-index:1160;">
+    <div class="modal-window" style="max-width:560px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-scale-balanced"></i><h3>تسوية فرق في الفاتورة</h3></div>
+        <button class="modal-close-btn" id="btnCloseSettle">&times;</button>
+      </div>
+      <div class="modal-form">
+        <div class="visit-target-summary" id="settleSummary" style="flex-direction:column;align-items:flex-start;gap:4px;"></div>
+        <p style="margin:16px 0 10px;color:var(--text-secondary);font-size:.92rem;">الفرق ده حصل إزاي؟</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <button type="button" class="btn btn-secondary settle-opt" id="btnSettleCorrect" style="justify-content:flex-start;text-align:right;white-space:normal;padding:14px;">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span><strong>المبلغ اتسجل غلط</strong><br><small style="color:var(--text-muted)" id="settleCorrectHint"></small></span>
+          </button>
+          <button type="button" class="btn btn-secondary settle-opt" id="btnSettleRefund" style="justify-content:flex-start;text-align:right;white-space:normal;padding:14px;">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span><strong>العميل دفع فعلاً وأنا رجّعتله الفرق</strong><br><small style="color:var(--text-muted)" id="settleRefundHint"></small></span>
+          </button>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnSettleLater">بعدين</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL 6: Customer Follow-up (who to call) -->
   <div class="modal-overlay" id="followUpModal" style="display: none;">
     <div class="modal-window modal-wide catalog-modal-window">
@@ -4050,12 +4077,15 @@ const CATALOG_SUGGESTED_PRESETS = [
   }
   function visitPaid(v) { return paymentsOf(v).reduce((a, p) => a + p.amount, 0); }
   function visitDue(v) { return Math.max(0, Math.round((visitNet(v) - visitPaid(v)) * 100) / 100); }
+  function visitOverpaid(v) { return Math.max(0, Math.round((visitPaid(v) - visitNet(v)) * 100) / 100); }
   function payStatus(v) {
+    if (visitOverpaid(v) > 0) return 'overpaid';
     if (visitDue(v) <= 0) return 'paid';
     return visitPaid(v) > 0 ? 'partial' : 'unpaid';
   }
   function payBadgeHtml(v) {
     const st = payStatus(v);
+    if (st === 'overpaid') return `<span class="pay-badge partial" title="المدفوع أكبر من قيمة الفاتورة — محتاج تسوية"><i class="fa-solid fa-scale-unbalanced"></i> دافع زيادة ${formatNumber(visitOverpaid(v))}</span>`;
     if (st === 'paid') return `<span class="pay-badge paid"><i class="fa-solid fa-circle-check"></i> مدفوعة</span>`;
     if (st === 'partial') return `<span class="pay-badge partial"><i class="fa-solid fa-circle-half-stroke"></i> باقي ${formatNumber(visitDue(v))}</span>`;
     return `<span class="pay-badge unpaid"><i class="fa-solid fa-clock"></i> آجل ${formatNumber(visitDue(v))}</span>`;
@@ -4097,11 +4127,55 @@ const CATALOG_SUGGESTED_PRESETS = [
     const due = Math.max(0, Math.round((net - editingPrevPaid - payNow) * 100) / 100);
     const hint = $id('visitPayHint');
     const prev = editingPrevPaid > 0 ? `مدفوع قبل كده: ${formatNumber(editingPrevPaid)} ج.م — ` : '';
-    if (due <= 0) {
+    const over = Math.round((editingPrevPaid - net) * 100) / 100;
+    if (editingVisitId && over > 0) {
+      hint.innerHTML = `<span class="trend-bad"><i class="fa-solid fa-scale-unbalanced"></i> العميل دافع ${formatNumber(editingPrevPaid)} والفاتورة بقت ${formatNumber(net)} — فيه فرق ${formatNumber(over)} ج.م، هتختار تعمل فيه إيه بعد الحفظ</span>`;
+    } else if (due <= 0) {
       hint.innerHTML = `<span class="trend-good"><i class="fa-solid fa-circle-check"></i> ${prev}مدفوعة بالكامل</span>`;
     } else {
       hint.innerHTML = `<span class="trend-bad"><i class="fa-solid fa-clock"></i> ${prev}الباقي على العميل: ${formatNumber(due)} ج.م (هيتسجل آجل)</span>`;
     }
+  }
+
+  // ---------- Settle overpayment ----------
+  let settlingVisitId = null;
+  function openSettleModal(visitId) {
+    const v = appState.visits.find(x => x.id === visitId);
+    if (!v || visitOverpaid(v) <= 0) return;
+    settlingVisitId = visitId;
+    const net = visitNet(v), paid = visitPaid(v), over = visitOverpaid(v);
+    $id('settleSummary').innerHTML = `
+      <div><span class="label">فاتورة:</span> <strong>#${escapeHtml(v.invoiceNumber || '')}</strong> — ${escapeHtml(v.date)}</div>
+      <div><span class="label">قيمة الفاتورة دلوقتي:</span> <strong>${formatNumber(net)} ج.م</strong></div>
+      <div><span class="label">المتسجل إنه اتدفع:</span> <strong>${formatNumber(paid)} ج.م</strong></div>
+      <div><strong class="trend-bad">الفرق: ${formatNumber(over)} ج.م</strong></div>`;
+    $id('settleCorrectHint').textContent = `العميل دفع ${formatNumber(net)} بس. هنصحح المدفوع ليبقى ${formatNumber(net)}، والمحصّل في الحسابات هيقل ${formatNumber(over)}.`;
+    $id('settleRefundHint').textContent = `هيتسجل مرتجع ${formatNumber(over)} ج.م بتاريخ النهارده، فالمحصّل وصافي الكاش هيقلوا بالفرق ده من النهارده.`;
+    $id('settleModal').style.display = 'flex';
+  }
+  function settleVisit(mode) {
+    const v = appState.visits.find(x => x.id === settlingVisitId);
+    if (!v) return;
+    let over = visitOverpaid(v);
+    v.payments = paymentsOf(v).map(p => ({ ...p, method: p.method === 'legacy' ? 'cash' : p.method }));
+    if (mode === 'correct') {
+      // reduce the most recent positive payments until paid == net
+      for (let i = v.payments.length - 1; i >= 0 && over > 0; i--) {
+        const p = v.payments[i];
+        if (p.amount <= 0) continue;
+        const cut = Math.min(p.amount, over);
+        p.amount = Math.round((p.amount - cut) * 100) / 100;
+        over = Math.round((over - cut) * 100) / 100;
+      }
+      v.payments = v.payments.filter(p => p.amount !== 0);
+      showToast('تم تصحيح المدفوع', 'success');
+    } else {
+      v.payments.push({ id: generateId('pay'), date: todayLocalISO(), amount: -over, method: 'cash', note: 'مرتجع للعميل (فرق تعديل الفاتورة)', kind: 'refund' });
+      showToast(`تم تسجيل مرتجع ${formatNumber(over)} ج.م`, 'success');
+    }
+    saveData();
+    $id('settleModal').style.display = 'none';
+    renderAllFromData();
   }
 
   // ---------- Payment modal ----------
@@ -4129,7 +4203,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     if (!v) return;
     const amount = Math.min(Number($id('payAmount').value) || 0, visitDue(v));
     if (amount <= 0) { showToast('اكتب مبلغ صحيح', 'error'); return; }
-    v.payments = paymentsOf(v).filter(p => p.method !== 'legacy');
+    v.payments = paymentsOf(v).map(p => ({ ...p, method: p.method === 'legacy' ? 'cash' : p.method }));
     v.payments.push({ id: generateId('pay'), date: $id('payDate').value || todayLocalISO(), amount, method: $id('payMethod').value, note: $id('payNote').value.trim() });
     saveData();
     $id('paymentModal').style.display = 'none';
@@ -4538,7 +4612,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     const q = normalizeArabic($id('finSearch').value);
     const vehMap = new Map(appState.vehicles.map(v => [v.id, v]));
     const cliMap = new Map(appState.clients.map(c => [c.id, c]));
-    const list = appState.visits.filter(v => onlyDue ? visitDue(v) > 0 : inRange(v.date, r)).filter(v => {
+    const list = appState.visits.filter(v => onlyDue ? (visitDue(v) > 0 || visitOverpaid(v) > 0) : inRange(v.date, r)).filter(v => {
       if (!q) return true;
       const veh = vehMap.get(v.vehicleId); const cl = veh && cliMap.get(veh.clientId);
       return [v.invoiceNumber, veh && (veh.plateFull || `${veh.plateLetters}${veh.plateNumbers}`), cl && cl.name, cl && cl.phone]
@@ -4553,16 +4627,18 @@ const CATALOG_SUGGESTED_PRESETS = [
         <td>${veh ? `${escapeHtml(carTitle(veh))} <span class="plate-mini">${escapeHtml(veh.plateFull || '')}</span>` : '-'}</td>
         <td class="num">${formatNumber(visitNet(v))}</td>
         <td>${formatNumber(visitPaid(v))}</td>
-        <td class="num">${visitDue(v) > 0 ? formatNumber(visitDue(v)) : '—'}</td>
+        <td class="num">${visitDue(v) > 0 ? formatNumber(visitDue(v)) : visitOverpaid(v) > 0 ? `<span class="trend-bad">-${formatNumber(visitOverpaid(v))}</span>` : '—'}</td>
         <td>${payBadgeHtml(v)}</td>
         <td style="white-space:nowrap">
           ${visitDue(v) > 0 ? `<button type="button" class="chip-btn" data-pay="${v.id}"><i class="fa-solid fa-hand-holding-dollar"></i> تحصيل</button>` : ''}
+          ${visitOverpaid(v) > 0 ? `<button type="button" class="chip-btn" data-settle="${v.id}"><i class="fa-solid fa-scale-balanced"></i> تسوية</button>` : ''}
           ${veh ? `<button type="button" class="chip-btn" data-open="${veh.id}"><i class="fa-solid fa-car"></i></button>` : ''}
         </td>
       </tr>`;
     }).join('') : `<tr><td colspan="9"><div class="mini-empty">${onlyDue ? 'مفيش فواتير عليها فلوس 👌' : 'مفيش فواتير في الفترة دي'}</div></td></tr>`;
     const tb = $id('finInvoicesBody');
     tb.querySelectorAll('[data-pay]').forEach(b => b.addEventListener('click', () => openPaymentModal(b.dataset.pay)));
+    tb.querySelectorAll('[data-settle]').forEach(b => b.addEventListener('click', () => openSettleModal(b.dataset.settle)));
     tb.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => openVehicle(b.dataset.open)));
 
     // Expenses
@@ -4577,6 +4653,12 @@ const CATALOG_SUGGESTED_PRESETS = [
     $id('finExpensesBody').querySelectorAll('[data-del-exp]').forEach(b => b.addEventListener('click', () => {
       const e = appState.expenses.find(x => x.id === b.dataset.delExp);
       if (!e || !confirm(`حذف مصروف "${EXPENSE_CATS[e.category] || ''}" بمبلغ ${formatNumber(e.amount)} ج.م؟`)) return;
+      if (e.stockEntryId) {
+        const part = appState.partsCatalog.find(p => (p.stockLog || []).some(x => x.id === e.stockEntryId));
+        if (part && confirm(`المصروف ده كان شراء "${part.name}". تشيل الكمية دي من المخزن كمان؟\n(دوس Cancel لو البضاعة وصلت فعلاً وعايز تسيبها في المخزن)`)) {
+          part.stockLog = part.stockLog.filter(x => x.id !== e.stockEntryId);
+        }
+      }
       appState.expenses = appState.expenses.filter(x => x.id !== e.id);
       saveData();
       renderFinance();
@@ -4647,6 +4729,11 @@ const CATALOG_SUGGESTED_PRESETS = [
     // visit payment fields
     $id('visitDiscountInput').addEventListener('input', () => updateVisitPayment());
     $id('visitPaidInput').addEventListener('input', () => { paidTouched = true; updateVisitPayment(); });
+
+    // settle overpayment
+    $id('btnSettleCorrect').addEventListener('click', () => settleVisit('correct'));
+    $id('btnSettleRefund').addEventListener('click', () => settleVisit('refund'));
+    ['btnCloseSettle', 'btnSettleLater'].forEach(id => $id(id).addEventListener('click', () => { $id('settleModal').style.display = 'none'; }));
 
     // payment & stock modals
     $id('paymentForm').addEventListener('submit', handlePaymentSubmit);
@@ -5465,6 +5552,7 @@ const CATALOG_SUGGESTED_PRESETS = [
             ${payBadgeHtml(visit)}
             <div class="visit-actions-row">
               ${visitDue(visit) > 0 ? `<button class="btn-print-sm btn-collect-visit" title="تحصيل دفعة"><i class="fa-solid fa-hand-holding-dollar"></i> تحصيل</button>` : ''}
+              ${visitOverpaid(visit) > 0 ? `<button class="btn-print-sm btn-settle-visit" title="تسوية الفرق"><i class="fa-solid fa-scale-balanced"></i> تسوية</button>` : ''}
               <button class="btn-print-sm btn-edit-visit" title="تعديل الزيارة">
                 <i class="fa-solid fa-pen"></i> تعديل
               </button>
@@ -5495,6 +5583,8 @@ const CATALOG_SUGGESTED_PRESETS = [
       card.querySelector('.btn-edit-visit').addEventListener('click', () => openVisitModal(visit.id));
       const collectBtn = card.querySelector('.btn-collect-visit');
       if (collectBtn) collectBtn.addEventListener('click', () => openPaymentModal(visit.id));
+      const settleBtn = card.querySelector('.btn-settle-visit');
+      if (settleBtn) settleBtn.addEventListener('click', () => openSettleModal(visit.id));
       card.querySelector('.btn-del-visit').addEventListener('click', () => deleteVisit(visit.id));
 
       elements.visitsTimeline.appendChild(card);
@@ -5797,6 +5887,7 @@ const CATALOG_SUGGESTED_PRESETS = [
 
   // --- MODAL 2: LOG / EDIT MAINTENANCE VISIT ---
   let editingVisitId = null;
+  let lastEditedVisitId = null;
 
   function openVisitModal(visitId = null) {
     if (!appState.activeVehicleId) {
@@ -5843,7 +5934,10 @@ const CATALOG_SUGGESTED_PRESETS = [
   function deleteVisit(visitId) {
     const visit = appState.visits.find(v => v.id === visitId);
     if (!visit) return;
-    if (!confirm(`هل أنت متأكد من حذف زيارة ${visit.date} (فاتورة #${visit.invoiceNumber})؟\nلا يمكن التراجع.`)) return;
+    const paidNow = visitPaid(visit);
+    const moneyWarn = paidNow > 0 ? `\n\n⚠️ الزيارة دي عليها ${formatNumber(paidNow)} ج.م متحصّلين — لو اتمسحت، المبلغ ده هيتشال من المحصّل وصافي الكاش.\nلو الزيارة اتعملت فعلاً والعميل دفع، الأفضل تعدّلها بدل ما تمسحها.` : '';
+    const partsWarn = (visit.items || []).some(it => it.catalogId) ? `\n\nالقطع اللي اتصرفت فيها من المخزن هترجع للمخزن.` : '';
+    if (!confirm(`هل أنت متأكد من حذف زيارة ${visit.date} (فاتورة #${visit.invoiceNumber})؟${moneyWarn}${partsWarn}\n\nلا يمكن التراجع.`)) return;
     appState.visits = appState.visits.filter(v => v.id !== visitId);
     const vehicle = appState.vehicles.find(v => v.id === visit.vehicleId);
     if (vehicle) recomputeCurrentOdometer(vehicle);
@@ -5985,8 +6079,13 @@ const CATALOG_SUGGESTED_PRESETS = [
     if (editingVisitId) {
       const visit = appState.visits.find(v => v.id === editingVisitId);
       if (visit) {
-        const oldPayments = paymentsOf(visit).filter(p => p.amount > 0).map(p => ({
-          id: p.id || generateId('pay'), date: p.date, amount: p.amount, method: p.method === 'legacy' ? 'cash' : (p.method || 'cash'), note: p.note || ''
+        const oldDate = visit.date;
+        const oldPayments = paymentsOf(visit).filter(p => p.amount !== 0).map(p => ({
+          id: p.id || generateId('pay'),
+          // a payment made on the visit day moves with the visit if its date was corrected
+          date: p.date === oldDate ? date : p.date,
+          amount: p.amount, method: p.method === 'legacy' ? 'cash' : (p.method || 'cash'), note: p.note || '',
+          ...(p.kind ? { kind: p.kind } : {})
         }));
         const already = oldPayments.reduce((a, p) => a + p.amount, 0);
         const add = Math.min(payNow, Math.max(net - already, 0));
@@ -6025,11 +6124,16 @@ const CATALOG_SUGGESTED_PRESETS = [
     saveData();
 
     const wasEditing = !!editingVisitId;
+    lastEditedVisitId = editingVisitId;
     editingVisitId = null;
     closeVisitModal();
     selectVehicle(vehicle.id);
     renderClientsList();
     showToast(wasEditing ? 'تم تعديل الزيارة بنجاح' : 'تم حفظ إجراءات زيارة الصيانة بنجاح!', 'success');
+    if (wasEditing) {
+      const edited = appState.visits.find(v => v.id === lastEditedVisitId);
+      if (edited && visitOverpaid(edited) > 0) setTimeout(() => openSettleModal(edited.id), 250);
+    }
   }
 
   // --- MODAL 3: PRINTABLE INVOICE MODAL ---
@@ -6062,7 +6166,9 @@ const CATALOG_SUGGESTED_PRESETS = [
     const disc = Number(visit.discount) || 0;
     const footRows = [['الإجمالي:', visit.totalCost]];
     if (disc > 0) footRows.push(['الخصم:', -disc], ['الصافي المطلوب:', visitNet(visit)]);
-    footRows.push(['المدفوع:', visitPaid(visit)]);
+    const refunds = paymentsOf(visit).filter(p => p.amount < 0).reduce((a, p) => a - p.amount, 0);
+    if (refunds > 0) footRows.push(['المدفوع:', visitPaid(visit) + refunds], ['مرتجع للعميل:', -refunds]);
+    else footRows.push(['المدفوع:', visitPaid(visit)]);
     if (visitDue(visit) > 0) footRows.push(['الباقي على العميل:', visitDue(visit)]);
     document.getElementById('invFoot').innerHTML = footRows.map(([label, val], i) =>
       `<tr><th colspan="4" class="text-left">${label}</th><th ${i === 0 && disc === 0 ? 'id="invTotalAmount"' : ''}>${formatNumber(val)} ج.م</th></tr>`).join('');
