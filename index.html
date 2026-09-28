@@ -1980,7 +1980,6 @@ h1, h2, h3, h4, h5 {
             </div>
             <button class="menu-item" id="btnExportData"><i class="fa-solid fa-file-export"></i> تنزيل نسخة احتياطية</button>
             <button class="menu-item" id="btnImportData"><i class="fa-solid fa-file-import"></i> استيراد نسخة احتياطية</button>
-            <button class="menu-item danger" id="btnClearAllData"><i class="fa-solid fa-trash-can"></i> مسح كل البيانات</button>
             <div class="menu-sep"></div>
             <button class="menu-item" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
           </div>
@@ -3338,7 +3337,6 @@ const CATALOG_SUGGESTED_PRESETS = [
     catalogFilterTabs: document.querySelectorAll('.catalog-tab-btn'),
     btnOpenAddPartModal: document.getElementById('btnOpenAddPartModal'),
     btnLoadPresetCatalog: document.getElementById('btnLoadPresetCatalog'),
-    btnClearAllData: document.getElementById('btnClearAllData'),
     catalogTableBody: document.getElementById('catalogTableBody'),
     countCatAll: document.getElementById('countCatAll'),
     countCatPart: document.getElementById('countCatPart'),
@@ -6092,31 +6090,6 @@ const CATALOG_SUGGESTED_PRESETS = [
       });
     }
 
-    // Clear ALL data (double confirmation + auto backup first)
-    if (elements.btnClearAllData) {
-      elements.btnClearAllData.addEventListener('click', () => {
-        if (!confirm('تحذير: سيتم مسح كل العملاء والسيارات والزيارات ودليل القطع نهائياً.\nهل أنت متأكد؟')) return;
-        const typed = prompt('للتأكيد النهائي اكتب كلمة: مسح');
-        if (typed === null || typed.trim() !== 'مسح') {
-          showToast('تم إلغاء المسح', 'info');
-          return;
-        }
-        exportDataBackup(); // safety copy before wiping
-        appState.clients = [];
-        appState.vehicles = [];
-        appState.visits = [];
-        appState.partsCatalog = [];
-        appState.expenses = [];
-        appState.invoiceCounter = 1000;
-        saveData();
-        renderClientsList();
-        renderPartsCatalogTable();
-        renderCatalogQuickPicker();
-        showEmptyState();
-        showToast('تم مسح كل البيانات (وتم تنزيل نسخة احتياطية قبل المسح)', 'info');
-      });
-    }
-
     // Insert From Catalog in Visit Modal
     if (elements.btnInsertFromCatalog) {
       elements.btnInsertFromCatalog.addEventListener('click', handleInsertFromCatalog);
@@ -6163,6 +6136,7 @@ const CATALOG_SUGGESTED_PRESETS = [
         const importedData = JSON.parse(event.target.result);
         if (Array.isArray(importedData.clients) && Array.isArray(importedData.vehicles) && Array.isArray(importedData.visits)) {
           if (!confirm(`الملف يحتوي على ${importedData.vehicles.length} سيارة و ${importedData.visits.length} زيارة.\nالاستيراد سيستبدل كل البيانات الحالية. هل تريد المتابعة؟`)) return;
+          exportDataBackup(); // safety copy of the current data before replacing it
           appState.clients = importedData.clients;
           appState.vehicles = importedData.vehicles;
           appState.visits = importedData.visits;
