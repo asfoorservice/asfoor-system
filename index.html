@@ -1477,7 +1477,7 @@ h1, h2, h3, h4, h5 {
 .odo-estimate-hint { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; background:rgba(245,158,11,.07); border:1px dashed rgba(245,158,11,.35); border-radius:var(--radius-md); padding:10px 14px; margin:-6px 0 18px; font-size:.84rem; color:var(--text-secondary); }
 .odo-estimate-hint strong { color:#fff; }
 .odo-estimate-hint .est { color: var(--color-amber); }
-.visit-actions-row { display:flex; gap:6px; }
+.visit-actions-row { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
 .btn-print-sm.btn-danger-sm:hover { background: var(--color-red); }
 .badge-count { background: var(--accent-red); color:#fff; border-radius:999px; font-size:.72rem; min-width:20px; height:20px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; font-weight:800; }
 .badge-count.zero { background: var(--bg-surface-elevated); color: var(--text-muted); }
@@ -1663,7 +1663,18 @@ h1, h2, h3, h4, h5 {
 
 /* ===== Invoice modal scroll ===== */
 .printable-modal .invoice-paper { overflow-y: auto; min-height: 0; flex: 1 1 auto; border-radius: 0; }
-.printable-modal .modal-actions { flex-shrink: 0; margin: 0; padding: 14px 20px; background: var(--bg-secondary); }
+.printable-modal .modal-actions { flex-shrink: 0; margin: 0; padding: 14px 20px; background: var(--bg-secondary); flex-wrap: wrap; }
+.btn-wa { background: #1faa55; color: #fff; border: none; }
+.btn-wa:hover { background: #178a45; color: #fff; }
+.btn-wa[disabled], #btnPdfInvoice[disabled] { opacity: .6; cursor: wait; }
+@media (max-width: 680px) {
+  .live-odometer-box { flex-wrap: wrap; max-width: 100%; box-sizing: border-box; }
+  .live-odometer-box label { white-space: normal; }
+}
+.btn-print-sm.btn-wa-sm { color: #1faa55; border-color: rgba(31,170,85,.4); }
+.btn-print-sm.btn-wa-sm:hover { background: #1faa55; color: #fff; }
+.pdf-render-host { position: fixed; left: -10000px; top: 0; width: 800px; background: #fff; z-index: -1; }
+.pdf-render-host .invoice-paper { overflow: visible !important; max-height: none !important; height: auto !important; }
 @media print {
   .modal-overlay, .modal-window, .printable-modal { position: static !important; max-height: none !important; overflow: visible !important; background: none !important; backdrop-filter: none !important; }
   .printable-modal .invoice-paper { overflow: visible !important; max-height: none !important; }
@@ -2684,8 +2695,14 @@ h1, h2, h3, h4, h5 {
       <!-- Action Buttons -->
       <div class="modal-actions no-print">
         <button type="button" class="btn btn-secondary" id="btnCloseInvoiceBtn">إغلاق</button>
+        <button type="button" class="btn btn-wa" id="btnWaInvoiceText" title="يفتح محادثة العميل على واتساب والفاتورة مكتوبة في الرسالة">
+          <i class="fa-brands fa-whatsapp"></i> إرسال واتساب
+        </button>
+        <button type="button" class="btn btn-secondary" id="btnPdfInvoice" title="الفاتورة كملف PDF تبعته على واتساب">
+          <i class="fa-solid fa-file-pdf"></i> PDF للواتساب
+        </button>
         <button type="button" class="btn btn-primary" id="btnPrintInvoiceBtn">
-          <i class="fa-solid fa-print"></i> طباعة الفاتورة والتقرير
+          <i class="fa-solid fa-print"></i> طباعة
         </button>
       </div>
     </div>
@@ -3326,7 +3343,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   'use strict';
 
   // App version — must match version.json (both are bumped on every release)
-  const APP_VERSION = '2026.09.28-1644';
+  const APP_VERSION = '2026.09.28-1656';
 
   // Check every few minutes (and when the tab comes back into view) whether a newer version was published
   function checkForUpdate() {
@@ -5594,6 +5611,9 @@ const CATALOG_SUGGESTED_PRESETS = [
               <button class="btn-print-sm btn-invoice-visit" data-visit-id="${visit.id}" title="طباعة الفاتورة">
                 <i class="fa-solid fa-print"></i> فاتورة
               </button>
+              <button class="btn-print-sm btn-wa-sm btn-wa-visit" data-visit-id="${visit.id}" title="إرسال الفاتورة للعميل على واتساب">
+                <i class="fa-brands fa-whatsapp"></i> واتساب
+              </button>
               <button class="btn-print-sm btn-danger-sm btn-del-visit" title="حذف الزيارة">
                 <i class="fa-solid fa-trash-can"></i>
               </button>
@@ -5615,6 +5635,7 @@ const CATALOG_SUGGESTED_PRESETS = [
 
       // Print button listener
       card.querySelector('.btn-invoice-visit').addEventListener('click', () => openInvoiceModal(visit, vehicle, client));
+      card.querySelector('.btn-wa-visit').addEventListener('click', () => sendInvoiceWhatsApp(visit, vehicle, client));
       card.querySelector('.btn-edit-visit').addEventListener('click', () => openVisitModal(visit.id));
       const collectBtn = card.querySelector('.btn-collect-visit');
       if (collectBtn) collectBtn.addEventListener('click', () => openPaymentModal(visit.id));
@@ -6216,11 +6237,169 @@ const CATALOG_SUGGESTED_PRESETS = [
       elements.invNotesBox.style.display = 'none';
     }
 
+    currentInvoice = { visit, vehicle, client };
     elements.invoiceModal.style.display = 'flex';
   }
 
   function closeInvoiceModal() {
     elements.invoiceModal.style.display = 'none';
+    currentInvoice = null;
+  }
+
+  // ---------- SEND INVOICE VIA WHATSAPP ----------
+  let currentInvoice = null;
+
+  function validClientWa(client) {
+    const n = toWhatsAppNumber(client && client.phone);
+    return n.length >= 11 ? n : '';
+  }
+
+  function buildInvoiceWhatsAppText(visit, vehicle, client) {
+    const money = (n) => `${formatNumber(n)} ج.م`;
+    const L = [];
+    L.push('*عصفور لصيانة السيارات*');
+    L.push('ASFOOR AUTO SERVICES');
+    L.push('');
+    if (client && client.name) L.push(`أهلاً أ/ ${client.name}، دي فاتورة صيانة عربيتك:`);
+    L.push(`🧾 فاتورة رقم: *${visit.invoiceNumber || '-'}*`);
+    L.push(`📅 التاريخ: ${formatDateAr(visit.date)}`);
+    L.push(`🚗 العربية: ${carTitle(vehicle)}${vehicle.color ? ' — ' + vehicle.color : ''}`);
+    L.push(`🔢 اللوحة: ${vehicle.plateFull || `${vehicle.plateLetters || ''} ${vehicle.plateNumbers || ''}`.trim()}`);
+    L.push(`📍 العداد: ${formatNumber(visit.odometer)} كم`);
+    const tn = techNamesOf(visit);
+    if (tn.length) L.push(`👨‍🔧 الفني: ${tn.join('، ')}`);
+    L.push('');
+    L.push('*البنود:*');
+    (visit.items || []).forEach((it, i) => {
+      const q = Number(it.qty) || 1;
+      const price = q > 1 ? `${formatNumber(q)} × ${formatNumber(it.unitPrice)} = ${money(it.cost)}` : money(it.cost);
+      L.push(`${i + 1}. ${it.name}${it.detail ? ` (${it.detail})` : ''} — ${price}`);
+    });
+    L.push('');
+    const disc = Number(visit.discount) || 0;
+    L.push(`الإجمالي: ${money(visit.totalCost)}`);
+    if (disc > 0) { L.push(`الخصم: ${money(disc)}`); L.push(`*الصافي: ${money(visitNet(visit))}*`); }
+    const refunds = paymentsOf(visit).filter(p => p.amount < 0).reduce((a, p) => a - p.amount, 0);
+    if (refunds > 0) { L.push(`المدفوع: ${money(visitPaid(visit) + refunds)}`); L.push(`مرتجع لحضرتك: ${money(refunds)}`); }
+    else L.push(`المدفوع: ${money(visitPaid(visit))}`);
+    const due = visitDue(visit);
+    if (due > 0) L.push(`*الباقي: ${money(due)}*`);
+    else if (visitOverpaid(visit) <= 0) L.push('✅ خالص');
+
+    // Next maintenance for the items done in this visit
+    const next = [];
+    (visit.items || []).forEach(it => {
+      const km = Number(it.intervalKm) || 0, mo = Number(it.intervalMonths) || 0;
+      if (it.category === 'labor' || (!km && !mo)) return;
+      const parts = [];
+      if (km) parts.push(`عند ${formatNumber((Number(visit.odometer) || 0) + km)} كم`);
+      if (mo && visit.date) parts.push(`أو ${formatDateAr(addMonthsISO(visit.date, mo))}`.replace(/^أو /, parts.length ? 'أو ' : ''));
+      next.push(`• ${it.name}: ${parts.join(' ')}`);
+    });
+    if (next.length) {
+      L.push('');
+      L.push('*🔧 ميعاد التغيير الجاي (أيهما أقرب):*');
+      next.forEach(x => L.push(x));
+    }
+    if (visit.notes) { L.push(''); L.push(`📝 ملاحظات: ${visit.notes}`); }
+    L.push('');
+    L.push('شكراً لثقتك في عصفور 🙏');
+    return L.join('\n');
+  }
+
+  function sendInvoiceWhatsApp(visit, vehicle, client) {
+    const n = validClientWa(client);
+    if (!n) { showToast('رقم موبايل العميل مش مسجل أو مش صحيح — عدّله من بيانات العميل الأول', 'error'); return; }
+    const url = `https://wa.me/${n}?text=${encodeURIComponent(buildInvoiceWhatsAppText(visit, vehicle, client))}`;
+    window.open(url, '_blank', 'noopener');
+  }
+
+  const loadedScripts = {};
+  function loadScriptOnce(src) {
+    if (!loadedScripts[src]) {
+      loadedScripts[src] = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src; s.async = true;
+        s.onload = resolve;
+        s.onerror = () => { delete loadedScripts[src]; reject(new Error('load failed: ' + src)); };
+        document.head.appendChild(s);
+      });
+    }
+    return loadedScripts[src];
+  }
+
+  async function buildInvoicePdf(visit) {
+    await Promise.all([
+      loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+      loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+    ]);
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    const host = document.createElement('div');
+    host.className = 'pdf-render-host';
+    const clone = document.getElementById('printableInvoice').cloneNode(true);
+    clone.removeAttribute('id');
+    clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    host.appendChild(clone);
+    document.body.appendChild(host);
+    try {
+      const canvas = await window.html2canvas(clone, { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false, windowWidth: 800 });
+      const { jsPDF } = window.jspdf;
+      const pageW = 210;
+      const pageH = Math.max(297, (canvas.height * pageW) / canvas.width);
+      const pdf = new jsPDF({ unit: 'mm', format: [pageW, pageH], orientation: 'portrait', compress: true });
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pageW, (canvas.height * pageW) / canvas.width);
+      const blob = pdf.output('blob');
+      const name = `فاتورة-${visit.invoiceNumber || 'عصفور'}.pdf`;
+      return new File([blob], name, { type: 'application/pdf' });
+    } finally {
+      host.remove();
+    }
+  }
+
+  function downloadFile(file) {
+    const url = URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = url; a.download = file.name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
+  async function sendInvoicePdf() {
+    if (!currentInvoice) return;
+    const { visit, vehicle, client } = currentInvoice;
+    const btn = document.getElementById('btnPdfInvoice');
+    const oldHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> بيجهز الملف...';
+    try {
+      const file = await buildInvoicePdf(visit);
+      const shareText = `فاتورة ${visit.invoiceNumber || ''} — عصفور لصيانة السيارات`;
+      const isTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+      if (isTouch && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: shareText, text: shareText });
+          return;
+        } catch (e) {
+          if (e && e.name === 'AbortError') return;
+        }
+      }
+      // Desktop: download the file, then open the client's chat to attach it
+      downloadFile(file);
+      const n = validClientWa(client);
+      if (n) {
+        const msg = `أهلاً${client && client.name ? ' أ/ ' + client.name : ''}، مرفق فاتورة صيانة عربيتك رقم ${visit.invoiceNumber || ''} من عصفور لصيانة السيارات. شكراً لثقتك 🙏`;
+        window.open(`https://wa.me/${n}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+        showToast('الملف نزل — اسحبه جوه محادثة العميل في واتساب أو دوس 📎 واختاره', 'success');
+      } else {
+        showToast('الملف نزل — رقم العميل مش مسجل، ابعته يدوي', 'info');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast('معرفتش أجهز ملف الـ PDF — اتأكد إن النت شغال وجرب تاني، أو ابعتها كرسالة', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = oldHtml;
+    }
   }
 
   // --- PARTS, SERVICES & LABOR CATALOG ---
@@ -6655,6 +6834,10 @@ const CATALOG_SUGGESTED_PRESETS = [
     elements.btnPrintInvoiceBtn.addEventListener('click', () => {
       window.print();
     });
+    document.getElementById('btnWaInvoiceText').addEventListener('click', () => {
+      if (currentInvoice) sendInvoiceWhatsApp(currentInvoice.visit, currentInvoice.vehicle, currentInvoice.client);
+    });
+    document.getElementById('btnPdfInvoice').addEventListener('click', sendInvoicePdf);
 
     // Data Backup / Restore Triggers
     elements.btnExportData.addEventListener('click', exportDataBackup);
