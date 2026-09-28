@@ -1510,6 +1510,12 @@ h1, h2, h3, h4, h5 {
 .login-card .btn { width:100%; margin-top:6px; padding:12px; }
 .login-error { color:#f87171; font-size:.85rem; min-height:1.3em; margin-top:10px; }
 .login-status { color:var(--text-muted); font-size:.85rem; margin-top:14px; }
+/* While we check if the user is already signed in: show only the logo + loading text */
+.login-overlay.auth-checking .form-group,
+.login-overlay.auth-checking #btnLogin,
+.login-overlay.auth-checking .login-error,
+.login-overlay.auth-checking .sub { display:none; }
+.login-overlay.auth-checking .login-card { background:transparent; border-color:transparent; box-shadow:none; }
 .sync-status { display:inline-flex; align-items:center; gap:7px; font-size:.78rem; font-weight:700; padding:6px 11px; border-radius:999px; border:1px solid var(--border-subtle); background:rgba(255,255,255,.04); color:var(--text-secondary); white-space:nowrap; }
 .sync-status .sync-dot { width:9px; height:9px; border-radius:50%; background:#64748b; }
 .sync-status.ok .sync-dot { background:var(--color-green); box-shadow:0 0 8px var(--color-green); }
@@ -2543,7 +2549,7 @@ h1, h2, h3, h4, h5 {
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Login Overlay (shown until the user signs in) -->
-  <div class="login-overlay" id="loginOverlay">
+  <div class="login-overlay auth-checking" id="loginOverlay">
     <form class="login-card" id="loginForm" autocomplete="on">
       <img id="loginLogo" alt="عصفور لصيانة السيارات">
       <h2>عصفور لصيانة السيارات</h2>
@@ -3060,6 +3066,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       if (window.AsfoorFirebase) {
         initCloud();
       } else {
+        elements.loginOverlay.classList.remove('auth-checking');
         elements.loginStatus.textContent = '';
         elements.loginError.innerHTML = 'مقدرناش نحمّل النظام — اتأكد إن الجهاز متصل بالإنترنت وافتح الصفحة تاني.';
         elements.btnLogin.disabled = true;
@@ -3122,10 +3129,11 @@ const CATALOG_SUGGESTED_PRESETS = [
       });
     } catch (e) {
       console.error(e);
+      elements.loginOverlay.classList.remove('auth-checking');
       elements.loginError.textContent = 'خطأ في إعداد قاعدة البيانات: ' + e.message;
       return;
     }
-    elements.loginStatus.textContent = '';
+    elements.loginStatus.textContent = 'جاري التحميل...';
     F.onAuthStateChanged(cloud.auth, user => {
       if (user) onSignedIn(user); else onSignedOut();
     });
@@ -3150,6 +3158,8 @@ const CATALOG_SUGGESTED_PRESETS = [
     appState.activeVehicleId = null;
     renderAllFromData();
     elements.userChip.textContent = '';
+    elements.loginOverlay.classList.remove('auth-checking');
+    elements.loginStatus.textContent = '';
     elements.loginOverlay.style.display = 'flex';
     elements.loginPassword.value = '';
     elements.btnLogin.disabled = false;
