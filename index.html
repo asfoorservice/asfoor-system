@@ -1636,6 +1636,9 @@ h1, h2, h3, h4, h5 {
 .menu-item i { width: 18px; text-align: center; color: var(--text-muted); }
 .menu-item:hover { background: rgba(255,255,255,.06); }
 .menu-item.danger, .menu-item.danger i { color: #f87171; }
+.menu-version { font-size: .72rem; color: var(--text-muted); padding: 2px 10px 6px; direction: ltr; text-align: right; }
+.update-banner { position: fixed; bottom: 18px; right: 50%; transform: translateX(50%); z-index: 2500; background: var(--bg-surface-elevated); border: 1px solid var(--accent-red); border-radius: 999px; padding: 10px 12px 10px 18px; display: none; align-items: center; gap: 12px; box-shadow: var(--shadow-lg); font-size: .9rem; white-space: nowrap; }
+.update-banner.show { display: flex; }
 .menu-sep { height: 1px; background: var(--border-subtle); margin: 6px 4px; }
 .app-header .main-tabs { max-width: 1440px; margin: 0 auto; border-bottom: none; padding-bottom: 0; margin-bottom: 0; gap: 2px; }
 .app-header .main-tab { padding: 10px 14px 11px; font-size: .92rem; }
@@ -2012,6 +2015,7 @@ h1, h2, h3, h4, h5 {
             <button class="menu-item" id="btnExportData"><i class="fa-solid fa-file-export"></i> تنزيل نسخة احتياطية</button>
             <button class="menu-item" id="btnImportData"><i class="fa-solid fa-file-import"></i> استيراد نسخة احتياطية</button>
             <div class="menu-sep"></div>
+            <div class="menu-version" id="appVersionLabel"></div>
             <button class="menu-item" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> تسجيل الخروج</button>
           </div>
         </div>
@@ -3023,6 +3027,12 @@ h1, h2, h3, h4, h5 {
     </div>
   </div>
 
+  <!-- New version available -->
+  <div class="update-banner" id="updateBanner">
+    <i class="fa-solid fa-circle-arrow-up text-red"></i> فيه تحديث جديد للنظام
+    <button type="button" class="btn btn-primary" id="btnApplyUpdate" style="padding:6px 14px;">تحديث دلوقتي</button>
+  </div>
+
   <!-- Toast Notification System -->
   <div class="toast-container" id="toastContainer"></div>
 
@@ -3315,6 +3325,29 @@ const CATALOG_SUGGESTED_PRESETS = [
 (function () {
   'use strict';
 
+  // App version — must match version.json (both are bumped on every release)
+  const APP_VERSION = '2026.09.28-1631';
+
+  // Check every few minutes (and when the tab comes back into view) whether a newer version was published
+  function checkForUpdate() {
+    if (location.protocol !== 'https:') return;
+    fetch(`version.json?_=${Date.now()}`, { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null)
+      .then(j => { if (j && j.version && j.version !== APP_VERSION) document.getElementById('updateBanner').classList.add('show'); })
+      .catch(() => {});
+  }
+  function setupUpdateChecks() {
+    const lbl = document.getElementById('appVersionLabel');
+    if (lbl) lbl.textContent = `إصدار ${APP_VERSION}`;
+    document.getElementById('btnApplyUpdate').addEventListener('click', () => {
+      if (cloud.pendingWrites > 0 && !confirm('فيه تغييرات لسه بتترفع. استنى ثانية وجرب تاني، أو دوس OK لو متأكد.')) return;
+      location.reload();
+    });
+    setInterval(checkForUpdate, 3 * 60 * 1000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) checkForUpdate(); });
+    setTimeout(checkForUpdate, 5000);
+  }
+
   // ================= FIREBASE / CLOUD DATABASE =================
   const FIREBASE_CONFIG = {
     apiKey: "AIzaSyAMeqtTZsZhiDvY5uuzeyZVFi6-FvNVBx8",
@@ -3540,6 +3573,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     getSettings();
     bindEvents();
     bindFollowUpEvents();
+    setupUpdateChecks();
     setupCarPickers();
     bindTeamEvents();
     bindPhase2Events();

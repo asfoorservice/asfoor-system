@@ -1,7 +1,7 @@
 // Asfoor Auto Services — service worker
 // Lets the system open without internet and be installed on phones.
 // Bump CACHE when shell files change a lot (old caches are deleted automatically).
-const CACHE = 'asfoor-v1';
+const CACHE = 'asfoor-v2';
 const FIREBASE = 'https://www.gstatic.com/firebasejs/10.12.2/';
 const SHELL = [
   './', './index.html', './logo.jpg', './manifest.webmanifest', './icon-192.png', './icon-512.png',
@@ -26,16 +26,21 @@ self.addEventListener('fetch', event => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
 
-  // Our own files: always try the network first so updates show up immediately.
+  // Our own files: always fetch the newest version (skip the browser cache and
+  // GitHub's ~10 minute CDN cache with a unique query), fall back to the saved copy offline.
   if (url.origin === self.location.origin) {
+    const fresh = new URL(req.url);
+    fresh.searchParams.set('_fresh', Date.now());
     event.respondWith(
-      fetch(req)
+      fetch(fresh.toString(), { cache: 'no-store' })
         .then(res => {
-          const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(req, copy));
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then(c => c.put(req, copy));
+          }
           return res;
         })
-        .catch(() => caches.match(req).then(hit => hit || caches.match('./index.html')))
+        .catch(() => caches.match(req, { ignoreSearch: true }).then(hit => hit || caches.match('./index.html')))
     );
     return;
   }
