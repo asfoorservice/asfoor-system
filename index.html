@@ -1,0 +1,5180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عصفور لصيانة السيارات | ASFOOR AUTO SERVICES</title>
+  <meta name="description" content="نظام متكامل لإدارة مركز عصفور لصيانة السيارات ASFOOR AUTO SERVICES، تسجيل العملاء والزيارات، ومتابعة استهلاك الزيوت والقطع وحساب المتبقي على الصيانة حسب قراءة العداد.">
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <meta name="theme-color" content="#e61e2b">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="عصفور">
+  
+  <!-- Fonts: Cairo & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+/* =========================================================
+   مركز عصفور لخدمة السيارات - Asfour Car Service Center
+   ========================================================= */
+
+:root {
+  /* Asfour Auto Services - Racing Crimson Red & Deep Carbon Palette */
+  --bg-primary: #0a0c10;
+  --bg-secondary: #11141c;
+  --bg-surface: #171b26;
+  --bg-surface-elevated: #1f2433;
+  --bg-surface-hover: #293042;
+  
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-focus: #e61e2b;
+  --border-active: rgba(230, 30, 43, 0.45);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent-red: #e61e2b;
+  --accent-red-light: #ff3340;
+  --accent-red-glow: rgba(230, 30, 43, 0.35);
+
+  /* Compatible Theme Aliases */
+  --accent-cyan: #e61e2b;
+  --accent-cyan-light: #ff3340;
+  --accent-cyan-glow: rgba(230, 30, 43, 0.35);
+
+  --color-green: #10b981;
+  --color-green-glow: rgba(16, 185, 129, 0.2);
+  --color-amber: #f59e0b;
+  --color-amber-glow: rgba(245, 158, 11, 0.2);
+  --color-red: #e61e2b;
+  --color-red-glow: rgba(230, 30, 43, 0.35);
+
+  /* Radius & Shadows */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+  --shadow-cyan: 0 0 25px rgba(230, 30, 43, 0.35);
+  --shadow-red: 0 0 25px rgba(230, 30, 43, 0.4);
+
+  --font-main: 'Cairo', system-ui, -apple-system, sans-serif;
+  --transition-fast: 0.18s ease;
+  --transition-normal: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  direction: rtl;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 15% 10%, rgba(230, 30, 43, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(230, 30, 43, 0.06) 0%, transparent 40%);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Typography Utilities */
+h1, h2, h3, h4, h5 {
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+.text-cyan { color: var(--accent-cyan) !important; }
+.text-green { color: var(--color-green) !important; }
+.text-amber { color: var(--color-amber) !important; }
+.text-red { color: var(--color-red) !important; }
+
+/* Buttons System */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  white-space: nowrap;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #e61e2b, #b91c1c);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(230, 30, 43, 0.4);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, #ff3340, #dc2626);
+  box-shadow: 0 6px 20px rgba(230, 30, 43, 0.55);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+}
+.btn-secondary:hover {
+  background: var(--bg-surface-hover);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-danger-soft {
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.btn-danger-soft:hover {
+  background: var(--color-red);
+  color: #fff;
+}
+
+.btn-pulse {
+  animation: pulseGlow 2.5s infinite;
+}
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(230, 30, 43, 0.5); }
+  70% { box-shadow: 0 0 0 10px rgba(230, 30, 43, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(230, 30, 43, 0); }
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 20px;
+  background: var(--bg-surface-elevated);
+  color: var(--text-secondary);
+}
+.badge-outline {
+  border: 1px solid var(--border-subtle);
+}
+.badge-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--color-green);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+/* Header */
+.app-header {
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 12px 24px;
+}
+.header-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.logo-img-container {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #e61e2b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(230, 30, 43, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.logo-text h1 {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+}
+.logo-text h1 span {
+  color: var(--accent-red);
+}
+.logo-text p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+/* Header Quick Stats */
+.header-stats {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.h-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+.h-stat-card i {
+  color: var(--accent-cyan);
+  font-size: 1.1rem;
+}
+.h-stat-num {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+.h-stat-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Main Container */
+.main-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Search Bar Section */
+.search-section {
+  margin-bottom: 24px;
+}
+.search-bar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-icon {
+  position: absolute;
+  right: 18px;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.search-bar-wrapper input {
+  width: 100%;
+  padding: 16px 52px 16px 50px;
+  font-size: 1.05rem;
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-subtle);
+  color: #fff;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+.search-bar-wrapper input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: var(--shadow-cyan);
+  background: #151e30;
+}
+.clear-search-btn {
+  position: absolute;
+  left: 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: none;
+  padding: 4px;
+}
+.clear-search-btn:hover {
+  color: #fff;
+}
+.search-quick-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.quick-tag-chip {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  border-radius: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+.quick-tag-chip:hover {
+  background: var(--bg-surface-hover);
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+}
+
+/* Workspace 2-Column Grid */
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 370px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Sidebar Column */
+.sidebar-column {
+  min-width: 0;
+}
+.panel-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.panel-title i {
+  color: var(--accent-cyan);
+}
+.panel-title h2 {
+  font-size: 1.05rem;
+}
+
+.panel-filters {
+  display: flex;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.filter-chip {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+.filter-chip:hover {
+  color: #fff;
+}
+.filter-chip.active {
+  background: var(--bg-surface-elevated);
+  color: var(--accent-cyan);
+  border-color: var(--border-subtle);
+  font-weight: 700;
+}
+
+.clients-list {
+  max-height: calc(100vh - 270px);
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Client Card in Sidebar */
+.client-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+.client-card:hover {
+  background: var(--bg-surface-hover);
+  border-color: rgba(6, 182, 212, 0.3);
+  transform: translateY(-2px);
+}
+.client-card.active {
+  background: #1e2a44;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 4px 16px rgba(6, 182, 212, 0.2);
+}
+.client-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.card-car-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: #fff;
+}
+.card-client-name {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.card-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 8px;
+  margin-top: 6px;
+}
+.card-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+}
+
+/* Egyptian / Arab Style License Plate Badge */
+.plate-mini {
+  display: inline-flex;
+  align-items: center;
+  background: #f8fafc;
+  color: #0f172a;
+  border: 2px solid #0284c7;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 1px 6px;
+  letter-spacing: 1px;
+}
+
+.plate-box {
+  background: #ffffff;
+  border: 3px solid #0284c7;
+  border-radius: 8px;
+  padding: 6px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  min-width: 140px;
+}
+.plate-box .plate-letters {
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+.plate-box .plate-country {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #0284c7;
+  letter-spacing: 1px;
+}
+
+/* Empty State */
+.empty-state-view {
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 60px 30px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+.empty-icon {
+  font-size: 4rem;
+  color: var(--accent-cyan);
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+.empty-state-view h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+.empty-state-view p {
+  max-width: 500px;
+  margin: 0 auto 24px auto;
+  color: var(--text-muted);
+}
+
+/* Vehicle Details View */
+.vehicle-details-view {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Car Banner */
+.car-identity-banner {
+  background: linear-gradient(135deg, #162032 0%, #101725 100%);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 22px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+.car-identity-banner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: linear-gradient(to bottom, var(--accent-cyan), #0284c7);
+}
+.car-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.car-text-info h2 {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+.client-subinfo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.client-subinfo i {
+  color: var(--accent-cyan);
+}
+.last-recorded-odo {
+  background: rgba(6, 182, 212, 0.12);
+  padding: 3px 10px;
+  border-radius: 6px;
+  color: var(--accent-cyan-light);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+}
+.banner-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  max-width: 480px;
+}
+.car-meta-info { min-width: 0; flex: 1; }
+.content-column { min-width: 0; }
+
+/* =========================================================
+   Tracker Card (Smart Wear & Lifespan Calculator)
+   ========================================================= */
+.tracker-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+.tracker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.tracker-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.tracker-title i {
+  font-size: 2rem;
+}
+.tracker-title h3 {
+  font-size: 1.25rem;
+}
+.tracker-title p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Live Odometer Input Box */
+.live-odometer-box {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(2, 132, 199, 0.15));
+  border: 2px solid var(--accent-cyan);
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+}
+.live-odometer-box label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+  white-space: nowrap;
+}
+.odo-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.odo-input-wrapper input {
+  width: 140px;
+  padding: 8px 38px 8px 12px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #fff;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  direction: ltr;
+  text-align: right;
+}
+.odo-input-wrapper input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+}
+.unit-badge {
+  position: absolute;
+  right: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  pointer-events: none;
+}
+
+/* Wear Items Section */
+.wear-items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.wear-items-header h4 {
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+}
+.status-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-green { background-color: var(--color-green); box-shadow: 0 0 8px var(--color-green); }
+.dot-amber { background-color: var(--color-amber); box-shadow: 0 0 8px var(--color-amber); }
+.dot-red { background-color: var(--color-red); box-shadow: 0 0 8px var(--color-red); }
+
+/* Wear Items Grid Cards */
+.wear-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+.wear-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  position: relative;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.wear-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.wear-card.status-good {
+  border-right: 4px solid var(--color-green);
+}
+.wear-card.status-warning {
+  border-right: 4px solid var(--color-amber);
+  background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(245, 158, 11, 0.05) 100%);
+}
+.wear-card.status-danger {
+  border-right: 4px solid var(--color-red);
+  background: linear-gradient(135deg, var(--bg-surface) 0%, rgba(239, 68, 68, 0.08) 100%);
+  animation: pulseCardRed 2.5s infinite;
+}
+
+@keyframes pulseCardRed {
+  0% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
+  50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.2); }
+  100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.wear-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.wear-item-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wear-item-detail {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.wear-status-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.status-good .wear-status-badge {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--color-green);
+}
+.status-warning .wear-status-badge {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--color-amber);
+}
+.status-danger .wear-status-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--color-red);
+}
+
+/* Wear Calculation Metrics */
+.wear-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  font-size: 0.78rem;
+}
+.wear-metric-cell span {
+  display: block;
+  color: var(--text-muted);
+}
+.wear-metric-cell strong {
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+/* Progress Bar */
+.wear-progress-wrapper {
+  margin-top: 8px;
+}
+.wear-progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  margin-bottom: 5px;
+}
+.progress-bar-track {
+  height: 8px;
+  background: #334155;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+.status-good .progress-bar-fill {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+.status-warning .progress-bar-fill {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+.status-danger .progress-bar-fill {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.wear-remaining-highlight {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.status-good .wear-remaining-highlight {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+}
+.status-warning .wear-remaining-highlight {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+}
+.status-danger .wear-remaining-highlight {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+/* History Panel */
+.history-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 14px;
+}
+.history-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.history-title i {
+  color: var(--accent-cyan);
+  font-size: 1.2rem;
+}
+.history-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.visits-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Visit Card */
+.visit-entry-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  transition: all var(--transition-fast);
+}
+.visit-entry-card:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+}
+.visit-entry-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.visit-date-odo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.visit-date-badge {
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.visit-odo-badge {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--accent-cyan);
+}
+.visit-cost-print {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.visit-cost {
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--color-green);
+}
+.btn-print-sm {
+  background: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.btn-print-sm:hover {
+  background: var(--accent-cyan);
+  color: #fff;
+}
+
+.visit-items-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.visit-item-tag {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.visit-item-tag strong {
+  color: #fff;
+}
+.visit-item-tag .item-price {
+  color: var(--color-green);
+  margin-right: 4px;
+}
+
+.visit-notes-snippet {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border-subtle);
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+/* =========================================================
+   Modal Dialogs System
+   ========================================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px;
+  overflow-y: auto;
+}
+.modal-window {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 650px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 48px);
+}
+.modal-header {
+  flex-shrink: 0;
+}
+.modal-form, .catalog-modal-body {
+  overflow-y: auto;
+}
+.modal-wide {
+  max-width: 850px;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.modal-title i {
+  color: var(--accent-cyan);
+  font-size: 1.2rem;
+}
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.8rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.modal-close-btn:hover {
+  color: #fff;
+}
+
+.modal-form {
+  padding: 24px;
+}
+
+.form-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 12px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 14px;
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.req {
+  color: var(--color-red);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 0.95rem;
+  transition: border-color var(--transition-fast);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  background: #192336;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 18px;
+}
+
+/* Visit Target Summary */
+.visit-target-summary {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+.visit-target-summary .label {
+  color: var(--text-muted);
+  margin-left: 6px;
+}
+
+/* Visit Items Table */
+.visit-items-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-top: 16px;
+}
+.visit-items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.visit-items-header h4 {
+  font-size: 0.95rem;
+}
+.quick-add-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.btn-chip {
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.btn-chip:hover {
+  background: var(--accent-cyan);
+  color: #fff;
+  border-color: var(--accent-cyan);
+}
+.btn-chip-primary {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent-cyan);
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.visit-items-table-wrapper {
+  overflow-x: auto;
+  max-height: 250px;
+  overflow-y: auto;
+}
+.visit-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+  font-size: 0.88rem;
+}
+.visit-items-table th {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 8px 10px;
+  color: var(--text-muted);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.visit-items-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+.visit-items-table input,
+.visit-items-table select {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  color: #fff;
+}
+.visit-items-table input:focus,
+.visit-items-table select:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+}
+.btn-table-del {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  transition: transform var(--transition-fast);
+}
+.btn-table-del:hover {
+  transform: scale(1.2);
+}
+
+.visit-total-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-subtle);
+}
+.total-label {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+.total-amount {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-green);
+}
+
+/* =========================================================
+   Printable Invoice Styles
+   ========================================================= */
+.invoice-paper {
+  background: #ffffff;
+  color: #1e293b;
+  padding: 30px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.inv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.inv-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.inv-logo-box {
+  width: 56px;
+  height: 56px;
+  background: #e61e2b;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+}
+.inv-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.inv-brand h2 {
+  color: #0f172a;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+.inv-brand p {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+.inv-meta {
+  text-align: left;
+  font-size: 0.85rem;
+  color: #475569;
+}
+.inv-divider {
+  height: 2px;
+  background: #e2e8f0;
+  margin: 18px 0;
+}
+.inv-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.inv-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.inv-box h4 {
+  color: #e61e2b;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+.inv-box p {
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+  color: #334155;
+}
+.inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 0.88rem;
+}
+.inv-table th {
+  background: #f1f5f9;
+  color: #334155;
+  padding: 10px;
+  border-bottom: 2px solid #cbd5e1;
+  text-align: right;
+}
+.inv-table td {
+  padding: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #1e293b;
+}
+.inv-table tfoot th {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f172a;
+  padding: 12px 10px;
+}
+.inv-table tfoot #invTotalAmount {
+  color: #e61e2b;
+  font-size: 1.25rem;
+}
+.inv-notes-box {
+  background: #fdf2f8;
+  border-right: 4px solid #db2777;
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+.inv-notes-box h4 {
+  color: #9d174d;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+.inv-notes-box p {
+  font-size: 0.82rem;
+  color: #4c0519;
+}
+.inv-signatures {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35px;
+  padding: 0 20px;
+  text-align: center;
+}
+.inv-signatures p {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 20px;
+}
+.sign-line {
+  color: #cbd5e1;
+  letter-spacing: 2px;
+}
+.inv-footer {
+  text-align: center;
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px dashed #cbd5e1;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.text-left { text-align: left; }
+
+/* ===== Phase 1 additions ===== */
+.color-dot { display:inline-block; width:12px; height:12px; border-radius:50%; border:1px solid rgba(255,255,255,.45); vertical-align:middle; margin-inline-end:5px; flex-shrink:0; }
+.color-dot.unknown { background: repeating-linear-gradient(45deg,#555 0 3px,#333 3px 6px); }
+.car-color-tag { display:inline-flex; align-items:center; gap:2px; }
+.form-grid-4 { display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; }
+.odo-estimate-hint { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; background:rgba(245,158,11,.07); border:1px dashed rgba(245,158,11,.35); border-radius:var(--radius-md); padding:10px 14px; margin:-6px 0 18px; font-size:.84rem; color:var(--text-secondary); }
+.odo-estimate-hint strong { color:#fff; }
+.odo-estimate-hint .est { color: var(--color-amber); }
+.visit-actions-row { display:flex; gap:6px; }
+.btn-print-sm.btn-danger-sm:hover { background: var(--color-red); }
+.badge-count { background: var(--accent-red); color:#fff; border-radius:999px; font-size:.72rem; min-width:20px; height:20px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; font-weight:800; }
+.badge-count.zero { background: var(--bg-surface-elevated); color: var(--text-muted); }
+.followup-settings { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center; background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:12px 16px; margin-bottom:16px; font-size:.85rem; color:var(--text-secondary); }
+.followup-settings input[type=number] { width:80px; padding:5px 8px; background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:6px; color:#fff; margin-inline-start:6px; }
+.followup-summary { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+.fu-list { display:flex; flex-direction:column; gap:10px; max-height:60vh; overflow-y:auto; }
+.fu-card { background:var(--bg-surface); border:1px solid var(--border-subtle); border-right:4px solid var(--color-amber); border-radius:var(--radius-md); padding:14px 16px; display:grid; grid-template-columns: 1.3fr 2fr auto; gap:14px; align-items:center; }
+.fu-card.overdue { border-right-color: var(--color-red); }
+.fu-card.snoozed { opacity:.55; }
+.fu-car { font-weight:800; color:#fff; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.fu-sub { font-size:.8rem; color:var(--text-muted); margin-top:4px; }
+.fu-chips { display:flex; flex-wrap:wrap; gap:6px; }
+.fu-chip { font-size:.78rem; padding:3px 9px; border-radius:6px; background:rgba(245,158,11,.14); color:#fbbf24; border:1px solid rgba(245,158,11,.3); }
+.fu-chip.overdue { background:rgba(239,68,68,.15); color:#f87171; border-color:rgba(239,68,68,.35); }
+.fu-actions { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+.fu-actions a, .fu-actions button { text-decoration:none; font-size:.8rem; padding:6px 10px; border-radius:6px; border:1px solid var(--border-subtle); background:var(--bg-surface-elevated); color:#fff; cursor:pointer; display:inline-flex; gap:5px; align-items:center; white-space:nowrap; }
+.fu-actions .wa { background:#128c4a; border-color:#16a34a; }
+.fu-actions .wa:hover { background:#16a34a; }
+.fu-actions .done:hover { border-color: var(--color-green); color: var(--color-green); }
+@media (max-width: 900px) { .fu-card { grid-template-columns: 1fr; } .fu-actions { justify-content:flex-start; } .form-grid-4 { grid-template-columns: 1fr 1fr; } }
+
+/* ===== Cloud: login overlay & sync status ===== */
+.login-overlay { position:fixed; inset:0; z-index:3000; background: radial-gradient(circle at 30% 20%, rgba(230,30,43,.18), transparent 50%), var(--bg-primary); display:flex; align-items:center; justify-content:center; padding:20px; }
+.login-card { width:100%; max-width:400px; background:var(--bg-secondary); border:1px solid var(--border-subtle); border-radius:var(--radius-xl); padding:32px 28px; box-shadow:var(--shadow-lg); text-align:center; }
+.login-card img { width:72px; height:72px; border-radius:16px; object-fit:cover; background:#e61e2b; margin-bottom:12px; }
+.login-card h2 { font-size:1.35rem; margin-bottom:4px; }
+.login-card .sub { color:var(--text-muted); font-size:.85rem; margin-bottom:22px; }
+.login-card .form-group { text-align:right; }
+.login-card .btn { width:100%; margin-top:6px; padding:12px; }
+.login-error { color:#f87171; font-size:.85rem; min-height:1.3em; margin-top:10px; }
+.login-status { color:var(--text-muted); font-size:.85rem; margin-top:14px; }
+.sync-status { display:inline-flex; align-items:center; gap:7px; font-size:.78rem; font-weight:700; padding:6px 11px; border-radius:999px; border:1px solid var(--border-subtle); background:rgba(255,255,255,.04); color:var(--text-secondary); white-space:nowrap; }
+.sync-status .sync-dot { width:9px; height:9px; border-radius:50%; background:#64748b; }
+.sync-status.ok .sync-dot { background:var(--color-green); box-shadow:0 0 8px var(--color-green); }
+.sync-status.pending .sync-dot { background:var(--color-amber); box-shadow:0 0 8px var(--color-amber); animation: pulseGlow 1.5s infinite; }
+.sync-status.offline .sync-dot { background:var(--color-red); }
+.sync-status.offline { color:#fca5a5; }
+.user-chip { font-size:.78rem; color:var(--text-muted); max-width:170px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.toast {
+  background: var(--bg-surface-elevated);
+  color: #fff;
+  border: 1px solid var(--border-subtle);
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  animation: toastSlide 0.3s ease;
+  min-width: 260px;
+}
+.toast-success { border-right: 4px solid var(--color-green); }
+.toast-error { border-right: 4px solid var(--color-red); }
+.toast-info { border-right: 4px solid var(--accent-cyan); }
+
+@keyframes toastSlide {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .invoice-paper, .invoice-paper * {
+    visibility: visible;
+  }
+  .invoice-paper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    box-shadow: none;
+  }
+  .no-print, .app-header, .search-section, .workspace-grid {
+    display: none !important;
+  }
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+  .header-stats {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .header-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .car-identity-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .form-grid-2, .form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+/* =========================================================
+   Spare Parts, Maintenance & Labor Catalog Styles
+   ========================================================= */
+.modal-window.catalog-modal-window {
+  width: 95%;
+  max-width: 1200px;
+}
+.catalog-table th:first-child, .catalog-table td:first-child {
+  text-align: center;
+}
+.catalog-table th:last-child, .catalog-table td:last-child {
+  text-align: center;
+}
+.part-code-tag {
+  display: inline-block;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #ff5252;
+  background: rgba(230, 30, 43, 0.12);
+  border: 1px solid rgba(230, 30, 43, 0.28);
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-top: 3px;
+  direction: ltr;
+}
+.part-cost-sub {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.catalog-modal-body {
+  padding: 20px 24px;
+}
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.catalog-search-box {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+.catalog-search-box i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-red);
+}
+.catalog-search-box input {
+  width: 100%;
+  padding: 9px 36px 9px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+}
+.catalog-search-box input:focus {
+  border-color: var(--accent-red);
+  outline: none;
+  box-shadow: 0 0 12px rgba(230, 30, 43, 0.25);
+}
+.catalog-filter-tabs {
+  display: flex;
+  gap: 6px;
+  background: var(--bg-surface);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+.catalog-tab-btn {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.catalog-tab-btn.active {
+  background: var(--accent-red);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(230, 30, 43, 0.4);
+}
+.catalog-table-wrapper {
+  max-height: 480px;
+  overflow-y: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+.catalog-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+  font-size: 0.88rem;
+}
+.catalog-table th {
+  background: #10131c;
+  padding: 12px 14px;
+  color: var(--text-muted);
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.catalog-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+}
+.catalog-table tr:hover td {
+  background: rgba(230, 30, 43, 0.04);
+}
+.badge-type {
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.badge-type.type-part {
+  background: rgba(230, 30, 43, 0.15);
+  color: #ff4d5a;
+  border: 1px solid rgba(230, 30, 43, 0.35);
+}
+.badge-type.type-service {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+.badge-type.type-labor {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+.btn-table-action {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-left: 4px;
+}
+.btn-table-action:hover {
+  border-color: var(--accent-red);
+  color: var(--accent-red);
+}
+.catalog-quick-bar {
+  margin-bottom: 14px;
+  background: rgba(230, 30, 43, 0.06);
+  border: 1px solid rgba(230, 30, 43, 0.25);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+}
+.catalog-quick-bar label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.quick-pick-flex {
+  display: flex;
+  gap: 10px;
+}
+.visit-catalog-dropdown {
+  flex: 1;
+  padding: 9px 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 0.88rem;
+}
+
+</style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-img-container">
+          <img src="logo.jpg" alt="عصفور لصيانة السيارات" class="brand-logo-img">
+        </div>
+        <div class="logo-text">
+          <h1>عصفور <span>لصيانة السيارات</span></h1>
+          <p>ASFOOR AUTO SERVICES</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats in Header -->
+      <div class="header-stats">
+        <div class="h-stat-card">
+          <i class="fa-solid fa-users"></i>
+          <div>
+            <span class="h-stat-num" id="totalClientsCount">0</span>
+            <span class="h-stat-label">عملاء مسجلين</span>
+          </div>
+        </div>
+        <div class="h-stat-card">
+          <i class="fa-solid fa-car"></i>
+          <div>
+            <span class="h-stat-num" id="totalVehiclesCount">0</span>
+            <span class="h-stat-label">سيارات بالمركز</span>
+          </div>
+        </div>
+        <div class="h-stat-card">
+          <i class="fa-solid fa-wrench"></i>
+          <div>
+            <span class="h-stat-num" id="totalVisitsCount">0</span>
+            <span class="h-stat-label">زيارات صيانة</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header Action Buttons -->
+      <div class="header-actions">
+        <a href="./client.html" target="_blank" class="btn btn-secondary" id="btnOpenClientApp" style="display:none" title="فتح تطبيق العميل للأندرويد">
+          <i class="fa-brands fa-android text-cyan"></i> تطبيق العميل
+        </a>
+        <button class="btn btn-secondary" id="btnOpenFollowUp" title="العربيات اللي ميعاد صيانتها قرّب أو عدّى">
+          <i class="fa-solid fa-phone-volume text-amber"></i> متابعة العملاء <span class="badge-count zero" id="followUpCount">0</span>
+        </button>
+        <button class="btn btn-secondary" id="btnOpenCatalogModal" title="دليل قطع الغيار والصيانات والمصنعية">
+          <i class="fa-solid fa-boxes-stacked text-red"></i> دليل القطع والمصنعية
+        </button>
+        <button class="btn btn-primary" id="btnOpenNewClientModal">
+          <i class="fa-solid fa-user-plus"></i> تسجيل عميل جديد
+        </button>
+        <button class="btn btn-secondary" id="btnExportData" title="تصدير نسخة احتياطية">
+          <i class="fa-solid fa-file-export"></i>
+        </button>
+        <button class="btn btn-secondary" id="btnImportData" title="استيراد نسخة احتياطية">
+          <i class="fa-solid fa-file-import"></i>
+        </button>
+        <button class="btn btn-secondary" id="btnClearAllData" title="تصفير ومسح كافة البيانات والبدء من جديد" style="color: var(--accent-red);">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+        <input type="file" id="importFileInput" accept=".json" style="display: none;">
+        <span class="sync-status" id="syncStatus" title="حالة المزامنة مع قاعدة البيانات"><span class="sync-dot"></span><span id="syncStatusText">جاري الاتصال...</span></span>
+        <span class="user-chip" id="userChip"></span>
+        <button class="btn btn-secondary" id="btnLogout" title="تسجيل الخروج"><i class="fa-solid fa-right-from-bracket"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="main-container">
+    
+    <!-- Top Search & Quick Selection Bar -->
+    <section class="search-section">
+      <div class="search-bar-wrapper">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input 
+          type="text" 
+          id="mainSearchInput" 
+          placeholder="ابحث برقم لوحة السيارة (أرقام أو حروف)، اسم العميل، أو رقم الهاتف..." 
+          autocomplete="off"
+        >
+        <button class="clear-search-btn" id="btnClearSearch" title="مسح البحث">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="search-quick-tags" id="searchQuickTags">
+        <!-- Recently viewed or searched cars will appear here -->
+      </div>
+    </section>
+
+    <!-- Main 2-Column Workspace Grid -->
+    <div class="workspace-grid">
+      
+      <!-- Right Column: Clients & Cars Directory -->
+      <aside class="sidebar-column">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title">
+              <i class="fa-solid fa-address-book"></i>
+              <h2>قائمة العملاء والسيارات</h2>
+            </div>
+            <span class="badge" id="clientListBadge">0 سيارة</span>
+          </div>
+          
+          <div class="panel-filters">
+            <button class="filter-chip active" data-filter="all">الكل</button>
+            <button class="filter-chip" data-filter="due-soon">قرب الصيانة <i class="fa-solid fa-circle-exclamation text-amber"></i></button>
+            <button class="filter-chip" data-filter="overdue">تجاوز المدى <i class="fa-solid fa-triangle-exclamation text-red"></i></button>
+          </div>
+
+          <div class="clients-list" id="clientsListContainer">
+            <!-- Dynamically populated client cards -->
+          </div>
+        </div>
+      </aside>
+
+      <!-- Left Column: Vehicle Profile, Smart Lifespan Calculator & History -->
+      <section class="content-column">
+        
+        <!-- Empty State (When no car is selected) -->
+        <div class="empty-state-view" id="emptyVehicleView">
+          <div class="empty-icon">
+            <i class="fa-solid fa-car-on"></i>
+          </div>
+          <h3>اختر سيارة من القائمة أو ابدأ بالبحث</h3>
+          <p>يمكنك استعراض كشف الحساب والصيانات السابقة، وإدخال العداد الحالي لمعرفة حالة كل بند ومقدار الكيلومترات المتبقية، أو تسجيل زيارة جديدة.</p>
+          <button class="btn btn-primary" id="btnEmptyNewClient">
+            <i class="fa-solid fa-plus"></i> تسجيل عميل وسيارة جديدة الآن
+          </button>
+        </div>
+
+        <!-- Vehicle Details Active View -->
+        <div class="vehicle-details-view" id="activeVehicleView" style="display: none;">
+          
+          <!-- Car Identity Banner -->
+          <div class="car-identity-banner">
+            <div class="car-meta-info">
+              <div class="plate-box" id="bannerPlateBox">
+                <span class="plate-letters" id="bannerPlateText">ب س ج 5821</span>
+                <span class="plate-country">مصر EGY</span>
+              </div>
+              <div class="car-text-info">
+                <h2 id="bannerCarTitle">تويوتا كورولا 2021</h2>
+                <div class="client-subinfo">
+                  <span class="car-color-tag" id="bannerCarColor"></span>
+                  <span><i class="fa-solid fa-user"></i> <strong id="bannerClientName">محمد أحمد علي</strong></span>
+                  <span><i class="fa-solid fa-phone"></i> <span id="bannerClientPhone" dir="ltr">01012345678</span></span>
+                  <span class="last-recorded-odo"><i class="fa-solid fa-gauge-high"></i> آخر عداد مسجل: <strong id="bannerLastOdo">85,400 كم</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="banner-actions">
+              <button class="btn btn-primary btn-pulse" id="btnLogNewVisit">
+                <i class="fa-solid fa-clipboard-check"></i> تسجيل زيارة صيانة
+              </button>
+              <button class="btn btn-secondary" id="btnShareClientPortal" style="display:none" title="فتح ومشاركة تطبيق العميل لهذه السيارة">
+                <i class="fa-brands fa-android text-cyan"></i> تطبيق العميل
+              </button>
+              <button class="btn btn-secondary" id="btnAddCarToClient" title="إضافة سيارة أخرى لنفس العميل">
+                <i class="fa-solid fa-car-side"></i> سيارة أخرى لنفس العميل
+              </button>
+              <button class="btn btn-secondary" id="btnEditClient">
+                <i class="fa-solid fa-pen-to-square"></i> تعديل البيانات
+              </button>
+              <button class="btn btn-danger-soft" id="btnDeleteVehicle" title="حذف السيارة">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Smart Lifespan & Wear Tracker Card (The Core Feature Requested by User) -->
+          <div class="tracker-card">
+            <div class="tracker-header">
+              <div class="tracker-title">
+                <i class="fa-solid fa-calculator text-cyan"></i>
+                <div>
+                  <h3>حاسبة استهلاك القطع ومواعيد التغيير</h3>
+                  <p>أدخل قراءة العداد الحالية ليتم فحص جميع البنود السابقة وحساب المتبقي بدقة</p>
+                </div>
+              </div>
+
+              <!-- Real-time Current Odometer Input Box -->
+              <div class="live-odometer-box">
+                <label for="currentOdometerInput">
+                  <i class="fa-solid fa-gauge-high"></i> قراءة العداد الحالي (كم):
+                </label>
+                <div class="odo-input-wrapper">
+                  <input 
+                    type="number" 
+                    id="currentOdometerInput" 
+                    placeholder="مثال: 92500" 
+                    min="0"
+                  >
+                  <span class="unit-badge">كم</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="odo-estimate-hint" id="odoEstimateHint"></div>
+
+            <!-- Calculated Items Status Grid -->
+            <div class="wear-items-container">
+              <div class="wear-items-header">
+                <h4>حالة البنود والقطع المستهلكة المسجلة في آخر الصيانات:</h4>
+                <div class="status-legend">
+                  <span class="legend-item"><span class="dot dot-green"></span> سليم / متبقي مسافة</span>
+                  <span class="legend-item"><span class="dot dot-amber"></span> اقترب موعد التغيير (بالكيلو أو بالتاريخ)</span>
+                  <span class="legend-item"><span class="dot dot-red"></span> متأخر / تجاوز المدى!</span>
+                </div>
+              </div>
+
+              <!-- Wear Items Dynamic Cards -->
+              <div class="wear-items-grid" id="wearItemsGrid">
+                <!-- Calculated cards will be injected here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Visits & Service History Panel -->
+          <div class="history-panel">
+            <div class="history-header">
+              <div class="history-title">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <h3>سجل زيارات الصيانة السابقة</h3>
+              </div>
+              <div class="history-stats">
+                <span id="visitCountBadge" class="badge badge-outline">0 زيارة</span>
+                <span id="totalSpentBadge" class="badge badge-success">إجمالي المصروفات: 0 ج.م</span>
+              </div>
+            </div>
+
+            <div class="visits-timeline" id="visitsTimeline">
+              <!-- Visits logs list -->
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL 1: Register/Edit Client & Vehicle Modal -->
+  <div class="modal-overlay" id="clientModal" style="display: none;">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-id-card"></i>
+          <h3 id="clientModalTitle">تسجيل عميل وسيارة جديدة</h3>
+        </div>
+        <button class="modal-close-btn" id="btnCloseClientModal">&times;</button>
+      </div>
+
+      <form id="clientForm" class="modal-form">
+        <input type="hidden" id="editClientId" value="">
+        <input type="hidden" id="addToClientId" value="">
+
+        <!-- Section: Client Details -->
+        <div class="form-section-title">
+          <i class="fa-solid fa-user-tag"></i> بيانات العميل
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="clientNameInput">اسم العميل <span class="req">*</span></label>
+            <input type="text" id="clientNameInput" placeholder="مثال: أحمد محمود إبراهيم" required>
+          </div>
+          <div class="form-group">
+            <label for="clientPhoneInput">رقم الهاتف / الموبايل <span class="req">*</span></label>
+            <input type="tel" id="clientPhoneInput" placeholder="مثال: 01012345678" required dir="ltr">
+          </div>
+        </div>
+
+        <!-- Section: Vehicle Details -->
+        <div class="form-section-title">
+          <i class="fa-solid fa-car-side"></i> بيانات السيارة
+        </div>
+        <div class="form-grid-3">
+          <div class="form-group">
+            <label for="carPlateLettersInput">حروف اللوحة <span class="req">*</span></label>
+            <input type="text" id="carPlateLettersInput" placeholder="مثال: أ ب ج أو د س م" required>
+          </div>
+          <div class="form-group">
+            <label for="carPlateNumbersInput">أرقام اللوحة <span class="req">*</span></label>
+            <input type="text" id="carPlateNumbersInput" placeholder="مثال: 1234" required dir="ltr">
+          </div>
+          <div class="form-group">
+            <label for="carInitialOdoInput">قراءة العداد الحالية (كم) <span class="req">*</span></label>
+            <input type="number" id="carInitialOdoInput" placeholder="مثال: 75000" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="carMakeInput">النوع / الماركة <span class="req">*</span></label>
+            <input list="carMakesList" id="carMakeInput" placeholder="اختر أو اكتب (مثل: تويوتا، كيا، هيونداي...)" required>
+            <datalist id="carMakesList">
+              <option value="تويوتا">
+              <option value="هيونداي">
+              <option value="كيا">
+              <option value="نيسان">
+              <option value="ميتسوبيشي">
+              <option value="شيفروليه">
+              <option value="مرسيدس بنز">
+              <option value="بي إم دبليو">
+              <option value="أودي">
+              <option value="فولكس فاجن">
+              <option value="شيري">
+              <option value="إم جي MG">
+              <option value="بيجو">
+              <option value="رينو">
+              <option value="هوندا">
+              <option value="سوزوكي">
+              <option value="سكودا">
+              <option value="فيات">
+              <option value="فورد">
+              <option value="جيب">
+            </datalist>
+          </div>
+          <div class="form-group">
+            <label for="carModelInput">الموديل / سنة الصنع <span class="req">*</span></label>
+            <input type="text" id="carModelInput" placeholder="مثال: كورولا 2022 أو سيراتو 2020" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="carColorInput">لون السيارة</label>
+          <input list="carColorsList" id="carColorInput" placeholder="اختر أو اكتب اللون (مثل: أبيض، فضي، أسود...)">
+          <datalist id="carColorsList">
+            <option value="أبيض"><option value="أسود"><option value="فضي"><option value="رمادي">
+            <option value="أحمر"><option value="نبيتي"><option value="أزرق"><option value="كحلي">
+            <option value="لبني"><option value="أخضر"><option value="بيج"><option value="بني">
+            <option value="ذهبي"><option value="برتقالي"><option value="أصفر">
+          </datalist>
+        </div>
+
+        <div class="form-group">
+          <label for="clientNotesInput">ملاحظات إضافية (اختياري)</label>
+          <textarea id="clientNotesInput" rows="2" placeholder="أي تفاصيل خاصة بالعميل أو السيارة..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelClientModal">إلغاء</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitClientForm">
+            <i class="fa-solid fa-save"></i> حفظ البيانات
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Log New Maintenance Visit Modal -->
+  <div class="modal-overlay" id="visitModal" style="display: none;">
+    <div class="modal-window modal-wide">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-wrench"></i>
+          <h3 id="visitModalTitle">تسجيل إجراءات زيارة صيانة جديدة</h3>
+        </div>
+        <button class="modal-close-btn" id="btnCloseVisitModal">&times;</button>
+      </div>
+
+      <form id="visitForm" class="modal-form">
+        <!-- Target Car Summary -->
+        <div class="visit-target-summary">
+          <div>
+            <span class="label">السيارة:</span>
+            <strong id="visitModalCarTitle">تويوتا كورولا 2021</strong>
+            <span class="plate-mini" id="visitModalPlateBadge">أ ب ج 1234</span>
+          </div>
+          <div>
+            <span class="label">العميل:</span>
+            <strong id="visitModalClientName">محمد أحمد</strong>
+          </div>
+        </div>
+
+        <!-- Visit Info: Date & Odometer -->
+        <div class="form-grid-2" style="margin-top: 15px;">
+          <div class="form-group">
+            <label for="visitDateInput">تاريخ الزيارة <span class="req">*</span></label>
+            <input type="date" id="visitDateInput" required>
+          </div>
+          <div class="form-group">
+            <label for="visitOdoInput">قراءة العداد عند الزيارة (كم) <span class="req">*</span></label>
+            <input type="number" id="visitOdoInput" placeholder="مثال: 85000" min="0" required>
+          </div>
+        </div>
+
+        <!-- Maintenance Services & Items Table/List -->
+        <div class="visit-items-box">
+          <!-- Quick Add from Catalog Bar -->
+          <div class="catalog-quick-bar">
+            <label><i class="fa-solid fa-bolt text-red"></i> إضافة سريعة من دليل قطع الغيار والمصنعية:</label>
+            <div class="quick-pick-flex">
+              <select id="visitCatalogSelect" class="visit-catalog-dropdown">
+                <option value="">-- اختر قطعة غيار أو مصنعية للإدراج المباشر --</option>
+              </select>
+              <button type="button" class="btn btn-secondary" id="btnInsertFromCatalog">
+                <i class="fa-solid fa-plus"></i> إدراج في الزيارة
+              </button>
+            </div>
+          </div>
+
+          <div class="visit-items-header">
+            <h4><i class="fa-solid fa-list-check"></i> أو أضف بنوداً يدوية:</h4>
+            <div class="quick-add-group">
+              <button type="button" class="btn-chip" id="btnAddOilItem">
+                <i class="fa-solid fa-oil-can"></i> + زيت
+              </button>
+              <button type="button" class="btn-chip" id="btnAddOilFilterItem">
+                <i class="fa-solid fa-filter"></i> + فلتر زيت
+              </button>
+              <button type="button" class="btn-chip" id="btnAddAirFilterItem">
+                <i class="fa-solid fa-wind"></i> + فلتر هواء
+              </button>
+              <button type="button" class="btn-chip" id="btnAddBrakeItem">
+                <i class="fa-solid fa-circle-stop"></i> + تيل فرامل
+              </button>
+              <button type="button" class="btn-chip btn-chip-primary" id="btnAddNewCustomItem">
+                <i class="fa-solid fa-plus"></i> + بند مخصص جديد
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Items Container -->
+          <div class="visit-items-table-wrapper">
+            <table class="visit-items-table">
+              <thead>
+                <tr>
+                  <th style="width: 24%;">بند الصيانة</th>
+                  <th style="width: 22%;">النوع / التفاصيل</th>
+                  <th style="width: 16%;" title="0 = بدون متابعة بالكيلو">المدى (كم)</th>
+                  <th style="width: 12%;" title="0 = بدون متابعة بالتاريخ">أو كل (شهور)</th>
+                  <th style="width: 16%;">التكلفة (ج.م)</th>
+                  <th style="width: 10%;">حذف</th>
+                </tr>
+              </thead>
+              <tbody id="visitItemsTableBody">
+                <!-- Rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Total Calculation Bar -->
+          <div class="visit-total-bar">
+            <div class="total-label">إجمالي تكلفة الزيارة:</div>
+            <div class="total-amount"><span id="visitTotalAmount">0</span> <small>ج.م</small></div>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 15px;">
+          <label for="visitNotesInput">ملاحظات الفني أو توصيات للزيارة القادمة</label>
+          <textarea id="visitNotesInput" rows="2" placeholder="أي ملاحظات حول حالة العفشة، الكاوتش، المحرك، إلخ..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelVisitModal">إلغاء</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-check-double"></i> تأكيد وحفظ الزيارة
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Printable Invoice & Visit Report Modal -->
+  <div class="modal-overlay" id="invoiceModal" style="display: none;">
+    <div class="modal-window modal-wide printable-modal">
+      <div class="modal-header no-print">
+        <div class="modal-title">
+          <i class="fa-solid fa-receipt"></i>
+          <h3>فاتورة وتقرير صيانة الزيارة</h3>
+        </div>
+        <button class="modal-close-btn" id="btnCloseInvoiceModal">&times;</button>
+      </div>
+
+      <!-- Printable Document Container -->
+      <div class="invoice-paper" id="printableInvoice">
+        <!-- Invoice Header -->
+        <div class="inv-header">
+          <div class="inv-brand">
+            <div class="inv-logo-box">
+              <img src="logo.jpg" alt="عصفور لصيانة السيارات" class="inv-logo-img">
+            </div>
+            <div>
+              <h2>عصفور لصيانة السيارات</h2>
+              <p>ASFOOR AUTO SERVICES - تقرير فني وفاتورة صيانة معتمدة</p>
+            </div>
+          </div>
+          <div class="inv-meta">
+            <div><strong>رقم الفاتورة:</strong> <span id="invNumber">#INV-1001</span></div>
+            <div><strong>التاريخ:</strong> <span id="invDate">2026-09-07</span></div>
+          </div>
+        </div>
+
+        <div class="inv-divider"></div>
+
+        <!-- Client & Car Info Box -->
+        <div class="inv-info-grid">
+          <div class="inv-box">
+            <h4>بيانات العميل</h4>
+            <p><strong>الاسم:</strong> <span id="invClientName">أحمد محمد</span></p>
+            <p><strong>الهاتف:</strong> <span id="invClientPhone" dir="ltr">01012345678</span></p>
+          </div>
+          <div class="inv-box">
+            <h4>بيانات السيارة</h4>
+            <p><strong>السيارة:</strong> <span id="invCarDetails">تويوتا كورولا 2021</span></p>
+            <p><strong>رقم اللوحة:</strong> <span id="invCarPlate">أ ب ج 1234</span></p>
+            <p><strong>قراءة العداد عند الزيارة:</strong> <span id="invCarOdo">85,000 كم</span></p>
+          </div>
+        </div>
+
+        <!-- Items Table -->
+        <table class="inv-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>بند الصيانة</th>
+              <th>النوع والمواصفات</th>
+              <th>المدى الافتراضي</th>
+              <th>التكلفة</th>
+            </tr>
+          </thead>
+          <tbody id="invItemsBody">
+            <!-- Items injected here -->
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="4" class="text-left">الإجمالي المطلوب:</th>
+              <th id="invTotalAmount">0 ج.م</th>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Notes & Next Service Recommendations -->
+        <div class="inv-notes-box" id="invNotesBox">
+          <h4>ملاحظات الفني وتوصيات الصيانة القادمة:</h4>
+          <p id="invNotesText">-</p>
+        </div>
+
+        <!-- Invoice Signatures -->
+        <div class="inv-signatures">
+          <div>
+            <p>توقيع المهندس / الفني المسئول</p>
+            <span class="sign-line">................................</span>
+          </div>
+          <div>
+            <p>توقيع العميل بالاستلام</p>
+            <span class="sign-line">................................</span>
+          </div>
+        </div>
+
+        <div class="inv-footer">
+          <p>شكراً لثقتكم بنا! نسعد دائماً بخدمتكم والحفاظ على سلامة سيارتكم.</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="modal-actions no-print">
+        <button type="button" class="btn btn-secondary" id="btnCloseInvoiceBtn">إغلاق</button>
+        <button type="button" class="btn btn-primary" id="btnPrintInvoiceBtn">
+          <i class="fa-solid fa-print"></i> طباعة الفاتورة والتقرير
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: Spare Parts, Maintenance & Labor Catalog Management -->
+  <div class="modal-overlay" id="catalogModal" style="display: none;">
+    <div class="modal-window modal-wide catalog-modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-boxes-stacked text-red"></i>
+          <h3>دليل قطع الغيار، الصيانات والمصنعية</h3>
+        </div>
+        <button class="modal-close-btn" id="btnCloseCatalogModal">&times;</button>
+      </div>
+
+      <div class="catalog-modal-body">
+        <!-- Toolbar: Search, Filters, Add Button -->
+        <div class="catalog-toolbar">
+          <div class="catalog-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="catalogSearchInput" placeholder="بحث في القطع أو المصنعية...">
+          </div>
+
+          <div class="catalog-filter-tabs">
+            <button type="button" class="catalog-tab-btn active" data-type="all">الكل (<span id="countCatAll">0</span>)</button>
+            <button type="button" class="catalog-tab-btn" data-type="part"><i class="fa-solid fa-gears"></i> قطع غيار (<span id="countCatPart">0</span>)</button>
+            <button type="button" class="catalog-tab-btn" data-type="service"><i class="fa-solid fa-wrench"></i> خدمات صيانة (<span id="countCatService">0</span>)</button>
+            <button type="button" class="catalog-tab-btn" data-type="labor"><i class="fa-solid fa-user-gear"></i> مصنعيات (<span id="countCatLabor">0</span>)</button>
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" id="btnLoadPresetCatalog" title="تحميل 20 بنداً قياسياً مقترحاً للمركز">
+              <i class="fa-solid fa-wand-magic-sparkles text-red"></i> تحميل بنود مقترحة
+            </button>
+            <button type="button" class="btn btn-primary" id="btnOpenAddPartModal">
+              <i class="fa-solid fa-plus"></i> إضافة بند جديد
+            </button>
+          </div>
+        </div>
+
+        <!-- Catalog Table Container -->
+        <div class="catalog-table-wrapper">
+          <table class="catalog-table">
+            <thead>
+              <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 25%;">اسم البند</th>
+                <th style="width: 15%;">النوع والتصنيف</th>
+                <th style="width: 25%;">المواصفات والماركة</th>
+                <th style="width: 12%;">المدى الافتراضي</th>
+                <th style="width: 10%;">السعر المعتمد</th>
+                <th style="width: 8%;">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="catalogTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: Add / Edit Single Part or Labor Item -->
+  <div class="modal-overlay" id="partItemModal" style="display: none; z-index: 1100;">
+    <div class="modal-window" style="max-width: 600px; width: 92%;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-boxes-stacked text-red"></i>
+          <h3 id="partModalTitle">إضافة بند جديد للدليل</h3>
+        </div>
+        <button class="modal-close-btn" id="btnClosePartItemModal">&times;</button>
+      </div>
+
+      <form id="partItemForm" class="modal-form">
+        <input type="hidden" id="editPartItemId">
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="partTypeSelect">نوع البند <span class="req">*</span></label>
+            <select id="partTypeSelect" required>
+              <option value="part">قطع غيار (Spare Part)</option>
+              <option value="service">خدمة صيانة (Maintenance Service)</option>
+              <option value="labor">مصنعية وأجر فني (Labor Fee)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="partCategorySelect">التصنيف الفني <span class="req">*</span></label>
+            <select id="partCategorySelect" required>
+              <option value="oil">زيوت وسوائل</option>
+              <option value="oil_filter">فلتر زيت</option>
+              <option value="air_filter">فلتر هواء وتكييف</option>
+              <option value="brakes">فرامل وتيل وطنابير</option>
+              <option value="spark_plugs">بوجيهات وإشعال</option>
+              <option value="suspension">عفشة ومساعدين</option>
+              <option value="belts">سيور ومجموعات</option>
+              <option value="labor">مصنعية وخدمات</option>
+              <option value="custom">أخرى / باقات عامة</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="partNameInput">اسم البند أو الخدمة / المصنعية <span class="req">*</span></label>
+            <input type="text" id="partNameInput" placeholder="مثال: زيت موبيل 1 / طقم تيل فرامل" required>
+          </div>
+          <div class="form-group">
+            <label for="partCodeInput">كود القطعة / الصنف (Code / SKU)</label>
+            <input type="text" id="partCodeInput" placeholder="مثال: MOB-5W30 أو OEM-04152">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="partSpecsInput">المواصفات والماركة / الملاحظات الفنية</label>
+          <input type="text" id="partSpecsInput" placeholder="مثال: 5W-30 تخليقي بالكامل / سيراميك أصلي / كشف بالأجهزة">
+        </div>
+
+        <div class="form-grid-4">
+          <div class="form-group" id="partIntervalGroup">
+            <label for="partIntervalInput">المدى بالكيلومتر</label>
+            <input type="number" id="partIntervalInput" value="10000" min="0" step="500">
+          </div>
+          <div class="form-group">
+            <label for="partMonthsInput">أو كل (شهور)</label>
+            <input type="number" id="partMonthsInput" value="0" min="0" step="1" title="0 = بدون متابعة بالتاريخ">
+          </div>
+          <div class="form-group">
+            <label for="partCostInput">سعر البيع للعميل (ج.م) <span class="req">*</span></label>
+            <input type="number" id="partCostInput" placeholder="0" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="partBuyCostInput">سعر التكلفة/الشراء (ج.م)</label>
+            <input type="number" id="partBuyCostInput" placeholder="0" min="0">
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelPartItemModal">إلغاء</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> حفظ في الدليل
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 6: Customer Follow-up (who to call) -->
+  <div class="modal-overlay" id="followUpModal" style="display: none;">
+    <div class="modal-window modal-wide catalog-modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i class="fa-solid fa-phone-volume text-amber"></i>
+          <h3>متابعة العملاء — عربيات ميعاد صيانتها قرّب أو عدّى</h3>
+        </div>
+        <button class="modal-close-btn" id="btnCloseFollowUp">&times;</button>
+      </div>
+      <div class="catalog-modal-body">
+        <div class="followup-settings">
+          <label title="يُستخدم للعربيات اللي ليها زيارة واحدة بس">متوسط السير الافتراضي (كم/يوم):
+            <input type="number" id="setDefaultDailyKm" min="1" max="500">
+          </label>
+          <label>نبّهني قبل الميعاد بـ (يوم):
+            <input type="number" id="setAlertDays" min="0" max="90">
+          </label>
+          <label>أو لما يفضل (كم):
+            <input type="number" id="setAlertKm" min="0" step="100">
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" id="fuHideContacted" checked> إخفاء اللي اتكلموا آخر <span id="fuSnoozeDaysLabel">7</span> أيام
+          </label>
+        </div>
+        <div class="followup-summary" id="followUpSummary"></div>
+        <div class="fu-list" id="followUpList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Login Overlay (shown until the user signs in) -->
+  <div class="login-overlay" id="loginOverlay">
+    <form class="login-card" id="loginForm" autocomplete="on">
+      <img id="loginLogo" alt="عصفور لصيانة السيارات">
+      <h2>عصفور لصيانة السيارات</h2>
+      <p class="sub">ASFOOR AUTO SERVICES — تسجيل الدخول</p>
+      <div class="form-group">
+        <label for="loginEmail">البريد الإلكتروني</label>
+        <input type="email" id="loginEmail" dir="ltr" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">كلمة المرور</label>
+        <input type="password" id="loginPassword" dir="ltr" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary" id="btnLogin"><i class="fa-solid fa-right-to-bracket"></i> دخول</button>
+      <div class="login-error" id="loginError"></div>
+      <div class="login-status" id="loginStatus">جاري تحميل النظام...</div>
+    </form>
+  </div>
+
+  <!-- Firebase SDK (loaded from Google's CDN) -->
+  <script type="module">
+    const FIREBASE_SDK_VERSION = '10.12.2';
+    const base = `https://www.gstatic.com/firebasejs/${FIREBASE_SDK_VERSION}/`;
+    try {
+      const [app, auth, fs] = await Promise.all([
+        import(base + 'firebase-app.js'),
+        import(base + 'firebase-auth.js'),
+        import(base + 'firebase-firestore.js')
+      ]);
+      window.AsfoorFirebase = { ...app, ...auth, ...fs };
+    } catch (e) {
+      console.error('Firebase SDK failed to load', e);
+      window.AsfoorFirebaseError = e;
+    }
+    window.dispatchEvent(new Event('asfoor-firebase-ready'));
+  </script>
+
+  <!-- Embedded All-In-One Scripts -->
+  <script>
+/**
+ * Sample Initial Data for Asfour Car Service Center - مركز عصفور لخدمة السيارات
+ * Loaded on first run if localStorage is empty
+ */
+
+const INITIAL_SAMPLE_DATA = {
+  clients: [],
+  vehicles: [],
+  visits: [],
+  partsCatalog: []
+};
+
+const CATALOG_SUGGESTED_PRESETS = [
+    {
+      id: "part_1",
+      type: "part",
+      code: "MOB-5W30",
+      name: "زيت محرك موبيل 1 تخليقي 5W-30",
+      category: "oil",
+      specs: "تخليقي بالكامل 10 آلاف كم - معتمد وكالة",
+      intervalKm: 10000,
+      cost: 1600,
+      buyCost: 1250
+    },
+    {
+      id: "part_2",
+      type: "part",
+      code: "SHL-5W40",
+      name: "زيت محرك شل هيلكس الترا 5W-40",
+      category: "oil",
+      specs: "تخليقي 10 آلاف كم للمحركات الشاقة",
+      intervalKm: 10000,
+      cost: 1550,
+      buyCost: 1200
+    },
+    {
+      id: "part_3",
+      type: "part",
+      code: "FLT-OIL-OEM",
+      name: "فلتر زيت أصلي ياباني / كوري",
+      category: "oil_filter",
+      specs: "صمام سيليكون مانع للرجوع - أصلي",
+      intervalKm: 10000,
+      cost: 350,
+      buyCost: 240
+    },
+    {
+      id: "part_4",
+      type: "part",
+      code: "FLT-AIR-STD",
+      name: "فلتر هواء محرك عالي التدفق",
+      category: "air_filter",
+      specs: "فلتر ورقي متعدد الطبقات لحماية البساتم",
+      intervalKm: 20000,
+      cost: 400,
+      buyCost: 260
+    },
+    {
+      id: "part_5",
+      type: "part",
+      code: "FLT-CAB-CRB",
+      name: "فلتر تكييف كربوني نشط",
+      category: "air_filter",
+      specs: "مضاد للبكتيريا والروائح لتنقية المقصورة",
+      intervalKm: 20000,
+      cost: 350,
+      buyCost: 220
+    },
+    {
+      id: "part_6",
+      type: "part",
+      code: "BRK-PAD-FRT",
+      name: "طقم تيل فرامل أمامي سيراميك",
+      category: "brakes",
+      specs: "سيراميك عالي التحمل بدون صفير أو غبار",
+      intervalKm: 35000,
+      cost: 850,
+      buyCost: 600
+    },
+    {
+      id: "part_7",
+      type: "part",
+      code: "BRK-PAD-RR",
+      name: "طقم تيل فرامل خلفي",
+      category: "brakes",
+      specs: "تيل فرامل خلفي أصلي عالي الاعتمادية",
+      intervalKm: 40000,
+      cost: 650,
+      buyCost: 450
+    },
+    {
+      id: "part_8",
+      type: "part",
+      code: "SPK-NGK-IR",
+      name: "طقم بوجيهات ليزر إيريديوم NGK",
+      category: "spark_plugs",
+      specs: "شمعات ليزر إيريديوم لعزم احتراق قوي",
+      intervalKm: 60000,
+      cost: 1200,
+      buyCost: 880
+    },
+    {
+      id: "part_9",
+      type: "part",
+      code: "BLT-ALT-OEM",
+      name: "سير مجموعة ودينامو أصلي",
+      category: "belts",
+      specs: "مطاط مقوى مقاوم للحرارة والتآكل",
+      intervalKm: 60000,
+      cost: 750,
+      buyCost: 520
+    },
+    {
+      id: "part_10",
+      type: "part",
+      code: "CLT-G12-RED",
+      name: "سائل تبريد رادياتير أحمر G12 أصلي",
+      category: "oil",
+      specs: "مياه رادياتير مانعة للصدأ وغليان 4 لتر",
+      intervalKm: 40000,
+      cost: 450,
+      buyCost: 310
+    },
+    {
+      id: "serv_1",
+      type: "service",
+      code: "SRV-10K",
+      name: "باقة صيانة دورية 10,000 كم",
+      category: "custom",
+      specs: "غيار زيت تخليقي وفلتر + فحص شامل للفرامل وتربيط عفشة",
+      intervalKm: 10000,
+      cost: 2100,
+      buyCost: 1600
+    },
+    {
+      id: "serv_2",
+      type: "service",
+      code: "SRV-40K",
+      name: "باقة صيانة كبرى 40,000 كم",
+      category: "custom",
+      specs: "زيوت وسوائل تبريد وفلاتر وفحص سيور ومنظومة إشعال كاملة",
+      intervalKm: 40000,
+      cost: 3800,
+      buyCost: 2900
+    },
+    {
+      id: "serv_3",
+      type: "service",
+      code: "SRV-INJ",
+      name: "تنظيف دورة الوقود والرشاشات بالألتراسونيك",
+      category: "custom",
+      specs: "فك الرشاشات واختبار الرش والتنظيف بمواد كيميائية ألمانية",
+      intervalKm: 30000,
+      cost: 650,
+      buyCost: 200
+    },
+    {
+      id: "serv_4",
+      type: "service",
+      code: "SRV-AC",
+      name: "صيانة وتطهير دورة التكييف وشحن فريون أصلي",
+      category: "custom",
+      specs: "تفريغ وتجربة ضغط وشحن غاز R134a أمريكي مع زيت كمبروسر",
+      intervalKm: 20000,
+      cost: 750,
+      buyCost: 350
+    },
+    {
+      id: "serv_5",
+      type: "service",
+      code: "SRV-CHK",
+      name: "فحص كامل للسيارة قبل السفر / قبل الشراء",
+      category: "custom",
+      specs: "فحص كمبيوتر لكافة الحساسات + فحص العفشة والمحرك ورفع السيارة",
+      intervalKm: 0,
+      cost: 500,
+      buyCost: 100
+    },
+    {
+      id: "part_11",
+      type: "labor",
+      code: "LBR-OIL",
+      name: "مصنعية تغيير زيت وفلاتر",
+      category: "labor",
+      specs: "فك وتركيب وتنظيف صرة الزيت وقاعدة الفلتر",
+      intervalKm: 0,
+      cost: 150,
+      buyCost: 0
+    },
+    {
+      id: "part_12",
+      type: "labor",
+      code: "LBR-BRK",
+      name: "مصنعية تغيير تيل فرامل وتنظيف الطنابير",
+      category: "labor",
+      specs: "تغيير تيل أمامي أو خلفي مع تشحيم الكليبرات",
+      intervalKm: 0,
+      cost: 250,
+      buyCost: 0
+    },
+    {
+      id: "part_13",
+      type: "labor",
+      code: "LBR-SCAN",
+      name: "مصنعية فحص كمبيوتر وكشف أعطال شامل",
+      category: "labor",
+      specs: "فحص بالأجهزة الحديثة وقراءة الحساسات وإطفاء اللمبات",
+      intervalKm: 0,
+      cost: 300,
+      buyCost: 0
+    },
+    {
+      id: "part_14",
+      type: "labor",
+      code: "LBR-MAJ",
+      name: "مصنعية صيانة دورية شاملة (40k/80k)",
+      category: "labor",
+      specs: "فحص شامل للعفشة، الفرامل، السوائل، والسيور",
+      intervalKm: 0,
+      cost: 500,
+      buyCost: 0
+    },
+    {
+      id: "part_15",
+      type: "labor",
+      code: "LBR-ALIGN",
+      name: "مصنعية ضبط زوايا وترصيص إطارات بالليزر",
+      category: "labor",
+      specs: "ضبط بالليزر ثلاثي الأبعاد 3D وضبط اتزان الدركسيون",
+      intervalKm: 0,
+      cost: 250,
+      buyCost: 0
+    }
+];
+
+// Default time intervals (months) for suggested items
+(function () {
+  const PRESET_MONTHS = { part_1: 6, part_2: 6, part_3: 6, part_4: 12, part_5: 12, part_6: 12, part_7: 12, part_10: 24, serv_1: 6, serv_2: 24, serv_4: 12 };
+  CATALOG_SUGGESTED_PRESETS.forEach(p => { if (p.intervalMonths == null) p.intervalMonths = PRESET_MONTHS[p.id] || 0; });
+})();
+
+/**
+ * Asfour Car Service Center - مركز عصفور لخدمة السيارات
+ * Main Application Logic - Modern Client & Vehicle Maintenance Database System
+ */
+
+(function () {
+  'use strict';
+
+  // ================= FIREBASE / CLOUD DATABASE =================
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAMeqtTZsZhiDvY5uuzeyZVFi6-FvNVBx8",
+    authDomain: "asfour-auto.firebaseapp.com",
+    projectId: "asfour-auto",
+    storageBucket: "asfour-auto.firebasestorage.app",
+    messagingSenderId: "839447400510",
+    appId: "1:839447400510:web:9ac1279b6daeed614bc16f"
+  };
+
+  // appState key -> Firestore collection name
+  const CLOUD_COLLECTIONS = {
+    clients: 'clients',
+    vehicles: 'vehicles',
+    visits: 'visits',
+    partsCatalog: 'catalog'
+  };
+  const MIGRATION_FLAG_KEY = 'ASFOUR_CLOUD_MIGRATION_DONE';
+
+  const cloud = {
+    F: null, app: null, auth: null, db: null, user: null,
+    unsubs: [],
+    synced: {},            // collection key -> Map(docId -> stable JSON) of what the database has
+    syncedMeta: null,      // stable JSON of meta/app
+    firstServerLoad: {},   // collection key -> true once a server snapshot arrived
+    ready: false,          // true once the first snapshot of every collection arrived
+    pendingWrites: 0,
+    migrationChecked: false,
+    renderTimer: null
+  };
+
+  // Storage Key (old browser-only storage — kept only to migrate old data)
+  const STORAGE_KEY = 'ASFOUR_CAR_SERVICE_CRM_V1';
+  const LEGACY_STORAGE_KEY = 'AUTOCARE_CRM_DATA_V1';
+
+  // Application State
+  let appState = {
+    clients: [],
+    vehicles: [],
+    visits: [],
+    partsCatalog: [],
+    invoiceCounter: 1000,
+    settings: { defaultDailyKm: 40, alertDays: 14, alertKm: 1000, contactSnoozeDays: 7 },
+    activeVehicleId: null,
+    currentFilter: 'all',
+    searchQuery: ''
+  };
+
+  // DOM Elements Cache
+  const elements = {
+    // Header Stats
+    totalClientsCount: document.getElementById('totalClientsCount'),
+    totalVehiclesCount: document.getElementById('totalVehiclesCount'),
+    totalVisitsCount: document.getElementById('totalVisitsCount'),
+
+    // Search & Sidebar
+    mainSearchInput: document.getElementById('mainSearchInput'),
+    btnClearSearch: document.getElementById('btnClearSearch'),
+    searchQuickTags: document.getElementById('searchQuickTags'),
+    clientListBadge: document.getElementById('clientListBadge'),
+    clientsListContainer: document.getElementById('clientsListContainer'),
+    filterChips: document.querySelectorAll('.filter-chip'),
+
+    // Vehicle Details
+    emptyVehicleView: document.getElementById('emptyVehicleView'),
+    activeVehicleView: document.getElementById('activeVehicleView'),
+    bannerPlateBox: document.getElementById('bannerPlateBox'),
+    bannerPlateText: document.getElementById('bannerPlateText'),
+    bannerCarTitle: document.getElementById('bannerCarTitle'),
+    bannerClientName: document.getElementById('bannerClientName'),
+    bannerClientPhone: document.getElementById('bannerClientPhone'),
+    bannerLastOdo: document.getElementById('bannerLastOdo'),
+    btnLogNewVisit: document.getElementById('btnLogNewVisit'),
+    btnEditClient: document.getElementById('btnEditClient'),
+    btnShareClientPortal: document.getElementById('btnShareClientPortal'),
+    btnDeleteVehicle: document.getElementById('btnDeleteVehicle'),
+    btnEmptyNewClient: document.getElementById('btnEmptyNewClient'),
+
+    // Wear Tracker
+    currentOdometerInput: document.getElementById('currentOdometerInput'),
+    wearItemsGrid: document.getElementById('wearItemsGrid'),
+
+    // Visits & Timeline
+    visitCountBadge: document.getElementById('visitCountBadge'),
+    totalSpentBadge: document.getElementById('totalSpentBadge'),
+    visitsTimeline: document.getElementById('visitsTimeline'),
+
+    // Modals
+    clientModal: document.getElementById('clientModal'),
+    clientForm: document.getElementById('clientForm'),
+    clientModalTitle: document.getElementById('clientModalTitle'),
+    editClientId: document.getElementById('editClientId'),
+    addToClientId: document.getElementById('addToClientId'),
+    btnAddCarToClient: document.getElementById('btnAddCarToClient'),
+    clientNameInput: document.getElementById('clientNameInput'),
+    clientPhoneInput: document.getElementById('clientPhoneInput'),
+    carPlateLettersInput: document.getElementById('carPlateLettersInput'),
+    carPlateNumbersInput: document.getElementById('carPlateNumbersInput'),
+    carInitialOdoInput: document.getElementById('carInitialOdoInput'),
+    carMakeInput: document.getElementById('carMakeInput'),
+    carModelInput: document.getElementById('carModelInput'),
+    clientNotesInput: document.getElementById('clientNotesInput'),
+    btnOpenNewClientModal: document.getElementById('btnOpenNewClientModal'),
+    btnCloseClientModal: document.getElementById('btnCloseClientModal'),
+    btnCancelClientModal: document.getElementById('btnCancelClientModal'),
+
+    // Visit Modal
+    visitModal: document.getElementById('visitModal'),
+    visitForm: document.getElementById('visitForm'),
+    visitModalCarTitle: document.getElementById('visitModalCarTitle'),
+    visitModalPlateBadge: document.getElementById('visitModalPlateBadge'),
+    visitModalClientName: document.getElementById('visitModalClientName'),
+    visitDateInput: document.getElementById('visitDateInput'),
+    visitOdoInput: document.getElementById('visitOdoInput'),
+    visitNotesInput: document.getElementById('visitNotesInput'),
+    visitItemsTableBody: document.getElementById('visitItemsTableBody'),
+    visitTotalAmount: document.getElementById('visitTotalAmount'),
+    btnAddOilItem: document.getElementById('btnAddOilItem'),
+    btnAddOilFilterItem: document.getElementById('btnAddOilFilterItem'),
+    btnAddAirFilterItem: document.getElementById('btnAddAirFilterItem'),
+    btnAddBrakeItem: document.getElementById('btnAddBrakeItem'),
+    btnAddNewCustomItem: document.getElementById('btnAddNewCustomItem'),
+    btnCloseVisitModal: document.getElementById('btnCloseVisitModal'),
+    btnCancelVisitModal: document.getElementById('btnCancelVisitModal'),
+
+    // Invoice Modal
+    invoiceModal: document.getElementById('invoiceModal'),
+    btnCloseInvoiceModal: document.getElementById('btnCloseInvoiceModal'),
+    btnCloseInvoiceBtn: document.getElementById('btnCloseInvoiceBtn'),
+    btnPrintInvoiceBtn: document.getElementById('btnPrintInvoiceBtn'),
+    invNumber: document.getElementById('invNumber'),
+    invDate: document.getElementById('invDate'),
+    invClientName: document.getElementById('invClientName'),
+    invClientPhone: document.getElementById('invClientPhone'),
+    invCarDetails: document.getElementById('invCarDetails'),
+    invCarPlate: document.getElementById('invCarPlate'),
+    invCarOdo: document.getElementById('invCarOdo'),
+    invItemsBody: document.getElementById('invItemsBody'),
+    invTotalAmount: document.getElementById('invTotalAmount'),
+    invNotesBox: document.getElementById('invNotesBox'),
+    invNotesText: document.getElementById('invNotesText'),
+
+    // Backup & Restore
+    btnExportData: document.getElementById('btnExportData'),
+    btnImportData: document.getElementById('btnImportData'),
+    importFileInput: document.getElementById('importFileInput'),
+    toastContainer: document.getElementById('toastContainer'),
+
+    // Parts & Labor Catalog Elements
+    btnOpenCatalogModal: document.getElementById('btnOpenCatalogModal'),
+    catalogModal: document.getElementById('catalogModal'),
+    btnCloseCatalogModal: document.getElementById('btnCloseCatalogModal'),
+    catalogSearchInput: document.getElementById('catalogSearchInput'),
+    catalogFilterTabs: document.querySelectorAll('.catalog-tab-btn'),
+    btnOpenAddPartModal: document.getElementById('btnOpenAddPartModal'),
+    btnLoadPresetCatalog: document.getElementById('btnLoadPresetCatalog'),
+    btnClearAllData: document.getElementById('btnClearAllData'),
+    catalogTableBody: document.getElementById('catalogTableBody'),
+    countCatAll: document.getElementById('countCatAll'),
+    countCatPart: document.getElementById('countCatPart'),
+    countCatService: document.getElementById('countCatService'),
+    countCatLabor: document.getElementById('countCatLabor'),
+
+    // Single Part Form Modal
+    partItemModal: document.getElementById('partItemModal'),
+    partItemForm: document.getElementById('partItemForm'),
+    partModalTitle: document.getElementById('partModalTitle'),
+    btnClosePartItemModal: document.getElementById('btnClosePartItemModal'),
+    btnCancelPartItemModal: document.getElementById('btnCancelPartItemModal'),
+    editPartItemId: document.getElementById('editPartItemId'),
+    partTypeSelect: document.getElementById('partTypeSelect'),
+    partCategorySelect: document.getElementById('partCategorySelect'),
+    partNameInput: document.getElementById('partNameInput'),
+    partCodeInput: document.getElementById('partCodeInput'),
+    partSpecsInput: document.getElementById('partSpecsInput'),
+    partIntervalGroup: document.getElementById('partIntervalGroup'),
+    partIntervalInput: document.getElementById('partIntervalInput'),
+    partCostInput: document.getElementById('partCostInput'),
+    partBuyCostInput: document.getElementById('partBuyCostInput'),
+
+    // Visit Quick Picker
+    visitCatalogSelect: document.getElementById('visitCatalogSelect'),
+    btnInsertFromCatalog: document.getElementById('btnInsertFromCatalog'),
+
+    // Phase 1
+    carColorInput: document.getElementById('carColorInput'),
+    bannerCarColor: document.getElementById('bannerCarColor'),
+    odoEstimateHint: document.getElementById('odoEstimateHint'),
+    visitModalTitle: document.getElementById('visitModalTitle'),
+    partMonthsInput: document.getElementById('partMonthsInput'),
+    btnOpenFollowUp: document.getElementById('btnOpenFollowUp'),
+    followUpCount: document.getElementById('followUpCount'),
+    followUpModal: document.getElementById('followUpModal'),
+    btnCloseFollowUp: document.getElementById('btnCloseFollowUp'),
+    followUpList: document.getElementById('followUpList'),
+    followUpSummary: document.getElementById('followUpSummary'),
+    setDefaultDailyKm: document.getElementById('setDefaultDailyKm'),
+    setAlertDays: document.getElementById('setAlertDays'),
+    setAlertKm: document.getElementById('setAlertKm'),
+    fuHideContacted: document.getElementById('fuHideContacted'),
+    fuSnoozeDaysLabel: document.getElementById('fuSnoozeDaysLabel'),
+
+    // Cloud / login
+    loginOverlay: document.getElementById('loginOverlay'),
+    loginForm: document.getElementById('loginForm'),
+    loginEmail: document.getElementById('loginEmail'),
+    loginPassword: document.getElementById('loginPassword'),
+    btnLogin: document.getElementById('btnLogin'),
+    loginError: document.getElementById('loginError'),
+    loginStatus: document.getElementById('loginStatus'),
+    loginLogo: document.getElementById('loginLogo'),
+    syncStatus: document.getElementById('syncStatus'),
+    syncStatusText: document.getElementById('syncStatusText'),
+    userChip: document.getElementById('userChip'),
+    btnLogout: document.getElementById('btnLogout')
+  };
+
+  // --- INITIALIZATION ---
+  function initApp() {
+    getSettings();
+    bindEvents();
+    bindFollowUpEvents();
+    bindCloudUI();
+    renderAllFromData();
+
+    const start = () => {
+      if (window.AsfoorFirebase) {
+        initCloud();
+      } else {
+        elements.loginStatus.textContent = '';
+        elements.loginError.innerHTML = 'مقدرناش نحمّل النظام — اتأكد إن الجهاز متصل بالإنترنت وافتح الصفحة تاني.';
+        elements.btnLogin.disabled = true;
+      }
+    };
+    if (window.AsfoorFirebase || window.AsfoorFirebaseError) start();
+    else window.addEventListener('asfoor-firebase-ready', start, { once: true });
+  }
+
+  // Re-render everything after data changed (locally or from another device)
+  function renderAllFromData() {
+    renderHeaderStats();
+    renderClientsList();
+    renderPartsCatalogTable();
+    renderCatalogQuickPicker();
+    const active = appState.activeVehicleId && appState.vehicles.find(v => v.id === appState.activeVehicleId);
+    if (active) {
+      // don't reset the calculator while the user is typing in it
+      if (document.activeElement !== elements.currentOdometerInput) selectVehicle(active.id);
+    } else if (appState.vehicles.length > 0) {
+      selectVehicle(appState.vehicles[0].id);
+    } else {
+      showEmptyState();
+    }
+    if (elements.followUpModal && elements.followUpModal.style.display === 'flex') renderFollowUpList();
+  }
+
+  function scheduleRender() {
+    clearTimeout(cloud.renderTimer);
+    cloud.renderTimer = setTimeout(renderAllFromData, 60);
+  }
+
+  // ---------- Stable JSON (sorted keys) so we only write what really changed ----------
+  function stableStringify(v) {
+    if (v === null || typeof v !== 'object') return JSON.stringify(v);
+    if (Array.isArray(v)) return '[' + v.map(stableStringify).join(',') + ']';
+    return '{' + Object.keys(v).sort().map(k => JSON.stringify(k) + ':' + stableStringify(v[k])).join(',') + '}';
+  }
+  function cleanForCloud(obj) { return JSON.parse(JSON.stringify(obj)); } // drops undefined values
+
+  function idTimestamp(item) {
+    const m = /_(\d{10,})_/.exec(item && item.id || '');
+    return m ? Number(m[1]) : 0;
+  }
+
+  function getMetaDoc() {
+    return cleanForCloud({ invoiceCounter: appState.invoiceCounter || 1000, settings: getSettings() });
+  }
+
+  // ---------- Cloud setup ----------
+  function initCloud() {
+    const F = window.AsfoorFirebase;
+    cloud.F = F;
+    try {
+      cloud.app = F.initializeApp(FIREBASE_CONFIG);
+      cloud.auth = F.getAuth(cloud.app);
+      cloud.db = F.initializeFirestore(cloud.app, {
+        // keeps a full copy on this device: works offline and syncs when the internet is back
+        localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() })
+      });
+    } catch (e) {
+      console.error(e);
+      elements.loginError.textContent = 'خطأ في إعداد قاعدة البيانات: ' + e.message;
+      return;
+    }
+    elements.loginStatus.textContent = '';
+    F.onAuthStateChanged(cloud.auth, user => {
+      if (user) onSignedIn(user); else onSignedOut();
+    });
+  }
+
+  function onSignedIn(user) {
+    cloud.user = user;
+    elements.loginOverlay.style.display = 'none';
+    elements.userChip.textContent = user.email || '';
+    elements.userChip.title = user.email || '';
+    startListeners();
+    updateSyncStatus();
+  }
+
+  function onSignedOut() {
+    cloud.user = null;
+    stopListeners();
+    appState.clients = [];
+    appState.vehicles = [];
+    appState.visits = [];
+    appState.partsCatalog = [];
+    appState.activeVehicleId = null;
+    renderAllFromData();
+    elements.userChip.textContent = '';
+    elements.loginOverlay.style.display = 'flex';
+    elements.loginPassword.value = '';
+    elements.btnLogin.disabled = false;
+    setTimeout(() => elements.loginEmail.focus(), 50);
+  }
+
+  function stopListeners() {
+    cloud.unsubs.forEach(u => { try { u(); } catch (e) {} });
+    cloud.unsubs = [];
+    cloud.synced = {};
+    cloud.syncedMeta = null;
+    cloud.firstServerLoad = {};
+    cloud.ready = false;
+    cloud.migrationChecked = false;
+  }
+
+  function startListeners() {
+    stopListeners();
+    const F = cloud.F;
+    const keys = Object.keys(CLOUD_COLLECTIONS);
+    const got = new Set();
+
+    const markLoaded = (key, fromCache) => {
+      got.add(key);
+      if (!fromCache) cloud.firstServerLoad[key] = true;
+      if (!cloud.ready && got.size === keys.length + 1) {
+        cloud.ready = true;
+      }
+      maybeMigrateLocalData();
+    };
+
+    keys.forEach(key => {
+      const unsub = F.onSnapshot(F.collection(cloud.db, CLOUD_COLLECTIONS[key]), { includeMetadataChanges: true }, snap => {
+        const arr = [];
+        const map = new Map();
+        snap.forEach(d => {
+          const data = d.data();
+          data.id = d.id;
+          arr.push(data);
+          map.set(d.id, stableStringify(data));
+        });
+        // newest first (same order the app used before)
+        arr.sort((a, b) => idTimestamp(b) - idTimestamp(a));
+        appState[key] = arr;
+        cloud.synced[key] = map;
+        markLoaded(key, snap.metadata.fromCache);
+        updateSyncStatus(snap.metadata);
+        scheduleRender();
+      }, err => handleCloudError(err));
+      cloud.unsubs.push(unsub);
+    });
+
+    const unsubMeta = F.onSnapshot(F.doc(cloud.db, 'meta', 'app'), { includeMetadataChanges: true }, snap => {
+      if (snap.exists()) {
+        const m = snap.data();
+        if (m.invoiceCounter) appState.invoiceCounter = m.invoiceCounter;
+        if (m.settings) appState.settings = m.settings;
+        cloud.syncedMeta = stableStringify(cleanForCloud({ invoiceCounter: m.invoiceCounter, settings: m.settings }));
+      } else {
+        cloud.syncedMeta = null;
+      }
+      markLoaded('meta', snap.metadata.fromCache);
+      if (!snap.metadata.fromCache) cloud.firstServerLoad.meta = true;
+      scheduleRender();
+    }, err => handleCloudError(err));
+    cloud.unsubs.push(unsubMeta);
+  }
+
+  function handleCloudError(err) {
+    console.error('Cloud error', err);
+    if (err && err.code === 'permission-denied') {
+      showToast('الحساب ده مش مسموح له يفتح البيانات — لازم إيميله يتضاف في قواعد الحماية (Rules)', 'error');
+    } else {
+      showToast('مشكلة في الاتصال بقاعدة البيانات: ' + (err && err.message ? err.message : ''), 'error');
+    }
+  }
+
+  // ---------- Save: write only changed / deleted documents ----------
+  function saveData() {
+    renderHeaderStats();
+    if (!cloud.user || !cloud.db) return;
+    if (!cloud.ready) {
+      showToast('البيانات لسه بتتحمّل من قاعدة البيانات — استنى ثانية وجرب تاني', 'error');
+      return;
+    }
+    const F = cloud.F;
+    const ops = [];
+
+    Object.keys(CLOUD_COLLECTIONS).forEach(key => {
+      const col = CLOUD_COLLECTIONS[key];
+      const before = cloud.synced[key] || new Map();
+      const seen = new Set();
+      (appState[key] || []).forEach(item => {
+        if (!item || !item.id) return;
+        const clean = cleanForCloud(item);
+        const str = stableStringify(clean);
+        seen.add(item.id);
+        if (before.get(item.id) !== str) {
+          ops.push({ type: 'set', ref: F.doc(cloud.db, col, item.id), data: clean });
+          before.set(item.id, str);
+        }
+      });
+      Array.from(before.keys()).forEach(id => {
+        if (!seen.has(id)) {
+          ops.push({ type: 'delete', ref: F.doc(cloud.db, col, id) });
+          before.delete(id);
+        }
+      });
+      cloud.synced[key] = before;
+    });
+
+    const meta = getMetaDoc();
+    const metaStr = stableStringify(meta);
+    if (metaStr !== cloud.syncedMeta) {
+      ops.push({ type: 'set', ref: F.doc(cloud.db, 'meta', 'app'), data: meta });
+      cloud.syncedMeta = metaStr;
+    }
+
+    if (ops.length === 0) return;
+
+    // Firestore allows up to 500 operations per batch
+    for (let i = 0; i < ops.length; i += 450) {
+      const batch = F.writeBatch(cloud.db);
+      ops.slice(i, i + 450).forEach(op => {
+        if (op.type === 'set') batch.set(op.ref, op.data);
+        else batch.delete(op.ref);
+      });
+      cloud.pendingWrites++;
+      updateSyncStatus();
+      batch.commit()
+        .then(() => { cloud.pendingWrites = Math.max(0, cloud.pendingWrites - 1); updateSyncStatus(); })
+        .catch(err => {
+          cloud.pendingWrites = Math.max(0, cloud.pendingWrites - 1);
+          updateSyncStatus();
+          handleCloudError(err);
+        });
+    }
+  }
+
+  // ---------- Sync status badge ----------
+  function updateSyncStatus() {
+    const el = elements.syncStatus;
+    if (!el) return;
+    el.classList.remove('ok', 'pending', 'offline');
+    if (!navigator.onLine) {
+      el.classList.add('offline');
+      elements.syncStatusText.textContent = cloud.pendingWrites
+        ? `بدون إنترنت — ${cloud.pendingWrites} تغيير هيترفع لما النت يرجع`
+        : 'بدون إنترنت — شغال من نسخة الجهاز';
+    } else if (cloud.pendingWrites > 0) {
+      el.classList.add('pending');
+      elements.syncStatusText.textContent = 'جاري رفع التغييرات...';
+    } else if (cloud.ready) {
+      el.classList.add('ok');
+      elements.syncStatusText.textContent = 'متزامن';
+    } else {
+      elements.syncStatusText.textContent = 'جاري التحميل...';
+    }
+  }
+
+  // ---------- One-time migration of old browser-only data ----------
+  function readOldLocalData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (!raw) return null;
+      const d = JSON.parse(raw);
+      const has = (d.clients && d.clients.length) || (d.vehicles && d.vehicles.length) ||
+                  (d.visits && d.visits.length) || (d.partsCatalog && d.partsCatalog.length);
+      return has ? d : null;
+    } catch (e) { return null; }
+  }
+
+  function maybeMigrateLocalData() {
+    if (cloud.migrationChecked || !cloud.ready) return;
+    // decide only on real server data, never on an empty offline cache
+    const allServer = Object.keys(CLOUD_COLLECTIONS).every(k => cloud.firstServerLoad[k]) && cloud.firstServerLoad.meta;
+    if (!allServer) return;
+    cloud.migrationChecked = true;
+    if (localStorage.getItem(MIGRATION_FLAG_KEY)) return;
+    const old = readOldLocalData();
+    if (!old) return;
+    const cloudEmpty = Object.keys(CLOUD_COLLECTIONS).every(k => (appState[k] || []).length === 0);
+    if (!cloudEmpty) return;
+
+    setTimeout(() => {
+      const msg = `لقينا بيانات قديمة محفوظة على المتصفح ده:\n` +
+        `${(old.clients || []).length} عميل، ${(old.vehicles || []).length} عربية، ${(old.visits || []).length} زيارة، ${(old.partsCatalog || []).length} بند في الدليل.\n\n` +
+        `ترفعها لقاعدة البيانات الأونلاين؟`;
+      if (!confirm(msg)) {
+        localStorage.setItem(MIGRATION_FLAG_KEY, 'declined');
+        showToast('تمام — البيانات القديمة لسه موجودة على المتصفح لو احتجتها', 'info');
+        return;
+      }
+      appState.clients = old.clients || [];
+      appState.vehicles = old.vehicles || [];
+      appState.visits = old.visits || [];
+      appState.partsCatalog = old.partsCatalog || [];
+      if (old.invoiceCounter) appState.invoiceCounter = old.invoiceCounter;
+      if (old.settings) appState.settings = old.settings;
+      saveData();
+      localStorage.setItem(MIGRATION_FLAG_KEY, new Date().toISOString());
+      renderAllFromData();
+      showToast('تم رفع البيانات القديمة لقاعدة البيانات بنجاح', 'success');
+    }, 300);
+  }
+
+  // ---------- Login / logout UI ----------
+  function bindCloudUI() {
+    const headerLogo = document.querySelector('.brand-logo-img');
+    if (headerLogo && elements.loginLogo) elements.loginLogo.src = headerLogo.src;
+
+    elements.loginForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!cloud.auth) return;
+      elements.loginError.textContent = '';
+      elements.btnLogin.disabled = true;
+      elements.loginStatus.textContent = 'جاري الدخول...';
+      try {
+        await cloud.F.signInWithEmailAndPassword(cloud.auth, elements.loginEmail.value.trim(), elements.loginPassword.value);
+      } catch (err) {
+        const code = err && err.code || '';
+        let msg = 'حصلت مشكلة في الدخول: ' + (err && err.message || '');
+        if (['auth/invalid-credential', 'auth/wrong-password', 'auth/user-not-found', 'auth/invalid-email'].includes(code)) msg = 'الإيميل أو كلمة المرور غلط';
+        else if (code === 'auth/too-many-requests') msg = 'محاولات كتير غلط — استنى شوية وجرب تاني';
+        else if (code === 'auth/network-request-failed') msg = 'مفيش إنترنت — أول دخول لازم يكون والنت شغال';
+        elements.loginError.textContent = msg;
+      } finally {
+        elements.btnLogin.disabled = false;
+        elements.loginStatus.textContent = '';
+      }
+    });
+
+    elements.btnLogout.addEventListener('click', async () => {
+      if (!cloud.auth || !cloud.user) return;
+      if (cloud.pendingWrites > 0 && !confirm('فيه تغييرات لسه ماترفعتش. لو خرجت دلوقتي ممكن تضيع. تخرج برضه؟')) return;
+      if (!confirm('تسجيل الخروج من النظام؟')) return;
+      await cloud.F.signOut(cloud.auth);
+    });
+
+    window.addEventListener('online', updateSyncStatus);
+    window.addEventListener('offline', updateSyncStatus);
+  }
+
+  // Helper ID Generator
+  function generateId(prefix = 'id') {
+    return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+  }
+
+  // Helper Arabic String Normalizer for fuzzy search
+  function normalizeArabic(str) {
+    if (!str) return '';
+    return str
+      .toString()
+      .trim()
+      .toLowerCase()
+      .replace(/[أإآ]/g, 'ا')
+      .replace(/ة/g, 'ه')
+      .replace(/ى/g, 'ي')
+      .replace(/\s+/g, '');
+  }
+
+  // Format Numbers with Commas
+  function formatNumber(num) {
+    if (num === null || num === undefined || isNaN(num)) return '0';
+    return Number(num).toLocaleString('ar-EG');
+  }
+
+  // --- HEADER STATS ---
+  function renderHeaderStats() {
+    if (elements.totalClientsCount) elements.totalClientsCount.textContent = appState.clients.length;
+    if (elements.totalVehiclesCount) elements.totalVehiclesCount.textContent = appState.vehicles.length;
+    if (elements.totalVisitsCount) elements.totalVisitsCount.textContent = appState.visits.length;
+    updateFollowUpBadge();
+  }
+
+  // --- CUSTOMER FOLLOW-UP (who to call) ---
+  function toWhatsAppNumber(phone) {
+    let d = String(phone || '').replace(/\D/g, '');
+    if (d.startsWith('00')) d = d.slice(2);
+    if (d.length === 11 && d.startsWith('01')) d = '2' + d;
+    else if (d.length === 10 && d.startsWith('1')) d = '20' + d;
+    return d;
+  }
+
+  function getFollowUpList() {
+    const st = getSettings();
+    const today = todayLocalISO();
+    return appState.vehicles.map(vehicle => {
+      const due = getVehicleDueItems(vehicle).filter(d => d.ev.status !== 'good');
+      if (due.length === 0) return null;
+      const client = appState.clients.find(c => c.id === vehicle.clientId);
+      const status = due.some(d => d.ev.status === 'overdue') ? 'overdue' : 'due-soon';
+      const earliest = due.map(d => d.ev.predictedDate).filter(Boolean).sort()[0] || null;
+      const contactedDaysAgo = vehicle.lastContactedAt ? daysBetween(vehicle.lastContactedAt, today) : null;
+      const snoozed = contactedDaysAgo !== null && contactedDaysAgo < Number(st.contactSnoozeDays);
+      return { vehicle, client, info: getOdometerInfo(vehicle), due, status, earliest, contactedDaysAgo, snoozed };
+    }).filter(Boolean).sort((a, b) =>
+      (a.snoozed - b.snoozed) ||
+      ((a.status === 'overdue' ? 0 : 1) - (b.status === 'overdue' ? 0 : 1)) ||
+      String(a.earliest || '9999').localeCompare(String(b.earliest || '9999')));
+  }
+
+  function updateFollowUpBadge() {
+    if (!elements.followUpCount) return;
+    const n = getFollowUpList().filter(x => !x.snoozed).length;
+    elements.followUpCount.textContent = n;
+    elements.followUpCount.classList.toggle('zero', n === 0);
+  }
+
+  function openFollowUpModal() {
+    const st = getSettings();
+    elements.setDefaultDailyKm.value = st.defaultDailyKm;
+    elements.setAlertDays.value = st.alertDays;
+    elements.setAlertKm.value = st.alertKm;
+    elements.fuSnoozeDaysLabel.textContent = st.contactSnoozeDays;
+    renderFollowUpList();
+    elements.followUpModal.style.display = 'flex';
+  }
+
+  function renderFollowUpList() {
+    const list = getFollowUpList();
+    const hide = elements.fuHideContacted.checked;
+    const visible = list.filter(x => !(hide && x.snoozed));
+    const overdueN = list.filter(x => x.status === 'overdue' && !x.snoozed).length;
+    const soonN = list.filter(x => x.status === 'due-soon' && !x.snoozed).length;
+    const snoozedN = list.filter(x => x.snoozed).length;
+
+    elements.followUpSummary.innerHTML = `
+      <span class="badge" style="background:rgba(239,68,68,.15);color:#f87171;"><i class="fa-solid fa-triangle-exclamation"></i> متأخر: ${overdueN}</span>
+      <span class="badge" style="background:rgba(245,158,11,.15);color:#fbbf24;"><i class="fa-solid fa-circle-exclamation"></i> قرّب: ${soonN}</span>
+      <span class="badge"><i class="fa-solid fa-check"></i> اتكلموا مؤخراً: ${snoozedN}</span>
+    `;
+
+    elements.followUpList.innerHTML = '';
+    if (visible.length === 0) {
+      elements.followUpList.innerHTML = `
+        <div style="text-align:center;padding:40px;color:var(--text-muted);">
+          <i class="fa-solid fa-mug-hot" style="font-size:2rem;margin-bottom:10px;display:block;opacity:.5;"></i>
+          مفيش عربيات محتاجة متابعة دلوقتي.
+        </div>`;
+      return;
+    }
+
+    visible.forEach(entry => {
+      const { vehicle, client, info, due, status, contactedDaysAgo, snoozed } = entry;
+      const plate = vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`;
+      const names = due.map(d => d.item.name);
+      const msg = `أهلاً أستاذ/ة ${client ? client.name : ''} 👋\n` +
+        `معاك مركز عصفور لصيانة السيارات.\n` +
+        `حسب سجل صيانة عربيتك ${vehicle.make} ${vehicle.model} (${plate})، ` +
+        `${status === 'overdue' ? 'ميعاد' : 'قرّب ميعاد'}: ${names.join('، ')}.\n` +
+        `تحب نحجزلك ميعاد؟`;
+      const wa = client && client.phone ? `https://wa.me/${toWhatsAppNumber(client.phone)}?text=${encodeURIComponent(msg)}` : null;
+
+      const chips = due.map(d => `<span class="fu-chip ${d.ev.status === 'overdue' ? 'overdue' : ''}">${escapeHtml(d.item.name)} — ${describeDue(d.ev)}</span>`).join('');
+      const contactText = contactedDaysAgo === null ? 'لم يتم التواصل بعد'
+        : contactedDaysAgo === 0 ? 'تم التواصل النهارده' : `آخر تواصل من ${formatNumber(contactedDaysAgo)} يوم`;
+
+      const card = document.createElement('div');
+      card.className = `fu-card ${status === 'overdue' ? 'overdue' : ''} ${snoozed ? 'snoozed' : ''}`;
+      card.innerHTML = `
+        <div>
+          <div class="fu-car">${colorDotHtml(vehicle.color)}${escapeHtml(vehicle.make)} ${escapeHtml(vehicle.model)} <span class="plate-mini">${escapeHtml(plate)}</span></div>
+          <div class="fu-sub"><i class="fa-regular fa-user"></i> ${escapeHtml(client ? client.name : '-')} — <span dir="ltr">${escapeHtml(client ? client.phone : '')}</span></div>
+          <div class="fu-sub"><i class="fa-solid fa-gauge"></i> آخر قراءة ${formatNumber(info.lastOdo)} — المتوقع ~${formatNumber(info.estimated)} كم</div>
+          <div class="fu-sub"><i class="fa-solid fa-clock-rotate-left"></i> ${contactText}</div>
+        </div>
+        <div class="fu-chips">${chips}</div>
+        <div class="fu-actions">
+          ${wa ? `<a class="wa" href="${wa}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> واتساب</a>` : ''}
+          ${client && client.phone ? `<a href="tel:${escapeHtml(client.phone)}"><i class="fa-solid fa-phone"></i> اتصال</a>` : ''}
+          <button type="button" class="done"><i class="fa-solid fa-check"></i> تم التواصل</button>
+          <button type="button" class="open"><i class="fa-solid fa-car"></i> فتح</button>
+        </div>
+      `;
+      card.querySelector('.done').addEventListener('click', () => {
+        vehicle.lastContactedAt = todayLocalISO();
+        vehicle.contactLog = vehicle.contactLog || [];
+        vehicle.contactLog.push({ date: todayLocalISO(), items: names });
+        saveData();
+        renderFollowUpList();
+        showToast('تم تسجيل التواصل', 'success');
+      });
+      card.querySelector('.open').addEventListener('click', () => {
+        elements.followUpModal.style.display = 'none';
+        selectVehicle(vehicle.id);
+      });
+      elements.followUpList.appendChild(card);
+    });
+  }
+
+  function bindFollowUpEvents() {
+    elements.btnOpenFollowUp.addEventListener('click', openFollowUpModal);
+    elements.btnCloseFollowUp.addEventListener('click', () => { elements.followUpModal.style.display = 'none'; });
+    elements.followUpModal.addEventListener('click', e => { if (e.target === elements.followUpModal) elements.followUpModal.style.display = 'none'; });
+    elements.fuHideContacted.addEventListener('change', renderFollowUpList);
+    const bindSetting = (el, key, min, max) => el.addEventListener('change', () => {
+      const v = Math.min(Math.max(Number(el.value) || 0, min), max);
+      el.value = v;
+      getSettings()[key] = v;
+      saveData();
+      renderFollowUpList();
+      renderClientsList();
+      if (appState.activeVehicleId) selectVehicle(appState.activeVehicleId);
+    });
+    bindSetting(elements.setDefaultDailyKm, 'defaultDailyKm', 1, 500);
+    bindSetting(elements.setAlertDays, 'alertDays', 0, 90);
+    bindSetting(elements.setAlertKm, 'alertKm', 0, 10000);
+  }
+
+  // --- VEHICLE SELECTION & WORKSPACE ---
+  function selectVehicle(vehicleId) {
+    const vehicle = appState.vehicles.find(v => v.id === vehicleId);
+    if (!vehicle) return;
+
+    appState.activeVehicleId = vehicleId;
+
+    // Highlight in sidebar
+    document.querySelectorAll('.client-card').forEach(card => {
+      card.classList.toggle('active', card.dataset.id === vehicleId);
+    });
+
+    const client = appState.clients.find(c => c.id === vehicle.clientId);
+
+    // Switch view
+    elements.emptyVehicleView.style.display = 'none';
+    elements.activeVehicleView.style.display = 'flex';
+
+    // Populate Banner Info
+    elements.bannerPlateText.textContent = vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`;
+    elements.bannerCarTitle.textContent = `${vehicle.make} ${vehicle.model}`;
+    elements.bannerClientName.textContent = client ? client.name : 'عميل غير محدد';
+    elements.bannerClientPhone.textContent = client ? client.phone : '-';
+    elements.bannerCarColor.innerHTML = vehicle.color ? `${colorDotHtml(vehicle.color)} ${escapeHtml(vehicle.color)}` : '';
+    elements.bannerCarColor.style.display = vehicle.color ? '' : 'none';
+
+    // Last real odometer reading
+    const visits = getVehicleVisits(vehicleId);
+    const info = getOdometerInfo(vehicle);
+    elements.bannerLastOdo.textContent = `${formatNumber(info.lastOdo)} كم`;
+
+    // Calculator starts from the last real reading
+    elements.currentOdometerInput.value = info.lastOdo;
+
+    // Render Tracker & History
+    renderWearCalculator(vehicle, info.lastOdo);
+    renderVisitsHistory(vehicle, client, visits);
+  }
+
+  function showEmptyState() {
+    appState.activeVehicleId = null;
+    elements.emptyVehicleView.style.display = 'block';
+    elements.activeVehicleView.style.display = 'none';
+  }
+
+  function getVehicleVisits(vehicleId) {
+    return appState.visits
+      .filter(v => v.vehicleId === vehicleId)
+      .sort((a, b) => new Date(b.date) - new Date(a.date) || b.odometer - a.odometer);
+  }
+
+  // Local (Cairo) date as YYYY-MM-DD, instead of UTC
+  function todayLocalISO() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  // Latest record of every trackable item for a vehicle.
+  // Items are identified by their NAME (not category), so front & rear brake pads
+  // are tracked separately. Items with no interval (labor, one-time checks) are skipped.
+  function getLatestTrackedItems(vehicleId) {
+    const visits = getVehicleVisits(vehicleId);
+    const latest = new Map();
+    visits.forEach(visit => {
+      (visit.items || []).forEach(item => {
+        const intervalKm = Number(item.intervalKm) || 0;
+        const intervalMonths = Number(item.intervalMonths) || 0;
+        if ((intervalKm <= 0 && intervalMonths <= 0) || item.category === 'labor') return;
+        const key = normalizeArabic(item.name);
+        if (!key || latest.has(key)) return;
+        latest.set(key, {
+          ...item,
+          intervalKm,
+          intervalMonths,
+          lastServiceDate: visit.date,
+          lastServiceOdo: Number(visit.odometer) || 0,
+          visitInvoice: visit.invoiceNumber
+        });
+      });
+    });
+    return Array.from(latest.values());
+  }
+
+  // ---------- DATES ----------
+  function parseISODate(d) {
+    const [y, m, dd] = String(d).slice(0, 10).split('-').map(Number);
+    return new Date(y, (m || 1) - 1, dd || 1);
+  }
+  function toISODate(dt) {
+    const pad = n => String(n).padStart(2, '0');
+    return `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
+  }
+  function daysBetween(a, b) { return Math.round((parseISODate(b) - parseISODate(a)) / 86400000); }
+  function addDaysISO(d, n) { const x = parseISODate(d); x.setDate(x.getDate() + Math.round(n)); return toISODate(x); }
+  function addMonthsISO(d, n) {
+    const x = parseISODate(d); const day = x.getDate();
+    x.setMonth(x.getMonth() + n);
+    if (x.getDate() < day) x.setDate(0);
+    return toISODate(x);
+  }
+  function formatDateAr(d) {
+    if (!d) return '-';
+    return parseISODate(d).toLocaleDateString('ar-EG', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function getSettings() {
+    appState.settings = Object.assign({ defaultDailyKm: 40, alertDays: 14, alertKm: 1000, contactSnoozeDays: 7 }, appState.settings || {});
+    return appState.settings;
+  }
+
+  function formatInterval(item) {
+    const parts = [];
+    if (Number(item.intervalKm) > 0) parts.push(`${formatNumber(item.intervalKm)} كم`);
+    if (Number(item.intervalMonths) > 0) parts.push(`${formatNumber(item.intervalMonths)} شهور`);
+    return parts.length ? parts.join(' أو ') : '-';
+  }
+
+  // ---------- CAR COLORS ----------
+  const COLOR_MAP = {
+    'ابيض': '#f5f5f5', 'اسود': '#111111', 'فضي': '#c0c4c8', 'رمادي': '#7d8288', 'احمر': '#d32f2f',
+    'نبيتي': '#6d1b2b', 'ازرق': '#1e63d6', 'كحلي': '#1b2a4a', 'لبني': '#90caf9', 'اخضر': '#2e7d32',
+    'بيج': '#d8c8a8', 'بني': '#6d4c41', 'ذهبي': '#c9a227', 'برتقالي': '#ef6c00', 'اصفر': '#fbc02d'
+  };
+  function colorDotHtml(colorName) {
+    if (!colorName) return '';
+    const key = normalizeArabic(colorName).replace(/ه$/, '');
+    const hex = COLOR_MAP[key] || COLOR_MAP[normalizeArabic(colorName)];
+    return hex
+      ? `<span class="color-dot" style="background:${hex}" title="${escapeHtml(colorName)}"></span>`
+      : `<span class="color-dot unknown" title="${escapeHtml(colorName)}"></span>`;
+  }
+
+  // ---------- ODOMETER: ACTUAL READINGS & ESTIMATE ----------
+  // Every real odometer reading we know: registration, visits, manual entries.
+  function getOdoReadings(vehicle) {
+    const r = [];
+    if (vehicle.createdAt && Number(vehicle.initialOdometer) > 0) {
+      r.push({ date: String(vehicle.createdAt).slice(0, 10), odo: Number(vehicle.initialOdometer) });
+    }
+    appState.visits.forEach(v => {
+      if (v.vehicleId === vehicle.id && v.date && Number(v.odometer) > 0) r.push({ date: v.date, odo: Number(v.odometer) });
+    });
+    (vehicle.odoLog || []).forEach(x => {
+      if (x.date && Number(x.odo) > 0) r.push({ date: x.date, odo: Number(x.odo) });
+    });
+    r.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.odo - b.odo));
+    // Odometers never go down: ignore any reading lower than an earlier one
+    // (e.g. a car registered today, then its old paper visits entered afterwards).
+    const clean = [];
+    r.forEach(x => { if (!clean.length || x.odo >= clean[clean.length - 1].odo) clean.push(x); });
+    return clean;
+  }
+
+  // Last real reading + average km/day + estimated reading for today
+  function getOdometerInfo(vehicle) {
+    const st = getSettings();
+    const today = todayLocalISO();
+    const r = getOdoReadings(vehicle);
+    const fallback = Number(vehicle.currentOdometer || vehicle.initialOdometer) || 0;
+    if (r.length === 0) {
+      return { lastOdo: fallback, lastDate: null, rate: Number(st.defaultDailyKm) || 0, rateSource: 'default', daysSince: 0, estimated: fallback };
+    }
+    const first = r[0];
+    const last = r[r.length - 1];
+    const lastOdo = Math.max(...r.map(x => x.odo), fallback);
+    const span = daysBetween(first.date, last.date);
+    let rate = Number(st.defaultDailyKm) || 0;
+    let rateSource = 'default';
+    if (span >= 14 && lastOdo > first.odo) {
+      rate = (lastOdo - first.odo) / span;
+      rateSource = 'history';
+    }
+    rate = Math.min(Math.max(rate, 0), 500);
+    const daysSince = Math.max(0, daysBetween(last.date, today));
+    return { lastOdo, lastDate: last.date, rate, rateSource, daysSince, estimated: Math.round(lastOdo + rate * daysSince) };
+  }
+
+  function recomputeCurrentOdometer(vehicle) {
+    const readings = getOdoReadings(vehicle);
+    vehicle.currentOdometer = Math.max(Number(vehicle.initialOdometer) || 0, ...readings.map(x => x.odo));
+  }
+
+  // Record a manual reading. Removes older manual readings that are higher (typos).
+  function logOdoReading(vehicle, odo) {
+    const today = todayLocalISO();
+    vehicle.odoLog = (vehicle.odoLog || []).filter(x => x.date !== today && Number(x.odo) <= odo);
+    vehicle.odoLog.push({ date: today, odo });
+    recomputeCurrentOdometer(vehicle);
+  }
+
+  // Evaluate one tracked item against an odometer value (km + months)
+  function evaluateItem(item, odoNow, rate) {
+    const st = getSettings();
+    const today = todayLocalISO();
+    const ev = { kmRemaining: null, targetOdo: null, dueDate: null, daysRemaining: null, predictedDate: null, status: 'good', pct: 0 };
+    const candidates = [];
+
+    if (item.intervalKm > 0) {
+      ev.targetOdo = item.lastServiceOdo + item.intervalKm;
+      ev.kmRemaining = ev.targetOdo - odoNow;
+      ev.pct = Math.max(ev.pct, (odoNow - item.lastServiceOdo) / item.intervalKm);
+      if (rate > 0) candidates.push(addDaysISO(today, ev.kmRemaining / rate));
+    }
+    const months = Number(item.intervalMonths) || 0;
+    if (months > 0 && item.lastServiceDate) {
+      ev.dueDate = addMonthsISO(item.lastServiceDate, months);
+      ev.daysRemaining = daysBetween(today, ev.dueDate);
+      candidates.push(ev.dueDate);
+      const total = Math.max(1, daysBetween(item.lastServiceDate, ev.dueDate));
+      ev.pct = Math.max(ev.pct, (total - ev.daysRemaining) / total);
+    }
+    ev.predictedDate = candidates.length ? candidates.sort()[0] : null;
+    const daysToPredicted = ev.predictedDate ? daysBetween(today, ev.predictedDate) : null;
+
+    if ((ev.kmRemaining !== null && ev.kmRemaining < 0) || (ev.daysRemaining !== null && ev.daysRemaining < 0)) {
+      ev.status = 'overdue';
+    } else if ((ev.kmRemaining !== null && ev.kmRemaining <= Number(st.alertKm)) ||
+               (daysToPredicted !== null && daysToPredicted <= Number(st.alertDays))) {
+      ev.status = 'due-soon';
+    }
+    ev.pct = Math.min(Math.max(Math.round(ev.pct * 100), 0), 100);
+    return ev;
+  }
+
+  function describeDue(ev) {
+    const parts = [];
+    if (ev.kmRemaining !== null) {
+      parts.push(ev.kmRemaining < 0 ? `عدّى بـ ${formatNumber(-ev.kmRemaining)} كم` : `فاضل ${formatNumber(ev.kmRemaining)} كم`);
+    }
+    if (ev.daysRemaining !== null) {
+      parts.push(ev.daysRemaining < 0 ? `متأخر ${formatNumber(-ev.daysRemaining)} يوم` : `فاضل ${formatNumber(ev.daysRemaining)} يوم`);
+    }
+    return parts.join(' • ');
+  }
+
+  // Due status for a vehicle using the ESTIMATED odometer for today
+  function getVehicleDueItems(vehicle) {
+    const info = getOdometerInfo(vehicle);
+    const odoNow = Math.max(info.estimated, info.lastOdo);
+    return getLatestTrackedItems(vehicle.id).map(item => ({ item, ev: evaluateItem(item, odoNow, info.rate) }));
+  }
+
+  // Next unique invoice number (never reused, even after deletions)
+  function nextInvoiceNumber() {
+    let maxNum = Number(appState.invoiceCounter) || 1000;
+    appState.visits.forEach(v => {
+      const m = /(\d+)$/.exec(v.invoiceNumber || '');
+      if (m) maxNum = Math.max(maxNum, Number(m[1]));
+    });
+    appState.invoiceCounter = maxNum + 1;
+    return `INV-${appState.invoiceCounter}`;
+  }
+
+  // --- CORE FEATURE: SMART WEAR & LIFESPAN CALCULATOR ---
+  function renderOdoEstimateHint(vehicle, info, shownOdo) {
+    const el = elements.odoEstimateHint;
+    if (!el) return;
+    const src = info.rateSource === 'history'
+      ? 'محسوب من سجل العربية'
+      : 'متوسط افتراضي — هيتظبط لوحده بعد زيارتين';
+    const showEstimate = info.estimated > info.lastOdo;
+    el.innerHTML = `
+      <span><i class="fa-solid fa-gauge-high"></i> آخر قراءة فعلية: <strong>${formatNumber(info.lastOdo)} كم</strong>
+        ${info.lastDate ? `(${formatDateAr(info.lastDate)} — ${info.daysSince === 0 ? 'النهارده' : `من ${formatNumber(info.daysSince)} يوم`})` : ''}</span>
+      <span><i class="fa-solid fa-road"></i> متوسط السير: <strong>~${formatNumber(Math.round(info.rate))} كم/يوم</strong> (${src})</span>
+      ${showEstimate ? `<span class="est"><i class="fa-solid fa-wand-magic-sparkles"></i> العداد المتوقع النهارده: <strong class="est">~${formatNumber(info.estimated)} كم</strong></span>
+        <button type="button" class="btn-chip" id="btnUseEstimate">احسب على المتوقع</button>` : ''}
+      ${Number(shownOdo) !== info.lastOdo ? `<button type="button" class="btn-chip" id="btnUseActual">رجوع لآخر قراءة فعلية</button>` : ''}
+    `;
+    const useEst = el.querySelector('#btnUseEstimate');
+    if (useEst) useEst.addEventListener('click', () => {
+      elements.currentOdometerInput.value = info.estimated;
+      renderWearCalculator(vehicle, info.estimated);
+    });
+    const useAct = el.querySelector('#btnUseActual');
+    if (useAct) useAct.addEventListener('click', () => {
+      elements.currentOdometerInput.value = info.lastOdo;
+      renderWearCalculator(vehicle, info.lastOdo);
+    });
+  }
+
+  function renderWearCalculator(vehicle, currentOdo) {
+    elements.wearItemsGrid.innerHTML = '';
+
+    const info = getOdometerInfo(vehicle);
+    renderOdoEstimateHint(vehicle, info, currentOdo);
+    const currentKm = Number(currentOdo) || 0;
+    const items = getLatestTrackedItems(vehicle.id);
+
+    if (items.length === 0) {
+      elements.wearItemsGrid.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 30px; background: rgba(0,0,0,0.2); border-radius: 8px; color: var(--text-muted);">
+          <i class="fa-solid fa-clipboard-list" style="font-size: 2rem; margin-bottom: 10px; color: var(--accent-cyan);"></i>
+          <p>لا توجد بنود لها مدى تغيير مسجلة لهذه السيارة حتى الآن.</p>
+          <button class="btn btn-primary" style="margin-top: 10px;" onclick="document.getElementById('btnLogNewVisit').click()">
+            <i class="fa-solid fa-plus"></i> تسجيل أول زيارة صيانة الآن
+          </button>
+        </div>
+      `;
+      return;
+    }
+
+    // Overdue first, then due-soon, then good
+    const order = { 'overdue': 0, 'due-soon': 1, 'good': 2 };
+    const evaluated = items
+      .map(item => ({ item, ev: evaluateItem(item, currentKm, info.rate) }))
+      .sort((a, b) => order[a.ev.status] - order[b.ev.status]);
+
+    evaluated.forEach(({ item, ev }) => {
+      let statusClass, statusLabel, statusIcon, remainingText;
+      const dueText = describeDue(ev);
+
+      if (ev.status === 'overdue') {
+        statusClass = 'status-danger';
+        statusLabel = 'متأخر — لازم يتغير';
+        statusIcon = 'fa-triangle-exclamation';
+        remainingText = `${dueText} — يجب التغيير فوراً`;
+      } else if (ev.status === 'due-soon') {
+        statusClass = 'status-warning';
+        statusLabel = 'اقترب موعد التغيير';
+        statusIcon = 'fa-circle-exclamation';
+        remainingText = `اقترب الموعد: ${dueText}`;
+      } else {
+        statusClass = 'status-good';
+        statusLabel = 'سليم';
+        statusIcon = 'fa-circle-check';
+        remainingText = dueText;
+      }
+
+      let catIcon = 'fa-wrench';
+      if (item.category === 'oil') catIcon = 'fa-oil-can';
+      else if (item.category === 'oil_filter') catIcon = 'fa-filter';
+      else if (item.category === 'air_filter') catIcon = 'fa-wind';
+      else if (item.category === 'brakes') catIcon = 'fa-circle-stop';
+      else if (item.category === 'spark_plugs') catIcon = 'fa-bolt';
+      else if (item.category === 'belts') catIcon = 'fa-gears';
+      else if (item.category === 'suspension') catIcon = 'fa-car-burst';
+
+      const kmElapsed = Math.max(0, currentKm - item.lastServiceOdo);
+      const targetParts = [];
+      if (ev.targetOdo !== null) targetParts.push(`${formatNumber(ev.targetOdo)} كم`);
+      if (ev.dueDate) targetParts.push(formatDateAr(ev.dueDate));
+
+      const card = document.createElement('div');
+      card.className = `wear-card ${statusClass}`;
+      card.innerHTML = `
+        <div>
+          <div class="wear-card-top">
+            <div>
+              <div class="wear-item-name">
+                <i class="fa-solid ${catIcon} text-cyan"></i>
+                <span>${escapeHtml(item.name)}</span>
+              </div>
+              <div class="wear-item-detail">${escapeHtml(item.detail || '-')}</div>
+            </div>
+            <span class="wear-status-badge">
+              <i class="fa-solid ${statusIcon}"></i> ${statusLabel}
+            </span>
+          </div>
+
+          <div class="wear-metrics">
+            <div class="wear-metric-cell">
+              <span>آخر تغيير:</span>
+              <strong>${formatDateAr(item.lastServiceDate)} (${formatNumber(item.lastServiceOdo)} كم)</strong>
+            </div>
+            <div class="wear-metric-cell">
+              <span>يتغير كل:</span>
+              <strong>${formatInterval(item)}</strong>
+            </div>
+            <div class="wear-metric-cell">
+              <span>المسافة منذ التغيير:</span>
+              <strong>${formatNumber(kmElapsed)} كم</strong>
+            </div>
+            <div class="wear-metric-cell">
+              <span>الميعاد المستهدف:</span>
+              <strong class="text-cyan">${targetParts.join(' أو ') || '-'}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="wear-progress-wrapper">
+            <div class="wear-progress-label">
+              <span>نسبة استهلاك عمر البند:</span>
+              <strong>${ev.pct}%</strong>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" style="width: ${ev.pct}%"></div>
+            </div>
+          </div>
+
+          <div class="wear-remaining-highlight">
+            <i class="fa-solid ${statusIcon}"></i>
+            <span>${remainingText}${ev.predictedDate && ev.status !== 'overdue' ? ` — الميعاد المتوقع: ${formatDateAr(ev.predictedDate)}` : ''}</span>
+          </div>
+        </div>
+      `;
+
+      elements.wearItemsGrid.appendChild(card);
+    });
+  }
+
+  // --- VISITS HISTORY RENDERING ---
+  function renderVisitsHistory(vehicle, client, visits) {
+    elements.visitsTimeline.innerHTML = '';
+    elements.visitCountBadge.textContent = `${visits.length} زيارة مسجلة`;
+
+    const totalSpent = visits.reduce((acc, v) => acc + (Number(v.totalCost) || 0), 0);
+    elements.totalSpentBadge.textContent = `إجمالي المصروفات: ${formatNumber(totalSpent)} ج.م`;
+
+    if (visits.length === 0) {
+      elements.visitsTimeline.innerHTML = `
+        <div style="text-align: center; padding: 25px; color: var(--text-muted);">
+          <p>لا توجد زيارات صيانة مسجلة حتى الآن لهذه السيارة.</p>
+        </div>
+      `;
+      return;
+    }
+
+    visits.forEach(visit => {
+      const card = document.createElement('div');
+      card.className = 'visit-entry-card';
+
+      // Item tags
+      const itemsHtml = (visit.items || []).map(item => `
+        <span class="visit-item-tag">
+          <strong>${escapeHtml(item.name)}:</strong> 
+          ${escapeHtml(item.detail || '')} 
+          <span class="item-price">(${formatNumber(item.cost)} ج.م)</span>
+        </span>
+      `).join('');
+
+      card.innerHTML = `
+        <div class="visit-entry-top">
+          <div class="visit-date-odo">
+            <div class="visit-date-badge">
+              <i class="fa-regular fa-calendar text-cyan"></i>
+              <span>${visit.date}</span>
+            </div>
+            <div class="visit-odo-badge">
+              <i class="fa-solid fa-gauge-high"></i> قراءة العداد: ${formatNumber(visit.odometer)} كم
+            </div>
+          </div>
+          <div class="visit-cost-print">
+            <span class="visit-cost">${formatNumber(visit.totalCost)} ج.م</span>
+            <div class="visit-actions-row">
+              <button class="btn-print-sm btn-edit-visit" title="تعديل الزيارة">
+                <i class="fa-solid fa-pen"></i> تعديل
+              </button>
+              <button class="btn-print-sm btn-invoice-visit" data-visit-id="${visit.id}" title="طباعة الفاتورة">
+                <i class="fa-solid fa-print"></i> فاتورة
+              </button>
+              <button class="btn-print-sm btn-danger-sm btn-del-visit" title="حذف الزيارة">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="visit-items-chips">
+          ${itemsHtml}
+        </div>
+
+        ${visit.notes ? `
+          <div class="visit-notes-snippet">
+            <i class="fa-solid fa-comment-dots"></i> <strong>ملاحظات الفني:</strong> ${escapeHtml(visit.notes)}
+          </div>
+        ` : ''}
+      `;
+
+      // Print button listener
+      card.querySelector('.btn-invoice-visit').addEventListener('click', () => openInvoiceModal(visit, vehicle, client));
+      card.querySelector('.btn-edit-visit').addEventListener('click', () => openVisitModal(visit.id));
+      card.querySelector('.btn-del-visit').addEventListener('click', () => deleteVisit(visit.id));
+
+      elements.visitsTimeline.appendChild(card);
+    });
+  }
+
+  // --- CLIENTS & CARS SIDEBAR LIST ---
+  function renderClientsList() {
+    elements.clientsListContainer.innerHTML = '';
+
+    const query = normalizeArabic(appState.searchQuery);
+
+    const filteredVehicles = appState.vehicles.filter(vehicle => {
+      const client = appState.clients.find(c => c.id === vehicle.clientId);
+
+      // Search match
+      if (query) {
+        const plateNorm = normalizeArabic(vehicle.plateFull || `${vehicle.plateLetters}${vehicle.plateNumbers}`);
+        const lettersNorm = normalizeArabic(vehicle.plateLetters);
+        const numbersNorm = normalizeArabic(vehicle.plateNumbers);
+        const makeNorm = normalizeArabic(vehicle.make);
+        const modelNorm = normalizeArabic(vehicle.model);
+        const clientNameNorm = client ? normalizeArabic(client.name) : '';
+        const clientPhoneNorm = client ? normalizeArabic(client.phone) : '';
+        const colorNorm = normalizeArabic(vehicle.color || '');
+
+        const matches = plateNorm.includes(query) ||
+                        (colorNorm && colorNorm.includes(query)) ||
+                        lettersNorm.includes(query) ||
+                        numbersNorm.includes(query) ||
+                        makeNorm.includes(query) ||
+                        modelNorm.includes(query) ||
+                        clientNameNorm.includes(query) ||
+                        clientPhoneNorm.includes(query);
+
+        if (!matches) return false;
+      }
+
+      // Status Filter (due soon, overdue, all)
+      if (appState.currentFilter !== 'all') {
+        const wearStatus = calculateVehicleOverallStatus(vehicle);
+        if (appState.currentFilter === 'overdue' && wearStatus !== 'overdue') return false;
+        if (appState.currentFilter === 'due-soon' && wearStatus !== 'due-soon') return false;
+      }
+
+      return true;
+    });
+
+    elements.clientListBadge.textContent = `${filteredVehicles.length} سيارة`;
+
+    if (filteredVehicles.length === 0) {
+      elements.clientsListContainer.innerHTML = `
+        <div style="text-align: center; padding: 40px 15px; color: var(--text-muted);">
+          <i class="fa-solid fa-magnifying-glass" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+          <p>لا توجد سيارات أو عملاء يطابقون شروط البحث الحالية.</p>
+        </div>
+      `;
+      return;
+    }
+
+    filteredVehicles.forEach(vehicle => {
+      const client = appState.clients.find(c => c.id === vehicle.clientId);
+      const visits = getVehicleVisits(vehicle.id);
+      const wearStatus = calculateVehicleOverallStatus(vehicle);
+
+      let statusBadgeHtml = '';
+      if (wearStatus === 'overdue') {
+        statusBadgeHtml = `<span class="card-status-indicator text-red"><i class="fa-solid fa-triangle-exclamation"></i> تجاوز المدى</span>`;
+      } else if (wearStatus === 'due-soon') {
+        statusBadgeHtml = `<span class="card-status-indicator text-amber"><i class="fa-solid fa-circle-exclamation"></i> اقترب موعد الصيانة</span>`;
+      } else {
+        statusBadgeHtml = `<span class="card-status-indicator text-green"><i class="fa-solid fa-circle-check"></i> حالة جيدة</span>`;
+      }
+
+      const card = document.createElement('div');
+      card.className = `client-card ${appState.activeVehicleId === vehicle.id ? 'active' : ''}`;
+      card.dataset.id = vehicle.id;
+
+      card.innerHTML = `
+        <div class="client-card-top">
+          <div class="card-car-title">${colorDotHtml(vehicle.color)}${escapeHtml(vehicle.make)} ${escapeHtml(vehicle.model)}</div>
+          <span class="plate-mini">${escapeHtml(vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`)}</span>
+        </div>
+
+        <div class="card-client-name">
+          <i class="fa-regular fa-user"></i> ${escapeHtml(client ? client.name : 'عميل غير محدد')}
+        </div>
+
+        <div class="card-meta-row">
+          <span><i class="fa-solid fa-gauge"></i> العداد: ${formatNumber(vehicle.currentOdometer || vehicle.initialOdometer)} كم${(() => { const i = getOdometerInfo(vehicle); return i.estimated > i.lastOdo ? ` <span title="العداد المتوقع النهارده">(~${formatNumber(i.estimated)})</span>` : ''; })()}</span>
+          <span><i class="fa-solid fa-wrench"></i> ${visits.length} زيارات</span>
+        </div>
+
+        <div style="margin-top: 6px;">
+          ${statusBadgeHtml}
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        selectVehicle(vehicle.id);
+      });
+
+      elements.clientsListContainer.appendChild(card);
+    });
+
+    renderSearchQuickTags();
+  }
+
+  // Calculate overall vehicle wear status for quick filtering
+  function calculateVehicleOverallStatus(vehicle) {
+    const due = getVehicleDueItems(vehicle);
+    if (due.some(d => d.ev.status === 'overdue')) return 'overdue';
+    if (due.some(d => d.ev.status === 'due-soon')) return 'due-soon';
+    return 'good';
+  }
+
+  function renderSearchQuickTags() {
+    elements.searchQuickTags.innerHTML = '';
+    // Show quick plate tags for the first 5 vehicles
+    const topVehicles = appState.vehicles.slice(0, 5);
+    topVehicles.forEach(v => {
+      const chip = document.createElement('span');
+      chip.className = 'quick-tag-chip';
+      chip.textContent = v.plateFull || `${v.plateLetters} ${v.plateNumbers}`;
+      chip.addEventListener('click', () => {
+        elements.mainSearchInput.value = v.plateNumbers;
+        handleSearchInput();
+        selectVehicle(v.id);
+      });
+      elements.searchQuickTags.appendChild(chip);
+    });
+  }
+
+  // --- SEARCH & FILTERS ---
+  function handleSearchInput() {
+    appState.searchQuery = elements.mainSearchInput.value.trim();
+    elements.btnClearSearch.style.display = appState.searchQuery ? 'block' : 'none';
+    renderClientsList();
+  }
+
+  // --- MODAL 1: CLIENT & VEHICLE REGISTRATION / EDIT ---
+  function openClientModal(editClientId = null, addToClientId = null) {
+    elements.clientForm.reset();
+    elements.editClientId.value = '';
+    elements.addToClientId.value = '';
+    elements.clientNameInput.readOnly = false;
+    elements.clientPhoneInput.readOnly = false;
+
+    if (addToClientId) {
+      const client = appState.clients.find(c => c.id === addToClientId);
+      if (client) {
+        elements.clientModalTitle.textContent = `إضافة سيارة جديدة للعميل: ${client.name}`;
+        elements.addToClientId.value = client.id;
+        elements.clientNameInput.value = client.name;
+        elements.clientPhoneInput.value = client.phone;
+        elements.clientNotesInput.value = client.notes || '';
+        elements.clientNameInput.readOnly = true;
+        elements.clientPhoneInput.readOnly = true;
+        elements.clientModal.style.display = 'flex';
+        return;
+      }
+    }
+
+    if (editClientId) {
+      const vehicle = appState.vehicles.find(v => v.id === editClientId);
+      if (!vehicle) return;
+      const client = appState.clients.find(c => c.id === vehicle.clientId);
+
+      elements.clientModalTitle.textContent = 'تعديل بيانات العميل والسيارة';
+      elements.editClientId.value = vehicle.id;
+      elements.clientNameInput.value = client ? client.name : '';
+      elements.clientPhoneInput.value = client ? client.phone : '';
+      elements.carPlateLettersInput.value = vehicle.plateLetters;
+      elements.carPlateNumbersInput.value = vehicle.plateNumbers;
+      elements.carInitialOdoInput.value = vehicle.initialOdometer;
+      elements.carMakeInput.value = vehicle.make;
+      elements.carModelInput.value = vehicle.model;
+      elements.carColorInput.value = vehicle.color || '';
+      elements.clientNotesInput.value = client ? client.notes : '';
+    } else {
+      elements.clientModalTitle.textContent = 'تسجيل عميل وسيارة جديدة';
+    }
+
+    elements.clientModal.style.display = 'flex';
+  }
+
+  function closeClientModal() {
+    elements.clientModal.style.display = 'none';
+  }
+
+  function handleClientFormSubmit(e) {
+    e.preventDefault();
+
+    const editId = elements.editClientId.value;
+    const name = elements.clientNameInput.value.trim();
+    const phone = elements.clientPhoneInput.value.trim();
+    const plateLetters = elements.carPlateLettersInput.value.trim();
+    const plateNumbers = elements.carPlateNumbersInput.value.trim();
+    const initialOdo = Number(elements.carInitialOdoInput.value) || 0;
+    const make = elements.carMakeInput.value.trim();
+    const model = elements.carModelInput.value.trim();
+    const color = elements.carColorInput.value.trim();
+    const notes = elements.clientNotesInput.value.trim();
+
+    if (!name || !phone || !plateLetters || !plateNumbers || !make || !model) {
+      showToast('يرجى ملء جميع الحقول المطلوبة', 'error');
+      return;
+    }
+
+    if (editId) {
+      // Update Existing
+      const vehicle = appState.vehicles.find(v => v.id === editId);
+      if (vehicle) {
+        vehicle.plateLetters = plateLetters;
+        vehicle.plateNumbers = plateNumbers;
+        vehicle.plateFull = `${plateLetters} ${plateNumbers}`;
+        vehicle.make = make;
+        vehicle.model = model;
+        vehicle.color = color;
+        vehicle.initialOdometer = initialOdo;
+        // Keep current odometer consistent if no visits recorded yet
+        recomputeCurrentOdometer(vehicle);
+
+        const client = appState.clients.find(c => c.id === vehicle.clientId);
+        if (client) {
+          client.name = name;
+          client.phone = phone;
+          client.notes = notes;
+        }
+
+        saveData();
+        renderClientsList();
+        selectVehicle(vehicle.id);
+        showToast('تم تحديث بيانات العميل والسيارة بنجاح', 'success');
+      }
+    } else {
+      // Create New Vehicle (and a new client only if needed)
+      const plateKey = normalizeArabic(`${plateLetters}${plateNumbers}`);
+      const duplicatePlate = appState.vehicles.find(v =>
+        normalizeArabic(`${v.plateLetters}${v.plateNumbers}`) === plateKey);
+      if (duplicatePlate) {
+        showToast('رقم اللوحة ده مسجل بالفعل لسيارة أخرى', 'error');
+        return;
+      }
+
+      let existingClient = null;
+      if (elements.addToClientId.value) {
+        existingClient = appState.clients.find(c => c.id === elements.addToClientId.value);
+      } else {
+        const phoneKey = phone.replace(/\D/g, '');
+        const samePhone = appState.clients.find(c => (c.phone || '').replace(/\D/g, '') === phoneKey);
+        if (samePhone && confirm(`رقم الهاتف ده مسجل للعميل "${samePhone.name}".\nهل تريد إضافة السيارة لنفس العميل؟`)) {
+          existingClient = samePhone;
+        }
+      }
+
+      const newClientId = existingClient ? existingClient.id : generateId('cli');
+      const newClient = existingClient ? null : {
+        id: newClientId,
+        name,
+        phone,
+        notes,
+        createdAt: new Date().toISOString()
+      };
+
+      const newVehicleId = generateId('veh');
+      const newVehicle = {
+        id: newVehicleId,
+        clientId: newClientId,
+        plateLetters,
+        plateNumbers,
+        plateFull: `${plateLetters} ${plateNumbers}`,
+        make,
+        model,
+        color,
+        initialOdometer: initialOdo,
+        currentOdometer: initialOdo,
+        createdAt: todayLocalISO()
+      };
+
+      if (newClient) appState.clients.unshift(newClient);
+      appState.vehicles.unshift(newVehicle);
+
+      saveData();
+      renderClientsList();
+      selectVehicle(newVehicleId);
+      showToast(existingClient ? `تمت إضافة السيارة للعميل ${existingClient.name}` : 'تم تسجيل العميل والسيارة الجديدة بنجاح', 'success');
+    }
+
+    closeClientModal();
+  }
+
+  // --- MODAL 2: LOG / EDIT MAINTENANCE VISIT ---
+  let editingVisitId = null;
+
+  function openVisitModal(visitId = null) {
+    if (!appState.activeVehicleId) {
+      showToast('يرجى اختيار سيارة أولاً لتسجيل الزيارة', 'error');
+      return;
+    }
+
+    const vehicle = appState.vehicles.find(v => v.id === appState.activeVehicleId);
+    const client = appState.clients.find(c => c.id === vehicle.clientId);
+    const visit = visitId ? appState.visits.find(v => v.id === visitId) : null;
+    editingVisitId = visit ? visit.id : null;
+
+    elements.visitModalCarTitle.textContent = `${vehicle.make} ${vehicle.model}`;
+    elements.visitModalPlateBadge.textContent = vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`;
+    elements.visitModalClientName.textContent = client ? client.name : '-';
+    elements.visitItemsTableBody.innerHTML = '';
+
+    if (visit) {
+      elements.visitModalTitle.textContent = `تعديل الزيارة — فاتورة #${visit.invoiceNumber}`;
+      elements.visitDateInput.value = visit.date;
+      elements.visitOdoInput.value = visit.odometer;
+      elements.visitNotesInput.value = visit.notes || '';
+      (visit.items || []).forEach(it => {
+        addVisitItemRow(it.category || 'custom', it.name, it.detail || '', Number(it.intervalKm) || 0, Number(it.cost) || 0, Number(it.intervalMonths) || 0, it.id);
+      });
+    } else {
+      elements.visitModalTitle.textContent = 'تسجيل إجراءات زيارة صيانة جديدة';
+      elements.visitDateInput.value = todayLocalISO();
+      elements.visitOdoInput.value = getOdometerInfo(vehicle).lastOdo || '';
+      elements.visitNotesInput.value = '';
+      addVisitItemRow('oil', 'تغيير زيت المحرك', 'تخليقي 10,000 كم (شل / موبيل)', 10000, 1600, 6);
+      addVisitItemRow('oil_filter', 'تغيير فلتر زيت', 'أصلي وكالة', 10000, 350, 6);
+    }
+
+    calculateVisitTotal();
+    elements.visitModal.style.display = 'flex';
+  }
+
+  function deleteVisit(visitId) {
+    const visit = appState.visits.find(v => v.id === visitId);
+    if (!visit) return;
+    if (!confirm(`هل أنت متأكد من حذف زيارة ${visit.date} (فاتورة #${visit.invoiceNumber})؟\nلا يمكن التراجع.`)) return;
+    appState.visits = appState.visits.filter(v => v.id !== visitId);
+    const vehicle = appState.vehicles.find(v => v.id === visit.vehicleId);
+    if (vehicle) recomputeCurrentOdometer(vehicle);
+    saveData();
+    if (vehicle) selectVehicle(vehicle.id);
+    renderClientsList();
+    showToast('تم حذف الزيارة', 'info');
+  }
+
+  function closeVisitModal() {
+    elements.visitModal.style.display = 'none';
+  }
+
+  // Add Item Row to the Visit Modal Table
+  function addVisitItemRow(category = 'custom', name = '', detail = '', intervalKm = 10000, cost = 0, intervalMonths = 0, itemId = null) {
+    const row = document.createElement('tr');
+    row.dataset.category = category;
+    if (itemId) row.dataset.itemId = itemId;
+
+    row.innerHTML = `
+      <td>
+        <input type="text" class="item-name-input" value="${escapeHtml(name)}" placeholder="اسم البند..." required>
+      </td>
+      <td>
+        <input type="text" class="item-detail-input" value="${escapeHtml(detail)}" placeholder="المواصفات / النوع...">
+      </td>
+      <td>
+        <input type="number" class="item-interval-input" value="${intervalKm}" placeholder="0 = بدون متابعة" title="اكتب 0 للمصنعيات والبنود التي لا تحتاج متابعة" min="0" step="500">
+      </td>
+      <td>
+        <input type="number" class="item-months-input" value="${intervalMonths}" placeholder="0" title="0 = بدون متابعة بالتاريخ" min="0" step="1">
+      </td>
+      <td>
+        <input type="number" class="item-cost-input" value="${cost}" placeholder="التكلفة" min="0" step="10" required>
+      </td>
+      <td style="text-align: center;">
+        <button type="button" class="btn-table-del" title="حذف البند">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+      </td>
+    `;
+
+    // Row Event Listeners
+    const costInput = row.querySelector('.item-cost-input');
+    costInput.addEventListener('input', calculateVisitTotal);
+
+    const delBtn = row.querySelector('.btn-table-del');
+    delBtn.addEventListener('click', () => {
+      row.remove();
+      calculateVisitTotal();
+    });
+
+    elements.visitItemsTableBody.appendChild(row);
+    calculateVisitTotal();
+  }
+
+  function calculateVisitTotal() {
+    let total = 0;
+    const rows = elements.visitItemsTableBody.querySelectorAll('tr');
+    rows.forEach(r => {
+      const cost = Number(r.querySelector('.item-cost-input')?.value) || 0;
+      total += cost;
+    });
+    elements.visitTotalAmount.textContent = formatNumber(total);
+  }
+
+  function handleVisitFormSubmit(e) {
+    e.preventDefault();
+
+    if (!appState.activeVehicleId) return;
+
+    const vehicle = appState.vehicles.find(v => v.id === appState.activeVehicleId);
+    const date = elements.visitDateInput.value;
+    const odo = Number(elements.visitOdoInput.value) || 0;
+    const notes = elements.visitNotesInput.value.trim();
+
+    if (!date || odo <= 0) {
+      showToast('يرجى تحديد تاريخ الزيارة وقراءة العداد بشكل صحيح', 'error');
+      return;
+    }
+
+    const rows = elements.visitItemsTableBody.querySelectorAll('tr');
+    if (rows.length === 0) {
+      showToast('يرجى إضافة بند صيانة واحد على الأقل في الزيارة', 'error');
+      return;
+    }
+
+    const items = [];
+    let totalCost = 0;
+
+    rows.forEach(r => {
+      const name = r.querySelector('.item-name-input').value.trim();
+      const detail = r.querySelector('.item-detail-input').value.trim();
+      const intervalKm = Number(r.querySelector('.item-interval-input').value) || 0;
+      const intervalMonths = Number(r.querySelector('.item-months-input').value) || 0;
+      const cost = Number(r.querySelector('.item-cost-input').value) || 0;
+      const category = r.dataset.category || 'custom';
+
+      if (name) {
+        items.push({
+          id: r.dataset.itemId || generateId('item'),
+          category,
+          name,
+          detail,
+          intervalKm,
+          intervalMonths,
+          cost
+        });
+        totalCost += cost;
+      }
+    });
+
+    if (editingVisitId) {
+      const visit = appState.visits.find(v => v.id === editingVisitId);
+      if (visit) {
+        visit.date = date;
+        visit.odometer = odo;
+        visit.notes = notes;
+        visit.totalCost = totalCost;
+        visit.items = items;
+        visit.updatedAt = new Date().toISOString();
+      }
+    } else {
+      appState.visits.unshift({
+        id: generateId('vis'),
+        vehicleId: vehicle.id,
+        invoiceNumber: nextInvoiceNumber(),
+        date,
+        odometer: odo,
+        notes,
+        totalCost,
+        items,
+        createdAt: new Date().toISOString()
+      });
+    }
+
+    recomputeCurrentOdometer(vehicle);
+    saveData();
+
+    const wasEditing = !!editingVisitId;
+    editingVisitId = null;
+    closeVisitModal();
+    selectVehicle(vehicle.id);
+    renderClientsList();
+    showToast(wasEditing ? 'تم تعديل الزيارة بنجاح' : 'تم حفظ إجراءات زيارة الصيانة بنجاح!', 'success');
+  }
+
+  // --- MODAL 3: PRINTABLE INVOICE MODAL ---
+  function openInvoiceModal(visit, vehicle, client) {
+    elements.invNumber.textContent = `#${visit.invoiceNumber || 'INV-1000'}`;
+    elements.invDate.textContent = visit.date;
+    elements.invClientName.textContent = client ? client.name : '-';
+    elements.invClientPhone.textContent = client ? client.phone : '-';
+    elements.invCarDetails.textContent = `${vehicle.make} ${vehicle.model}${vehicle.color ? ' — ' + vehicle.color : ''}`;
+    elements.invCarPlate.textContent = vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`;
+    elements.invCarOdo.textContent = `${formatNumber(visit.odometer)} كم`;
+
+    // Items table
+    elements.invItemsBody.innerHTML = '';
+    (visit.items || []).forEach((item, index) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td><strong>${escapeHtml(item.name)}</strong></td>
+        <td>${escapeHtml(item.detail || '-')}</td>
+        <td>${formatInterval(item)}</td>
+        <td><strong>${formatNumber(item.cost)} ج.م</strong></td>
+      `;
+      elements.invItemsBody.appendChild(tr);
+    });
+
+    elements.invTotalAmount.textContent = `${formatNumber(visit.totalCost)} ج.م`;
+
+    // Notes
+    if (visit.notes) {
+      elements.invNotesBox.style.display = 'block';
+      elements.invNotesText.textContent = visit.notes;
+    } else {
+      elements.invNotesBox.style.display = 'none';
+    }
+
+    elements.invoiceModal.style.display = 'flex';
+  }
+
+  function closeInvoiceModal() {
+    elements.invoiceModal.style.display = 'none';
+  }
+
+  // --- PARTS, SERVICES & LABOR CATALOG ---
+  let catalogFilterType = 'all';
+  let catalogSearchQuery = '';
+
+  function renderPartsCatalogTable() {
+    if (!elements.catalogTableBody) return;
+    elements.catalogTableBody.innerHTML = '';
+
+    const list = appState.partsCatalog || [];
+
+    // Counts
+    const partCount = list.filter(p => p.type === 'part').length;
+    const serviceCount = list.filter(p => p.type === 'service').length;
+    const laborCount = list.filter(p => p.type === 'labor').length;
+
+    if (elements.countCatAll) elements.countCatAll.textContent = list.length;
+    if (elements.countCatPart) elements.countCatPart.textContent = partCount;
+    if (elements.countCatService) elements.countCatService.textContent = serviceCount;
+    if (elements.countCatLabor) elements.countCatLabor.textContent = laborCount;
+
+    // Filter
+    let filtered = list;
+    if (catalogFilterType !== 'all') {
+      filtered = filtered.filter(p => p.type === catalogFilterType);
+    }
+    if (catalogSearchQuery) {
+      const q = catalogSearchQuery.toLowerCase();
+      filtered = filtered.filter(p => 
+        (p.name && p.name.toLowerCase().includes(q)) ||
+        (p.code && p.code.toLowerCase().includes(q)) ||
+        (p.specs && p.specs.toLowerCase().includes(q))
+      );
+    }
+
+    if (filtered.length === 0) {
+      elements.catalogTableBody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 40px 20px;">
+            <i class="fa-solid fa-boxes-stacked" style="font-size: 2.4rem; margin-bottom: 12px; display: block; opacity: 0.4;"></i>
+            <h4 style="color: #fff; margin-bottom: 6px;">دليل قطع الغيار والمصنعية فارغ ونظيف</h4>
+            <p style="font-size: 0.88rem; margin-bottom: 14px;">لا توجد بنود مسجلة حالياً. يمكنك إضافة قطع غيار أو خدمات خاصة بمركزك، أو تحميل الباقة القياسية الجاهزة بنقرة واحدة.</p>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('btnLoadPresetCatalog')?.click()" style="margin: 0 auto;">
+              <i class="fa-solid fa-wand-magic-sparkles text-red"></i> تحميل الباقة القياسية المقترحة (20 بنداً)
+            </button>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    filtered.forEach((item, index) => {
+      let typeLabel = 'قطعة غيار';
+      let typeClass = 'type-part';
+      let typeIcon = 'fa-gears';
+
+      if (item.type === 'service') {
+        typeLabel = 'صيانة';
+        typeClass = 'type-service';
+        typeIcon = 'fa-wrench';
+      } else if (item.type === 'labor') {
+        typeLabel = 'مصنعية';
+        typeClass = 'type-labor';
+        typeIcon = 'fa-user-gear';
+      }
+
+      const codeHtml = item.code ? `<div class="part-code-tag"><i class="fa-solid fa-barcode"></i> ${escapeHtml(item.code)}</div>` : '';
+      const costSubHtml = (item.buyCost && item.buyCost > 0) ? `<div class="part-cost-sub">تكلفة: ${formatNumber(item.buyCost)} ج.م</div>` : '';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>
+          <strong style="color: #fff;">${escapeHtml(item.name)}</strong>
+          ${codeHtml}
+        </td>
+        <td>
+          <span class="badge-type ${typeClass}">
+            <i class="fa-solid ${typeIcon}"></i> ${typeLabel}
+          </span>
+        </td>
+        <td>
+          <span style="color: var(--text-secondary); font-size: 0.82rem;">${escapeHtml(item.specs || '-')}</span>
+        </td>
+        <td>
+          ${(item.intervalKm > 0 || item.intervalMonths > 0) ? `<strong>${formatInterval(item)}</strong>` : '<span style="color: var(--text-muted);">-</span>'}
+        </td>
+        <td>
+          <strong style="color: var(--accent-red); font-size: 0.95rem;">${formatNumber(item.cost)}</strong> ج.م
+          ${costSubHtml}
+        </td>
+        <td>
+          <button type="button" class="btn-table-action btn-edit-part" data-id="${item.id}" title="تعديل">
+            <i class="fa-solid fa-pen"></i>
+          </button>
+          <button type="button" class="btn-table-action btn-del-part" data-id="${item.id}" title="حذف">
+            <i class="fa-solid fa-trash-can text-red"></i>
+          </button>
+        </td>
+      `;
+
+      tr.querySelector('.btn-edit-part').addEventListener('click', () => openPartItemModal(item.id));
+      tr.querySelector('.btn-del-part').addEventListener('click', () => deletePartItem(item.id));
+
+      elements.catalogTableBody.appendChild(tr);
+    });
+  }
+
+  function renderCatalogQuickPicker() {
+    if (!elements.visitCatalogSelect) return;
+    elements.visitCatalogSelect.innerHTML = '<option value="">-- اختر قطعة غيار أو مصنعية للإدراج المباشر --</option>';
+
+    const list = appState.partsCatalog || [];
+    const parts = list.filter(p => p.type === 'part');
+    const services = list.filter(p => p.type === 'service');
+    const labors = list.filter(p => p.type === 'labor');
+
+    if (parts.length > 0) {
+      const g = document.createElement('optgroup');
+      g.label = '🔧 قطع الغيار (Spare Parts)';
+      parts.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} - ${formatNumber(p.cost)} ج.م (${formatInterval(p) !== '-' ? formatInterval(p) : 'بدون مدى'})`;
+        g.appendChild(opt);
+      });
+      elements.visitCatalogSelect.appendChild(g);
+    }
+
+    if (services.length > 0) {
+      const g = document.createElement('optgroup');
+      g.label = '⚙️ خدمات الصيانة (Services)';
+      services.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} - ${formatNumber(p.cost)} ج.م (${formatInterval(p) !== '-' ? formatInterval(p) : 'خدمة'})`;
+        g.appendChild(opt);
+      });
+      elements.visitCatalogSelect.appendChild(g);
+    }
+
+    if (labors.length > 0) {
+      const g = document.createElement('optgroup');
+      g.label = '👨‍🔧 المصنعيات وأجور الفنيين (Labor Fees)';
+      labors.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} - ${formatNumber(p.cost)} ج.م`;
+        g.appendChild(opt);
+      });
+      elements.visitCatalogSelect.appendChild(g);
+    }
+  }
+
+  function openCatalogModal() {
+    renderPartsCatalogTable();
+    elements.catalogModal.style.display = 'flex';
+  }
+
+  function closeCatalogModal() {
+    elements.catalogModal.style.display = 'none';
+  }
+
+  function openPartItemModal(partId = null) {
+    elements.partItemForm.reset();
+    elements.editPartItemId.value = '';
+
+    if (partId) {
+      const item = (appState.partsCatalog || []).find(p => p.id === partId);
+      if (item) {
+        elements.partModalTitle.textContent = 'تعديل بند في الدليل';
+        elements.editPartItemId.value = item.id;
+        elements.partTypeSelect.value = item.type || 'part';
+        elements.partCategorySelect.value = item.category || 'custom';
+        elements.partNameInput.value = item.name || '';
+        elements.partSpecsInput.value = item.specs || '';
+        elements.partIntervalInput.value = item.intervalKm || 0;
+        elements.partMonthsInput.value = item.intervalMonths || 0;
+        elements.partCostInput.value = item.cost || 0;
+        elements.partCodeInput.value = item.code || '';
+        elements.partBuyCostInput.value = item.buyCost || '';
+      }
+    } else {
+      elements.partModalTitle.textContent = 'إضافة بند جديد للدليل';
+      elements.partIntervalInput.value = 10000;
+      elements.partMonthsInput.value = 0;
+    }
+
+    elements.partItemModal.style.display = 'flex';
+  }
+
+  function closePartItemModal() {
+    elements.partItemModal.style.display = 'none';
+  }
+
+  function handlePartItemFormSubmit(e) {
+    e.preventDefault();
+    const editId = elements.editPartItemId.value;
+    const type = elements.partTypeSelect.value;
+    const category = elements.partCategorySelect.value;
+    const name = elements.partNameInput.value.trim();
+    const specs = elements.partSpecsInput.value.trim();
+    const intervalKm = Number(elements.partIntervalInput.value) || 0;
+    const intervalMonths = Number(elements.partMonthsInput.value) || 0;
+    const cost = Number(elements.partCostInput.value) || 0;
+    const code = elements.partCodeInput.value.trim();
+    const buyCost = Number(elements.partBuyCostInput.value) || 0;
+
+    if (!appState.partsCatalog) appState.partsCatalog = [];
+
+    if (editId) {
+      const idx = appState.partsCatalog.findIndex(p => p.id === editId);
+      if (idx !== -1) {
+        appState.partsCatalog[idx] = {
+          ...appState.partsCatalog[idx],
+          type,
+          category,
+          name,
+          specs,
+          intervalKm,
+          intervalMonths,
+          cost,
+          code,
+          buyCost
+        };
+        showToast('تم تعديل البند في الدليل بنجاح', 'success');
+      }
+    } else {
+      const newItem = {
+        id: generateId('part'),
+        type,
+        category,
+        name,
+        specs,
+        intervalKm,
+        intervalMonths,
+        cost,
+        code,
+        buyCost
+      };
+      appState.partsCatalog.unshift(newItem);
+      showToast('تمت إضافة البند إلى الدليل بنجاح', 'success');
+    }
+
+    saveData();
+    closePartItemModal();
+    renderPartsCatalogTable();
+    renderCatalogQuickPicker();
+  }
+
+  function deletePartItem(partId) {
+    const item = (appState.partsCatalog || []).find(p => p.id === partId);
+    if (!item) return;
+
+    if (confirm(`هل أنت متأكد من حذف "${item.name}" من الدليل؟`)) {
+      appState.partsCatalog = appState.partsCatalog.filter(p => p.id !== partId);
+      saveData();
+      renderPartsCatalogTable();
+      renderCatalogQuickPicker();
+      showToast('تم حذف البند من الدليل بنجاح', 'info');
+    }
+  }
+
+  function handleInsertFromCatalog() {
+    const selectedId = elements.visitCatalogSelect.value;
+    if (!selectedId) {
+      showToast('يرجى اختيار بند من القائمة المنسدلة أولاً', 'error');
+      return;
+    }
+
+    const item = (appState.partsCatalog || []).find(p => p.id === selectedId);
+    if (!item) return;
+
+    addVisitItemRow(item.category, item.name, item.specs, item.intervalKm, item.cost, item.intervalMonths || 0);
+    calculateVisitTotal();
+    showToast(`تم إدراج "${item.name}" في بنود الصيانة`, 'success');
+  }
+
+  // --- EVENT LISTENERS ---
+  function bindEvents() {
+    // Search
+    elements.mainSearchInput.addEventListener('input', handleSearchInput);
+    elements.btnClearSearch.addEventListener('click', () => {
+      elements.mainSearchInput.value = '';
+      handleSearchInput();
+    });
+
+    // Filter Chips
+    elements.filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        elements.filterChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        appState.currentFilter = chip.dataset.filter;
+        renderClientsList();
+      });
+    });
+
+    // Real-time Current Odometer Input Change
+    // Live preview while typing (no saving)
+    elements.currentOdometerInput.addEventListener('input', (e) => {
+      if (!appState.activeVehicleId) return;
+      const vehicle = appState.vehicles.find(v => v.id === appState.activeVehicleId);
+      if (vehicle) renderWearCalculator(vehicle, Number(e.target.value) || 0);
+    });
+    // Save only when the user finishes typing
+    elements.currentOdometerInput.addEventListener('change', (e) => {
+      if (!appState.activeVehicleId) return;
+      const vehicle = appState.vehicles.find(v => v.id === appState.activeVehicleId);
+      if (!vehicle) return;
+
+      const newOdo = Number(e.target.value) || 0;
+      const visits = getVehicleVisits(vehicle.id);
+      const maxVisitOdo = visits.reduce((m, v) => Math.max(m, Number(v.odometer) || 0), 0);
+      if (newOdo < maxVisitOdo) {
+        showToast(`القراءة أقل من عداد آخر زيارة (${formatNumber(maxVisitOdo)} كم) — لم يتم الحفظ`, 'error');
+        e.target.value = vehicle.currentOdometer || maxVisitOdo;
+        renderWearCalculator(vehicle, e.target.value);
+        return;
+      }
+      logOdoReading(vehicle, newOdo);
+      saveData();
+      elements.bannerLastOdo.textContent = `${formatNumber(getOdometerInfo(vehicle).lastOdo)} كم`;
+      renderWearCalculator(vehicle, newOdo);
+      renderClientsList(); // update sidebar status dots
+      showToast('تم حفظ قراءة العداد', 'success');
+    });
+
+    // Client Modal Triggers
+    elements.btnOpenNewClientModal.addEventListener('click', () => openClientModal());
+    elements.btnEmptyNewClient.addEventListener('click', () => openClientModal());
+    elements.btnAddCarToClient.addEventListener('click', () => {
+      if (!appState.activeVehicleId) return;
+      const vehicle = appState.vehicles.find(v => v.id === appState.activeVehicleId);
+      if (vehicle) openClientModal(null, vehicle.clientId);
+    });
+    elements.btnEditClient.addEventListener('click', () => {
+      if (appState.activeVehicleId) openClientModal(appState.activeVehicleId);
+    });
+    elements.btnCloseClientModal.addEventListener('click', closeClientModal);
+    elements.btnCancelClientModal.addEventListener('click', closeClientModal);
+    elements.clientForm.addEventListener('submit', handleClientFormSubmit);
+
+    // Share / Open Client Portal for active vehicle
+    if (elements.btnShareClientPortal) {
+      elements.btnShareClientPortal.addEventListener('click', () => {
+        if (appState.activeVehicleId) {
+          window.open(`./client.html?v=${appState.activeVehicleId}`, '_blank');
+        } else {
+          window.open('./client.html', '_blank');
+        }
+      });
+    }
+
+    // Delete Vehicle Trigger
+    elements.btnDeleteVehicle.addEventListener('click', () => {
+      if (!appState.activeVehicleId) return;
+      const vehicle = appState.vehicles.find(v => v.id === appState.activeVehicleId);
+      if (!vehicle) return;
+
+      if (confirm(`هل أنت متأكد من حذف سيارة "${vehicle.plateFull}" وكافة سجلات صيانتها؟`)) {
+        appState.vehicles = appState.vehicles.filter(v => v.id !== vehicle.id);
+        appState.visits = appState.visits.filter(v => v.vehicleId !== vehicle.id);
+        // Remove the client too if they have no other vehicles
+        const clientHasOtherCars = appState.vehicles.some(v => v.clientId === vehicle.clientId);
+        if (!clientHasOtherCars) {
+          appState.clients = appState.clients.filter(c => c.id !== vehicle.clientId);
+        }
+        saveData();
+        renderClientsList();
+        if (appState.vehicles.length > 0) {
+          selectVehicle(appState.vehicles[0].id);
+        } else {
+          showEmptyState();
+        }
+        showToast('تم حذف السيارة وسجلاتها بنجاح', 'info');
+      }
+    });
+
+    // Visit Modal Triggers
+    elements.btnLogNewVisit.addEventListener('click', () => openVisitModal());
+    elements.btnCloseVisitModal.addEventListener('click', closeVisitModal);
+    elements.btnCancelVisitModal.addEventListener('click', closeVisitModal);
+    elements.visitForm.addEventListener('submit', handleVisitFormSubmit);
+
+    // Quick Add Buttons in Visit Modal
+    elements.btnAddOilItem.addEventListener('click', () => {
+      addVisitItemRow('oil', 'تغيير زيت المحرك', 'تخليقي 5W-30', 10000, 1600, 6);
+    });
+    elements.btnAddOilFilterItem.addEventListener('click', () => {
+      addVisitItemRow('oil_filter', 'تغيير فلتر زيت', 'أصلي', 10000, 350, 6);
+    });
+    elements.btnAddAirFilterItem.addEventListener('click', () => {
+      addVisitItemRow('air_filter', 'تغيير فلتر هواء', 'أصلي', 20000, 400, 12);
+    });
+    elements.btnAddBrakeItem.addEventListener('click', () => {
+      addVisitItemRow('brakes', 'تغيير تيل فرامل أمامي', 'سيراميك أصلي', 35000, 850, 12);
+    });
+    elements.btnAddNewCustomItem.addEventListener('click', () => {
+      addVisitItemRow('custom', '', '', 20000, 0);
+    });
+
+    // Invoice Modal Triggers
+    elements.btnCloseInvoiceModal.addEventListener('click', closeInvoiceModal);
+    elements.btnCloseInvoiceBtn.addEventListener('click', closeInvoiceModal);
+    elements.btnPrintInvoiceBtn.addEventListener('click', () => {
+      window.print();
+    });
+
+    // Data Backup / Restore Triggers
+    elements.btnExportData.addEventListener('click', exportDataBackup);
+    elements.btnImportData.addEventListener('click', () => {
+      elements.importFileInput.click();
+    });
+    elements.importFileInput.addEventListener('change', handleDataImport);
+
+    // Catalog Modal Triggers
+    if (elements.btnOpenCatalogModal) {
+      elements.btnOpenCatalogModal.addEventListener('click', openCatalogModal);
+    }
+    if (elements.btnCloseCatalogModal) {
+      elements.btnCloseCatalogModal.addEventListener('click', closeCatalogModal);
+    }
+    if (elements.btnOpenAddPartModal) {
+      elements.btnOpenAddPartModal.addEventListener('click', () => openPartItemModal());
+    }
+    if (elements.btnClosePartItemModal) {
+      elements.btnClosePartItemModal.addEventListener('click', closePartItemModal);
+    }
+    if (elements.btnCancelPartItemModal) {
+      elements.btnCancelPartItemModal.addEventListener('click', closePartItemModal);
+    }
+    if (elements.partItemForm) {
+      elements.partItemForm.addEventListener('submit', handlePartItemFormSubmit);
+    }
+    if (elements.catalogSearchInput) {
+      elements.catalogSearchInput.addEventListener('input', (e) => {
+        catalogSearchQuery = e.target.value.trim();
+        renderPartsCatalogTable();
+      });
+    }
+    if (elements.catalogFilterTabs) {
+      elements.catalogFilterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          elements.catalogFilterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          catalogFilterType = tab.dataset.type;
+          renderPartsCatalogTable();
+        });
+      });
+    }
+
+    // Load suggested catalog presets (skip items already present)
+    if (elements.btnLoadPresetCatalog) {
+      elements.btnLoadPresetCatalog.addEventListener('click', () => {
+        if (!appState.partsCatalog) appState.partsCatalog = [];
+        const existingCodes = new Set(appState.partsCatalog.map(p => p.code).filter(Boolean));
+        const existingNames = new Set(appState.partsCatalog.map(p => normalizeArabic(p.name)));
+        const toAdd = CATALOG_SUGGESTED_PRESETS
+          .filter(p => !existingCodes.has(p.code) && !existingNames.has(normalizeArabic(p.name)))
+          .map(p => ({ ...p, id: generateId('part') }));
+        if (toAdd.length === 0) {
+          showToast('كل البنود المقترحة موجودة بالفعل في الدليل', 'info');
+          return;
+        }
+        appState.partsCatalog.push(...toAdd);
+        saveData();
+        renderPartsCatalogTable();
+        renderCatalogQuickPicker();
+        showToast(`تمت إضافة ${toAdd.length} بند للدليل — راجع الأسعار وعدّلها حسب مركزك`, 'success');
+      });
+    }
+
+    // Clear ALL data (double confirmation + auto backup first)
+    if (elements.btnClearAllData) {
+      elements.btnClearAllData.addEventListener('click', () => {
+        if (!confirm('تحذير: سيتم مسح كل العملاء والسيارات والزيارات ودليل القطع نهائياً.\nهل أنت متأكد؟')) return;
+        const typed = prompt('للتأكيد النهائي اكتب كلمة: مسح');
+        if (typed === null || typed.trim() !== 'مسح') {
+          showToast('تم إلغاء المسح', 'info');
+          return;
+        }
+        exportDataBackup(); // safety copy before wiping
+        appState.clients = [];
+        appState.vehicles = [];
+        appState.visits = [];
+        appState.partsCatalog = [];
+        appState.invoiceCounter = 1000;
+        saveData();
+        renderClientsList();
+        renderPartsCatalogTable();
+        renderCatalogQuickPicker();
+        showEmptyState();
+        showToast('تم مسح كل البيانات (وتم تنزيل نسخة احتياطية قبل المسح)', 'info');
+      });
+    }
+
+    // Insert From Catalog in Visit Modal
+    if (elements.btnInsertFromCatalog) {
+      elements.btnInsertFromCatalog.addEventListener('click', handleInsertFromCatalog);
+    }
+
+    // Close Modals on Overlay Click
+    window.addEventListener('click', (e) => {
+      if (e.target === elements.clientModal) closeClientModal();
+      if (e.target === elements.visitModal) closeVisitModal();
+      if (e.target === elements.invoiceModal) closeInvoiceModal();
+      if (e.target === elements.catalogModal) closeCatalogModal();
+      if (e.target === elements.partItemModal) closePartItemModal();
+    });
+  }
+
+  // --- BACKUP & RESTORE UTILITIES ---
+  function exportDataBackup() {
+    const dataStr = JSON.stringify({
+      clients: appState.clients,
+      vehicles: appState.vehicles,
+      visits: appState.visits,
+      partsCatalog: appState.partsCatalog,
+      invoiceCounter: appState.invoiceCounter,
+      settings: appState.settings
+    }, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Asfour_Car_Service_Backup_${todayLocalISO()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('تم تصدير نسخة احتياطية من قاعدة البيانات بنجاح', 'success');
+  }
+
+  function handleDataImport(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const importedData = JSON.parse(event.target.result);
+        if (Array.isArray(importedData.clients) && Array.isArray(importedData.vehicles) && Array.isArray(importedData.visits)) {
+          if (!confirm(`الملف يحتوي على ${importedData.vehicles.length} سيارة و ${importedData.visits.length} زيارة.\nالاستيراد سيستبدل كل البيانات الحالية. هل تريد المتابعة؟`)) return;
+          appState.clients = importedData.clients;
+          appState.vehicles = importedData.vehicles;
+          appState.visits = importedData.visits;
+          if (importedData.partsCatalog) {
+            appState.partsCatalog = importedData.partsCatalog;
+          }
+          if (importedData.invoiceCounter) {
+            appState.invoiceCounter = importedData.invoiceCounter;
+          }
+          if (importedData.settings) {
+            appState.settings = importedData.settings;
+          }
+          saveData();
+          renderPartsCatalogTable();
+          renderCatalogQuickPicker();
+          renderHeaderStats();
+          renderClientsList();
+          if (appState.vehicles.length > 0) {
+            selectVehicle(appState.vehicles[0].id);
+          }
+          showToast('تم استيراد قاعدة البيانات بنجاح!', 'success');
+        } else {
+          showToast('الملف غير صالح أو لا يحتوي على بنية البيانات الصحيحة', 'error');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('خطأ أثناء قراءة ملف النسخة الاحتياطية', 'error');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }
+
+  // --- TOAST NOTIFICATIONS ---
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+
+    let icon = 'fa-circle-info text-cyan';
+    if (type === 'success') icon = 'fa-circle-check text-green';
+    if (type === 'error') icon = 'fa-circle-xmark text-red';
+
+    toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${escapeHtml(message)}</span>`;
+    elements.toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      toast.style.transition = 'all 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
+  // Helper Escape HTML
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .toString()
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // Start Application
+  document.addEventListener('DOMContentLoaded', initApp);
+
+  // Offline support + "install as app" (only works on the hosted website, not a local file)
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW registration failed', err));
+    });
+  }
+
+})();
+
+  </script>
+</body>
+</html>
