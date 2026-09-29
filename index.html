@@ -1578,6 +1578,7 @@ h1, h2, h3, h4, h5 {
 .data-table .num { font-weight:700; color:#fff; white-space:nowrap; }
 .table-scroll { overflow:auto; max-height:560px; border:1px solid var(--border-subtle); border-radius:var(--radius-md); }
 .fin-panel { padding:16px 18px; }
+.fin-hint { font-size: .82rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.7; }
 .fin-toolbar { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:14px; }
 .fin-toolbar input[type=text] { flex:1; min-width:200px; padding:9px 12px; background:var(--bg-surface); border:1px solid var(--border-subtle); border-radius:var(--radius-md); color:#fff; font-family:var(--font-main); }
 .fin-toolbar label { display:flex; align-items:center; gap:6px; color:var(--text-secondary); font-size:.86rem; cursor:pointer; }
@@ -1631,6 +1632,15 @@ h1, h2, h3, h4, h5 {
 .account-head { display: flex; align-items: center; gap: 10px; padding: 10px 10px 12px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 6px; }
 .account-head > i { font-size: 1.6rem; color: var(--text-muted); }
 .account-label { font-size: .72rem; color: var(--text-muted); }
+.src-wrap { display: flex; align-items: center; gap: 6px; margin-top: 5px; }
+.src-toggle { background: none; border: 1px dashed var(--border-subtle); color: var(--text-muted); border-radius: 999px; padding: 2px 9px; font-size: .72rem; font-family: inherit; cursor: pointer; white-space: nowrap; }
+.src-toggle:hover { color: var(--text-primary); border-color: var(--text-muted); }
+.src-wrap .item-supplier-input { display: none; padding: 4px 8px !important; font-size: .78rem !important; min-width: 0; flex: 1; }
+.src-wrap.on .src-toggle { border-style: solid; border-color: var(--color-amber); color: var(--color-amber); background: rgba(245,158,11,.1); }
+.src-wrap.on .item-supplier-input { display: block; }
+.supp-row-detail td { background: rgba(255,255,255,.02); font-size: .82rem; }
+.supp-parts { width: 100%; border-collapse: collapse; }
+.supp-parts td { padding: 6px 8px; border-bottom: 1px solid var(--border-subtle); }
 .sync-info { font-size: .74rem; color: var(--text-secondary); padding: 6px 12px; line-height: 1.8; }
 .sync-info b { color: var(--text-primary); font-weight: 700; }
 .sync-info .warn { color: #fca5a5; }
@@ -2053,6 +2063,7 @@ h1, h2, h3, h4, h5 {
     </nav>
   </header>
   <div class="clock-banner" id="clockBanner"></div>
+  <datalist id="supplierNamesList"></datalist>
 
   <!-- Main Application Container -->
   <main class="main-container">
@@ -2132,6 +2143,16 @@ h1, h2, h3, h4, h5 {
       <div class="sub-tabs">
         <button type="button" class="sub-tab active" data-fin="invoices"><i class="fa-solid fa-file-invoice"></i> الفواتير والتحصيل</button>
         <button type="button" class="sub-tab" data-fin="expenses"><i class="fa-solid fa-money-bill-wave"></i> المصروفات</button>
+        <button type="button" class="sub-tab" data-fin="suppliers"><i class="fa-solid fa-store"></i> المحلات</button>
+      </div>
+      <div class="panel-card fin-panel" id="finSuppliers" style="display:none;">
+        <p class="fin-hint">القطع اللي بتتجاب من محل لعربية معينة بسعرها. تمنها بيتشال من مكسب الشغل، وبيتسجل هنا لحد ما تدفعه للمحل.</p>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead><tr><th>المحل</th><th>عدد القطع</th><th>تمن القطع</th><th>اتدفع</th><th>الباقي له</th><th>إجراءات</th></tr></thead>
+            <tbody id="finSuppliersBody"></tbody>
+          </table>
+        </div>
       </div>
       <div class="panel-card fin-panel" id="finInvoices">
         <div class="fin-toolbar">
@@ -2902,6 +2923,28 @@ h1, h2, h3, h4, h5 {
     </div>
   </div>
 
+  <!-- Pay a parts shop -->
+  <div class="modal-overlay" id="supplierPayModal" style="display:none; z-index:1150;">
+    <div class="modal-window" style="max-width:480px;">
+      <div class="modal-header">
+        <div class="modal-title"><i class="fa-solid fa-store"></i><h3>دفع لمحل</h3></div>
+        <button class="modal-close-btn" id="btnCloseSupplierPay">&times;</button>
+      </div>
+      <form class="modal-form" id="supplierPayForm">
+        <div class="visit-target-summary" id="supplierPaySummary" style="flex-direction:column;align-items:flex-start;gap:4px;"></div>
+        <div class="form-grid-2" style="margin-top:14px;">
+          <div class="form-group"><label for="spAmount">المبلغ (ج.م)</label><input type="number" id="spAmount" min="1" step="any" required></div>
+          <div class="form-group"><label for="spDate">التاريخ</label><input type="date" id="spDate" required></div>
+        </div>
+        <div class="form-group"><label for="spNote">ملاحظة</label><input type="text" id="spNote" placeholder="اختياري"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelSupplierPay">إلغاء</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> تسجيل الدفع</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL 8: Receive stock / stock count -->
   <div class="modal-overlay" id="stockModal" style="display:none; z-index:1150;">
     <div class="modal-window" style="max-width:520px;">
@@ -3353,7 +3396,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   'use strict';
 
   // App version — must match version.json (both are bumped on every release)
-  const APP_VERSION = '2026.09.28-1737';
+  const APP_VERSION = '2026.09.29-1447';
 
   // Check every few minutes (and when the tab comes back into view) whether a newer version was published
   function checkForUpdate() {
@@ -4464,7 +4507,7 @@ const CATALOG_SUGGESTED_PRESETS = [
   const inRange = (d, r) => d && d >= r.from && d <= r.to;
 
   function computeStats(r) {
-    const st = { sales: 0, discount: 0, visits: 0, collected: 0, expenses: 0, partsCost: 0, byCat: {}, services: new Map() };
+    const st = { sales: 0, discount: 0, visits: 0, collected: 0, expenses: 0, partsCost: 0, supplierParts: 0, supplierPaid: 0, byCat: {}, services: new Map() };
     appState.visits.forEach(v => {
       if (inRange(v.date, r)) {
         st.visits++;
@@ -4476,7 +4519,8 @@ const CATALOG_SUGGESTED_PRESETS = [
           e.count += Number(it.qty) || 1;
           e.revenue += Number(it.cost) || 0;
           st.services.set(key, e);
-          if (Number(it.buyCost) > 0) st.partsCost += Number(it.buyCost) * (Number(it.qty) || 1);
+          if (it.supplier) { const c = Number(it.cost) || 0; st.partsCost += c; st.supplierParts += c; }
+          else if (Number(it.buyCost) > 0) st.partsCost += Number(it.buyCost) * (Number(it.qty) || 1);
         });
       }
       paymentsOf(v).forEach(p => { if (inRange(p.date, r)) st.collected += p.amount; });
@@ -4484,14 +4528,46 @@ const CATALOG_SUGGESTED_PRESETS = [
     appState.expenses.forEach(e => {
       if (inRange(e.date, r)) {
         const a = Number(e.amount) || 0;
+        if (e.category === 'supplier') { st.supplierPaid += a; return; }
         st.expenses += a;
         st.byCat[e.category] = (st.byCat[e.category] || 0) + a;
       }
     });
     st.outstanding = appState.visits.reduce((a, v) => a + visitDue(v), 0);
-    st.netCash = st.collected - st.expenses;
+    st.netCash = st.collected - st.expenses - st.supplierPaid;
     st.workProfit = st.sales - st.partsCost;
+    st.supplierDue = supplierBalances().reduce((a, x) => a + Math.max(x.due, 0), 0);
     return st;
+  }
+
+  // ---------- Parts bought from shops for a specific car (pass-through, not profit) ----------
+  let lastSupplierName = '';
+  const supKey = n => normalizeArabic(String(n || '').trim());
+  function supplierBalances() {
+    const map = new Map();
+    const get = name => {
+      const k = supKey(name);
+      if (!map.has(k)) map.set(k, { name: String(name).trim(), parts: [], total: 0, paid: 0, payments: [] });
+      return map.get(k);
+    };
+    appState.visits.forEach(v => (v.items || []).forEach(it => {
+      if (!it.supplier) return;
+      const e = get(it.supplier);
+      e.parts.push({ visit: v, item: it });
+      e.total += Number(it.cost) || 0;
+    }));
+    appState.expenses.forEach(x => {
+      if (x.category !== 'supplier' || !x.supplier) return;
+      const e = get(x.supplier);
+      e.paid += Number(x.amount) || 0;
+      e.payments.push(x);
+    });
+    return [...map.values()].map(e => ({ ...e, due: e.total - e.paid }))
+      .sort((a, b) => b.due - a.due || a.name.localeCompare(b.name, 'ar'));
+  }
+  function refreshSupplierDatalist() {
+    const dl = $id('supplierNamesList');
+    if (dl) dl.innerHTML = supplierBalances().map(x => `<option value="${escapeHtml(x.name)}"></option>`).join('');
   }
 
   function getDebtors() {
@@ -4550,12 +4626,13 @@ const CATALOG_SUGGESTED_PRESETS = [
     const debtors = getDebtors();
 
     $id('dashKpis').innerHTML = [
-      kpiTile('المبيعات', 'fa-receipt', money(st.sales), `${formatNumber(st.visits)} زيارة${st.discount ? ` • خصومات ${formatNumber(st.discount)}` : ''}`),
+      kpiTile('المبيعات', 'fa-receipt', money(st.sales), `${formatNumber(st.visits)} زيارة${st.supplierParts ? ` • منها قطع محلات ${formatNumber(st.supplierParts)}` : ''}${st.discount ? ` • خصومات ${formatNumber(st.discount)}` : ''}`),
       kpiTile('المحصّل', 'fa-sack-dollar', money(st.collected), 'فلوس دخلت فعلاً'),
       kpiTile('المصروفات', 'fa-money-bill-wave', money(st.expenses), 'إيجار ومرتبات وشراء قطع...'),
       kpiTile('صافي الكاش', st.netCash >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down', money(st.netCash),
-        st.netCash >= 0 ? 'المحصّل ناقص المصروفات — مكسب' : 'المحصّل ناقص المصروفات — خسارة', st.netCash >= 0 ? 'trend-good' : 'trend-bad'),
-      kpiTile('مكسب الشغل', 'fa-screwdriver-wrench', money(st.workProfit), 'المبيعات ناقص تمن القطع المستخدمة'),
+        st.supplierPaid ? `بعد المصروفات و${formatNumber(st.supplierPaid)} اتدفعوا للمحلات` : 'المحصّل ناقص المصروفات', st.netCash >= 0 ? 'trend-good' : 'trend-bad'),
+      kpiTile('مكسب الشغل', 'fa-screwdriver-wrench', money(st.workProfit), 'المبيعات ناقص تمن القطع (مخزن ومحلات)'),
+      kpiTile('للمحلات عليك', 'fa-store', money(st.supplierDue), 'تمن قطع لسه ماتدفعش (كل الفترات)', st.supplierDue > 0 ? 'trend-bad' : '', 'data-go="suppliers"'),
       kpiTile('فلوس برّه', 'fa-hand-holding-dollar', money(st.outstanding), `${formatNumber(debtors.length)} عميل عليهم فلوس`, st.outstanding > 0 ? 'trend-bad' : '', 'data-go="debts"'),
       kpiTile('محتاجين متابعة', 'fa-phone-volume', formatNumber(fu.length), 'عربيات ميعادها قرّب أو عدّى', fu.length ? 'trend-bad' : '', 'data-go="followup"'),
       kpiTile('قطع قربت تخلص', 'fa-box-open', formatNumber(low.length), 'من المخزن', low.length ? 'trend-bad' : '', 'data-go="inventory"')
@@ -4565,6 +4642,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       if (g === 'followup') openFollowUpModal();
       else if (g === 'inventory') { invFilter = 'low'; switchView('inventory'); }
       else if (g === 'debts') { $id('finOnlyDue').checked = true; switchView('finance'); }
+      else if (g === 'suppliers') { switchView('finance'); showFinTab('suppliers'); }
     }));
 
     renderSalesChart(r);
@@ -4743,10 +4821,15 @@ const CATALOG_SUGGESTED_PRESETS = [
     $id('finKpis').innerHTML = [
       kpiTile('المبيعات', 'fa-receipt', money(st.sales), `${formatNumber(st.visits)} فاتورة`),
       kpiTile('المحصّل', 'fa-sack-dollar', money(st.collected), 'فلوس دخلت فعلاً'),
-      kpiTile('المصروفات', 'fa-money-bill-wave', money(st.expenses), ''),
-      kpiTile('صافي الكاش', st.netCash >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down', money(st.netCash), st.netCash >= 0 ? 'مكسب' : 'خسارة', st.netCash >= 0 ? 'trend-good' : 'trend-bad'),
+      kpiTile('المصروفات', 'fa-money-bill-wave', money(st.expenses), st.supplierPaid ? `+ ${formatNumber(st.supplierPaid)} اتدفعوا للمحلات` : ''),
+      kpiTile('صافي الكاش', st.netCash >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down', money(st.netCash), 'المحصّل ناقص المصروفات والمدفوع للمحلات', st.netCash >= 0 ? 'trend-good' : 'trend-bad'),
+      kpiTile('مكسب الشغل', 'fa-screwdriver-wrench', money(st.workProfit), st.supplierParts ? `من غير ${formatNumber(st.supplierParts)} تمن قطع محلات` : 'المبيعات ناقص تمن القطع'),
+      kpiTile('للمحلات عليك', 'fa-store', money(st.supplierDue), 'كل الفترات', st.supplierDue > 0 ? 'trend-bad' : '', 'data-fin-go="suppliers"'),
       kpiTile('فلوس برّه (كل الفترات)', 'fa-hand-holding-dollar', money(st.outstanding), 'فواتير لسه ماتحصّلتش', st.outstanding > 0 ? 'trend-bad' : '')
     ].join('');
+
+    $id('finKpis').querySelectorAll('[data-fin-go]').forEach(el => el.addEventListener('click', () => showFinTab('suppliers')));
+    renderSuppliers();
 
     // Invoices
     const onlyDue = $id('finOnlyDue').checked;
@@ -4783,10 +4866,10 @@ const CATALOG_SUGGESTED_PRESETS = [
     tb.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => openVehicle(b.dataset.open)));
 
     // Expenses
-    const exps = appState.expenses.filter(e => inRange(e.date, r)).sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    const exps = appState.expenses.filter(e => inRange(e.date, r) && e.category !== 'supplier').sort((a, b) => (b.date || '').localeCompare(a.date || ''));
     $id('finExpensesBody').innerHTML = exps.length ? exps.map(e => `<tr>
         <td style="white-space:nowrap">${formatDateAr(e.date)}</td>
-        <td>${escapeHtml(EXPENSE_CATS[e.category] || e.category || '-')}</td>
+        <td>${escapeHtml(e.category === 'supplier' ? `دفع لمحل: ${e.supplier || ''}` : (EXPENSE_CATS[e.category] || e.category || '-'))}</td>
         <td class="num">${formatNumber(e.amount)} ج.م</td>
         <td>${escapeHtml(e.note || '')}</td>
         <td><button type="button" class="btn-table-action" data-del-exp="${e.id}" title="حذف"><i class="fa-solid fa-trash-can text-red"></i></button></td>
@@ -4807,6 +4890,83 @@ const CATALOG_SUGGESTED_PRESETS = [
     }));
     $id('finExpenseByCat').innerHTML = Object.entries(st.byCat).sort((a, b) => b[1] - a[1])
       .map(([k, v]) => `<span class="exp-cat-chip">${escapeHtml(EXPENSE_CATS[k] || k)}: <strong>${formatNumber(Math.round(v))} ج.م</strong></span>`).join('');
+  }
+
+  function showFinTab(name) {
+    document.querySelectorAll('.sub-tab').forEach(x => x.classList.toggle('active', x.dataset.fin === name));
+    ['invoices', 'expenses', 'suppliers'].forEach(k => {
+      $id('fin' + k[0].toUpperCase() + k.slice(1)).style.display = k === name ? '' : 'none';
+    });
+  }
+
+  const openSuppliers = new Set();
+  function renderSuppliers() {
+    const body = $id('finSuppliersBody');
+    if (!body) return;
+    const list = supplierBalances();
+    const vehMap = new Map(appState.vehicles.map(v => [v.id, v]));
+    body.innerHTML = list.length ? list.map((x, i) => {
+      const k = supKey(x.name);
+      const open = openSuppliers.has(k);
+      const parts = x.parts.slice().sort((a, b) => (b.visit.date || '').localeCompare(a.visit.date || ''));
+      const detail = open ? `<tr class="supp-row-detail"><td colspan="6"><table class="supp-parts">
+          ${parts.map(({ visit, item }) => {
+            const veh = vehMap.get(visit.vehicleId);
+            return `<tr><td style="white-space:nowrap">${formatDateAr(visit.date)}</td><td>#${escapeHtml(visit.invoiceNumber || '')}</td>
+              <td>${escapeHtml(veh ? carTitle(veh) : '')} <span class="plate-mini">${escapeHtml(veh ? veh.plateFull || '' : '')}</span></td>
+              <td>${escapeHtml(item.name)}${Number(item.qty) > 1 ? ` × ${formatNumber(item.qty)}` : ''}</td><td class="num">${formatNumber(item.cost)} ج.م</td></tr>`;
+          }).join('')}
+          ${x.payments.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(p => `<tr><td style="white-space:nowrap">${formatDateAr(p.date)}</td><td colspan="3"><i class="fa-solid fa-money-bill-wave text-green"></i> دفعت للمحل${p.note ? ' — ' + escapeHtml(p.note) : ''}</td>
+              <td class="num trend-good">-${formatNumber(p.amount)} ج.م <button type="button" class="btn-table-action" data-del-sp="${p.id}" title="حذف الدفعة"><i class="fa-solid fa-trash-can text-red"></i></button></td></tr>`).join('')}
+        </table></td></tr>` : '';
+      return `<tr>
+        <td><strong>${escapeHtml(x.name)}</strong></td>
+        <td>${formatNumber(x.parts.length)}</td>
+        <td class="num">${formatNumber(x.total)}</td>
+        <td>${formatNumber(x.paid)}</td>
+        <td class="num">${x.due > 0 ? `<span class="trend-bad">${formatNumber(x.due)}</span>` : x.due < 0 ? `<span class="trend-good">ليك ${formatNumber(-x.due)}</span>` : '—'}</td>
+        <td style="white-space:nowrap">
+          ${x.due > 0 ? `<button type="button" class="chip-btn" data-sp-pay="${i}"><i class="fa-solid fa-money-bill-wave"></i> دفع</button>` : ''}
+          <button type="button" class="chip-btn" data-sp-toggle="${i}"><i class="fa-solid fa-list"></i> ${open ? 'إخفاء' : 'التفاصيل'}</button>
+        </td>
+      </tr>${detail}`;
+    }).join('') : `<tr><td colspan="6"><div class="mini-empty">لسه مفيش قطع متسجلة من محلات — في الزيارة دوس "قطعة من محل؟" تحت اسم القطعة</div></td></tr>`;
+    body.querySelectorAll('[data-sp-toggle]').forEach(b => b.addEventListener('click', () => {
+      const k = supKey(list[b.dataset.spToggle].name);
+      if (openSuppliers.has(k)) openSuppliers.delete(k); else openSuppliers.add(k);
+      renderSuppliers();
+    }));
+    body.querySelectorAll('[data-sp-pay]').forEach(b => b.addEventListener('click', () => openSupplierPay(list[b.dataset.spPay])));
+    body.querySelectorAll('[data-del-sp]').forEach(b => b.addEventListener('click', () => {
+      const e = appState.expenses.find(x => x.id === b.dataset.delSp);
+      if (!e || !confirm(`حذف دفعة ${formatNumber(e.amount)} ج.م لمحل "${e.supplier}"؟`)) return;
+      appState.expenses = appState.expenses.filter(x => x.id !== e.id);
+      saveData();
+      renderFinance();
+      showToast('تم حذف الدفعة', 'info');
+    }));
+  }
+
+  let payingSupplier = null;
+  function openSupplierPay(x) {
+    payingSupplier = x.name;
+    $id('supplierPaySummary').innerHTML = `
+      <div><span class="label">المحل:</span> <strong>${escapeHtml(x.name)}</strong></div>
+      <div><span class="label">تمن القطع:</span> ${formatNumber(x.total)} — <span class="label">اتدفع:</span> ${formatNumber(x.paid)} — <strong class="trend-bad">الباقي له: ${formatNumber(x.due)} ج.م</strong></div>`;
+    $id('spAmount').value = x.due;
+    $id('spDate').value = todayLocalISO();
+    $id('spNote').value = '';
+    $id('supplierPayModal').style.display = 'flex';
+  }
+  function handleSupplierPaySubmit(e) {
+    e.preventDefault();
+    const amount = Number($id('spAmount').value) || 0;
+    if (!payingSupplier || amount <= 0) { showToast('اكتب مبلغ صحيح', 'error'); return; }
+    appState.expenses.unshift({ id: generateId('exp'), date: $id('spDate').value || todayLocalISO(), category: 'supplier', supplier: payingSupplier, amount, note: $id('spNote').value.trim() });
+    saveData();
+    $id('supplierPayModal').style.display = 'none';
+    renderFinance();
+    showToast(`تم تسجيل ${formatNumber(amount)} ج.م للمحل`, 'success');
   }
 
   function bindPhase2Events() {
@@ -4844,11 +5004,9 @@ const CATALOG_SUGGESTED_PRESETS = [
     $id('finPeriod').addEventListener('change', renderFinance);
     $id('finOnlyDue').addEventListener('change', renderFinance);
     $id('finSearch').addEventListener('input', renderFinance);
-    document.querySelectorAll('.sub-tab').forEach(t => t.addEventListener('click', () => {
-      document.querySelectorAll('.sub-tab').forEach(x => x.classList.toggle('active', x === t));
-      $id('finInvoices').style.display = t.dataset.fin === 'invoices' ? '' : 'none';
-      $id('finExpenses').style.display = t.dataset.fin === 'expenses' ? '' : 'none';
-    }));
+    document.querySelectorAll('.sub-tab').forEach(t => t.addEventListener('click', () => showFinTab(t.dataset.fin)));
+    $id('supplierPayForm').addEventListener('submit', handleSupplierPaySubmit);
+    ['btnCloseSupplierPay', 'btnCancelSupplierPay'].forEach(id => $id(id).addEventListener('click', () => { $id('supplierPayModal').style.display = 'none'; }));
     $id('expenseForm').addEventListener('submit', e => {
       e.preventDefault();
       const amount = Number($id('expAmount').value) || 0;
@@ -4925,7 +5083,8 @@ const CATALOG_SUGGESTED_PRESETS = [
     appState.visits.forEach(v => {
       if (!inRange(v.date, r) || !Array.isArray(v.technicianIds) || !v.technicianIds.includes(m.id)) return;
       visits++;
-      sales += visitNet(v) / v.technicianIds.length;
+      const passThrough = (v.items || []).reduce((a, it) => a + (it.supplier ? Number(it.cost) || 0 : 0), 0);
+      sales += Math.max(visitNet(v) - passThrough, 0) / v.technicianIds.length;
     });
     const commission = (Number(m.commissionPct) || 0) / 100 * sales;
     const paid = appState.expenses.filter(e => e.teamMemberId === m.id && inRange(e.date, r)).reduce((a, e) => a + (Number(e.amount) || 0), 0);
@@ -6050,6 +6209,7 @@ const CATALOG_SUGGESTED_PRESETS = [
     elements.visitModalPlateBadge.textContent = vehicle.plateFull || `${vehicle.plateLetters} ${vehicle.plateNumbers}`;
     elements.visitModalClientName.textContent = client ? client.name : '-';
     elements.visitItemsTableBody.innerHTML = '';
+    refreshSupplierDatalist();
 
     if (visit) {
       elements.visitModalTitle.textContent = `تعديل الزيارة — فاتورة #${visit.invoiceNumber}`;
@@ -6058,7 +6218,7 @@ const CATALOG_SUGGESTED_PRESETS = [
       elements.visitNotesInput.value = visit.notes || '';
       (visit.items || []).forEach(it => {
         addVisitItemRow(it.category || 'custom', it.name, it.detail || '', Number(it.intervalKm) || 0, Number(it.cost) || 0, Number(it.intervalMonths) || 0, it.id,
-          { qty: it.qty, unitPrice: it.unitPrice, catalogId: it.catalogId, buyCost: it.buyCost });
+          { qty: it.qty, unitPrice: it.unitPrice, catalogId: it.catalogId, buyCost: it.buyCost, supplier: it.supplier });
       });
       preparePaymentFields(visit);
       renderTechChips(visit.technicianIds || []);
@@ -6104,12 +6264,19 @@ const CATALOG_SUGGESTED_PRESETS = [
     if (itemId) row.dataset.itemId = itemId;
     if (extra.catalogId) row.dataset.catalogId = extra.catalogId;
     if (extra.buyCost) row.dataset.buyCost = extra.buyCost;
+    const supplier = extra.supplier || '';
     const qty = Number(extra.qty) || 1;
     const unitPrice = extra.unitPrice != null ? Number(extra.unitPrice) : (Number(cost) || 0) / qty;
 
     row.innerHTML = `
       <td>
         <input type="text" class="item-name-input" value="${escapeHtml(name)}" placeholder="اسم البند..." required>
+        ${extra.catalogId ? '' : `<div class="src-wrap ${supplier ? 'on' : ''}">
+          <button type="button" class="src-toggle" title="القطعة دي اتجابت من محل بسعرها — مش مكسب ليك">
+            <i class="fa-solid fa-store"></i> ${supplier ? 'من محل:' : 'قطعة من محل؟'}
+          </button>
+          <input type="text" class="item-supplier-input" list="supplierNamesList" value="${escapeHtml(supplier)}" placeholder="اسم المحل">
+        </div>`}
       </td>
       <td>
         <input type="text" class="item-detail-input" value="${escapeHtml(detail)}" placeholder="المواصفات / النوع...">
@@ -6135,6 +6302,16 @@ const CATALOG_SUGGESTED_PRESETS = [
     `;
 
     // Row Event Listeners
+    const srcWrap = row.querySelector('.src-wrap');
+    if (srcWrap) {
+      srcWrap.querySelector('.src-toggle').addEventListener('click', () => {
+        const on = !srcWrap.classList.contains('on');
+        srcWrap.classList.toggle('on', on);
+        srcWrap.querySelector('.src-toggle').innerHTML = `<i class="fa-solid fa-store"></i> ${on ? 'من محل:' : 'قطعة من محل؟'}`;
+        const inp = srcWrap.querySelector('.item-supplier-input');
+        if (on) { if (!inp.value) inp.value = lastSupplierName || ''; inp.focus(); inp.select(); }
+      });
+    }
     row.querySelector('.item-cost-input').addEventListener('input', calculateVisitTotal);
     row.querySelector('.item-qty-input').addEventListener('input', calculateVisitTotal);
 
@@ -6186,6 +6363,7 @@ const CATALOG_SUGGESTED_PRESETS = [
 
     const items = [];
     let totalCost = 0;
+    let missingSupplier = false;
 
     rows.forEach(r => {
       const name = r.querySelector('.item-name-input').value.trim();
@@ -6211,11 +6389,19 @@ const CATALOG_SUGGESTED_PRESETS = [
         };
         if (r.dataset.catalogId) it.catalogId = r.dataset.catalogId;
         if (Number(r.dataset.buyCost) > 0) it.buyCost = Number(r.dataset.buyCost);
+        const sw = r.querySelector('.src-wrap');
+        if (sw && sw.classList.contains('on')) {
+          const sup = sw.querySelector('.item-supplier-input').value.trim();
+          if (!sup) missingSupplier = true;
+          it.supplier = sup || 'محل غير محدد';
+          lastSupplierName = it.supplier;
+        }
         items.push(it);
         totalCost += cost;
       }
     });
 
+    if (missingSupplier) showToast('فيه قطعة من محل من غير اسم المحل — اتسجلت "محل غير محدد"، عدّلها من الزيارة', 'info');
     const discount = Math.min(Math.max(Number(document.getElementById('visitDiscountInput').value) || 0, 0), totalCost);
     const net = totalCost - discount;
     const payNow = Math.max(Number(document.getElementById('visitPaidInput').value) || 0, 0);
